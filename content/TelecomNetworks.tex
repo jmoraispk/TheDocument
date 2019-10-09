@@ -1,0 +1,148 @@
+
+
+\section{Telecommunication Networks - Overview}
+
+From the courses Internet Networks and Services (RSI in portuguese) and Telecommunication Networks (RTel in pt) I've had an insight about how the whole network is multiplexed into optic fibers and many other interesting topics such as the triple play services and a bunch of protocols that are used in today's world to make everything communicate with everything. Therefore, I propose to write a sum up of the slides and bibliography of RSI and RTel in this section. I'll mainly give importance to RTel since it is what I'm studying at the moment, but I hope to go through the slides of RSI as well.
+
+\begin{multicols}{2}
+\begin{enumerate}
+    \item Introduction \\(2 lessons)
+    \item Fundamentals of networks \\(7 lessons)
+    \item Ethernet and data centre networks \\(5 lessons)
+    \item SDH transport networks \\(4 lessons)
+    \item Optical transport networks \\(4 lessons)
+    \item Access networks \\(3 lessons)
+\end{enumerate}
+
+\columnbreak
+
+\begin{enumerate}
+    \item The Internet
+    \item Quality of Service on the Internet
+    \item IP Network Models
+    \item Next Generation Networks
+    \item The Telephony Network
+    \item Technologies for data transport
+    \item MPLS - Multi-Protocol Label Switching
+\end{enumerate}
+\end{multicols}
+
+\subsection{Introduction}
+
+\bb{Definition}\hspace{-.2cm} \ii{Telecommunications}:  is the transmission of information at a distance through the use of electromagnetic signals.
+
+\defining{Telecom. Network} collection of nodes and links with the purpose of interchanging these signals in order to have an information flow.
+
+These Telecommunication Networks can be public, owned by Telecom. / Network Operators that use that network to provide services to the general public, or can be private, used by a company to connect infrastructures. Many of these private networks also rely on leased links by public networks.
+
+There are mainly 3 layers in a network: the backbone or core, the metropolitan and the access layer. As expected, the access layer collects the traffic, connections to homes, offices, everywhere the internet is required. The metropolitan area connects different parts of the city that use that network, typically with a ring (made out of optic fiber). The core is the most extensive layer, with a mesh of nodes and very extensive links that connect cities of the whole world. Hundreds or thousands of km's is not atypical.
+
+What makes possible to communicate with everyone connected to the internet is that the networks of both operators are also connected.
+
+As a public service, the public networks must provide fidelity (transmit the information without loss of changes) and reliability (less than 3 minutes down per year).
+
+
+\vspace{.5cm}
+
+Nowadays, most of transmission is digital. A series of pulses is transmitted through a channel with attenuation, dispersion, interference from other signals and noise. Therefore what reaches the other side is considerably different and has to be estimated what the original input was.
+
+\quickimage{RTel/Cap1-001.png}{0.6}
+
+As having a dedicated physical infrastructure for each service would be far to expensive and messy, the big majority of services share the same channel, the optic fiber. It is easily shared because of the available bandwidth in it. Thus, the signals are multiplexed at the entrance, using different wavelengths (\bb{Wavelength-Division Multiplexing (WDM)}) and de-multiplexed at the other end, to follow each one to their device that is requiring the service. 
+
+Note that WDM is exactly like \bb{Frequency Division Multiplexing (FDM)} but in the optical domain. Technically they are exactly the same as changing the wavelength is nothing more than changing the transmit frequency.
+
+A single mode optical fiber can reach throughputs of 10 Terabits per second.
+
+Remember that there are many ways of scheduling frames in a multiplexer. With time slots or doing it statistically are two ways. Also, there are 2 types of switching: packet switching and circuit switching. Circuit is when a channel is constantly reserved for a certain application even if it is not being used. Packet switching allows a much better share of the resources. Packet switching principle is based on sending packets whenever there's a packet to transmit and use all the resources to do so as fast as possible. Therefore, the "speed" of the internet depends a lot on the amount of people that are accessing it. 
+
+Regarding the physical infrastructures for the transmission of data, those go from satellites, well the open space in general as microwave links are also a thing, twisted pairs, optical fibers and even a few more that are less common.
+
+Finally, a look at the tendencies is pertinent. The traffic is increasing constantly, at a rate of 30\% a year, therefore the network must be upgraded as the time passes as well, or else it won't be able to handle the traffic of the future. Not only are the links being upgraded since now we have fiber to the home, terminating really in our router, but each node must be upgraded as well to cope with the traffic resulting in new switches, larger datacentres, ect... However, all of this must be standardised to guarantee compatibility between countries, operators, manufacturers and users and to ensure minimum quality of service for all users. This standardisation is done by the International Telecommunication Union (ITU) that has two main sectors of interest: the -T sector regarding telecommunications in general and the -R sector for radiocommunications that is more focused in point-to-point, mobile, satellite links, ect\dots Additionally, ETSI, ISO, OSI, ANSI, IEEE are some of the main organisations that standardise technologies. IEEE is the best :)
+
+
+
+\subsection{Networks Fundamentals}
+
+A network is composed of nodes and links and can be represented by graphs.
+However, a clear distinction between networks and graphs has been made in class: a network is a graph with a few more numbers that represent various network parameters. These parameters will be talked later, but can be delay of a link, distance, \dots
+
+
+The physical topology concerns the physical connections that are in place while the logical topology for a certain case concerns the actual flow of information. Even though every computer is connected in a network, maybe the information always flows from one to the others and the graph that represents that has much less links.
+
+
+A link can be unidirectional or bidirectional. If the link is unidirectional, sometimes is referred to as an arc. $e_1 = (v_1,v_2)$ is the representation of a link, and the order of the nodes matter if it's an arc.
+
+In optical fiber networks, or other networks that require amplifiers, the space between amplifiers (distance the signal has to go attenuating) is called a span.
+
+
+\quickimage{RTel/Cap2-001.png}{.5}
+
+In a graph there's N number of Vertices($v_i$), and L number of Edges($e_j$). And the degree of the vertex is the number of edges it has.
+It's called the order of the graph, it's number of vertices, and the size of the graph it's number of edges.
+
+Directed graphs only have unidirectional links, while undirected graphs only have bidirectional links.
+
+\bb{The reason to make the distinction between directed and undirected graphs}(unidirectional and bidirectional edges): in case of optical fiber, which is what connects most of long distance networking, is required to use more than one fiber. Because and optical emitter can't receive as well (at least in the same fiber). 
+Also, if amplifiers are required, note that they are directed as well.
+
+A path can be represented by a set of links, starting at some node. Source and sink are the names for the first and last vertex of that path.
+
+
+\quickimage{RTel/Cap2-002.png}{.5}
+
+
+Bus, Ring and Star are the main physical topologies. Tree as well.
+
+A tree is simply a graph with no cycles.
+
+
+A graph can be represented with an \bb{Adjacency matrix (A)}, with $a_{ij} = 1$ if there's a direction from the vertices i to j.
+
+The average node degree is given by the average of each node's degree which won't be more than the sum of all links, times 2 divided by the number of nodes. Times 2 because each link contributes for the degree twice, once at each end.
+
+\quickimage{RTel/Cap2-003.png}{.5}
+
+
+The Network diameter ($D_R$) is the maximum number of links between nodes through the shortest path between them. $D_R$ is the longest of the shortest paths between every node.
+
+
+Every link can have an associated cost (a function of distance, delay, reliability, actual cost, or other parameters) and a capacity ($u_e$ denotes the capacity of node $e$).
+
+\quickimage{RTel/Cap2-004.png}{.5}
+
+
+Despite similar to an Adjacency Matrix, the \bb{Demand matrix (D)} is slightly different. $d_{ij} = 1$ if the traffic flows from the vertex i to the vertex j.
+
+Note that the diagonal of this matrix should be empty, or else it would mean that a certain node would receive information from himself, which makes no sense.
+
+The mean number of demands is the number of demands divided by the number of nodes.
+
+\quickimage{RTel/Cap2-005.png}{.5}
+
+The number of unidirectional demands (edges) is $D_1  = N (N-1)$. N nodes x the other N-1 nodes, however, not every node is connected to every other node.
+One other way of seeing it is that the D matrix is $N \times N$ but we need to take N away due to the empty diagonal. $D_2 = \frac{D1}{2}$ is the number of bidirectional demands, which is one of the triangles of the D matrix. 
+
+
+
+Another interesting matrix is the \bb{Traffic matrix (T)} and it's used to denote traffic intensities. It only has entries different from 0 in the exact same places the Demand matrix has. It's used for static traffic designs.
+
+\quickimage{RTel/Cap2-006.png}{.5}
+
+
+Considering now a Dynamic Traffic case, a few concepts arise:
+\begin{itemize}
+    \item Average intensity of data flow between two nodes;
+    \item Traffic bursts are time intervals where the flux of data is considerably higher than the average rate;
+    \item Peak rate is the maximum instantaneous intensity.
+\end{itemize}
+
+Aggregation level or multiplexing level reduces the traffic \ii{burstiness} because.....
+%SLIDE 58! slides 19 do segundo set de slides
+
+
+
+
+
+
+

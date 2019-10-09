@@ -1,0 +1,255 @@
+
+\section{MATLAB}
+
+\subsection{Plots}
+\par First things first: to create a vector of equally spaced elements is best to use \bb{linspace}. It guarantees the same amount of points in each array more easily.
+
+\begin{lstlisting}[language=matlab]
+t = linspace(-Ts, Ts, 200);
+plot(t, 2*t);
+xlabel('x axis, duh');
+ylabel('y axis, hud'); 
+title('guess?');
+grid minor; %sometimes..
+\end{lstlisting}
+
+\par Use \bb{meshgrid} and \bb{surf}\hspace{-.18cm}ace to plot functions with multiple variables:
+
+\begin{lstlisting}
+[xx, yy] = meshgrid(x,y);  
+surf(xx,yy, 2 * xx, 'EdgeColor', 'none');
+\end{lstlisting}
+
+\par \bb{Meshgrid} is necessary because matlab doesn't know how to take do value iteration! The \bb{surf} function DOES know that should take one value from x, run for all values of y and get the (x,y) value for each iteration from z. THEREFORE, z must be an length(x) by length(y) matrix! This is why the mesh grid command is used. It allows for this matrix creation just in the same way as one creates values for a 2D plot.
+\par What \bb{surf} will do is: check the sizes of the x and y vectors to see if it should iterate or just choose the right values. If x and y are row vectors, it will have to manually calculate all the possible combinations. If they are matrices (like the ones returned by meshgrid), it is able to just choose the appropriate combinations: take each element of each vector and plot it in space - notice what is returned by meshgrid is exactly the same dimensions as the Z vector will be.
+\par To conclude: is possible to give x and y or X and Y as inputs for the \bb{surf} function of MATLAB, however, Z must be a matrix! And that will only happen with meshgrid, otherwise it will be a vector without all combinations of values in x an y.
+
+
+\subsubsection{Contour}
+In portuguese "contorno", returns the levels curves of the function.
+
+contour(X1, X2, Z, 10.\textasciicircum(-20:3:0)') will plot the Z points of the coordinates X1, X2, on the levels 10.\textasciicircum[-20 -17 -14 -11 -8 -5 -2].
+Note that if the points X1 and X2 are not provided, there is no "set" where to which is possible to compute the level curves, so Matlab chooses one and it may not fit your previous graph.
+
+\subsubsection{Extra Stuff for Graphs}
+Check all properties of a graph \href{https://nl.mathworks.com/help/matlab/ref/matlab.graphics.chart.primitive.line-properties.html}{\uline{here}}. Some of them:
+
+\bb{Subplots} - allow several figures in the same window.
+    Writing subplot(1,2,1) divides a window in a grid of 1x2 and will access the first element of it. Increasing the final number changes the division of the grid selected which is where the subsequent plots are going to end up on.
+
+\bb{xlabel, ylabel} - labels for the Graphs
+
+\bb{xlim, ylim} - limits for the Graphs
+
+\bb{set current figure position (and size)} - set(gcf,'position',[x0, y0, width, height]); x0 is measure from the left of the screen. y0 is measure from the bottom of the screen. width is along x, height along y.
+
+\bb{imagesc} - Image with scaled colours. imagesc(A); colorbar; shows quite fast the values that the matrix A has. A very useful tool to debug and to quickly have an insight on the matrix contents and patterns.
+
+\bb{LineWidth}: a number for the thickness of the line 
+
+\bb{Dashed line}: '--' makes the line dashed.
+
+\bb{DisplayName}: To specify a specific legend
+
+\bb{legend} is possible to position the legend according to the cardinal points, "North", etc\dots Use \uline{legend('Location', 'North')}.It is also possible to put it in a desired location with legend('Position', [.25 .25 .25 .25]).
+
+\bb{'HandleVisibility'} 'on' by default. This doesn't show a legend for a certain graph, useful for when we need to plot thresholds or something that we don't want to have a legend about.
+
+
+\subsection{Functions}
+
+To make a function, create a new file and write in the first line:
+
+\begin{lstlisting}[language=matlab]
+function [o1,o2,o3] = nameOfTheFunction(i1,i2,i3) 
+    %func code here
+end
+\end{lstlisting}
+Where the o's are the outputs and the i's are inputs.
+
+Is also possible to pass a function as an argument! For instance, if that function is what is suppose to be used inside another function.
+
+integral(@log, x) is passing the built-in function \ii{log} as an argument. 
+
+\subsection{Set and Matlab Objects}
+Since you've probably done something with Java or something with python oriented in that sense, you probably know what an object is. In Matlab, there are many object as well. Instead of changing its properties in the arguments of the instantiation of that object, one may create that object and then use the \uline{set} method.
+
+The following two pieces of code do exactly the same thing regarding legends.
+
+\begin{lstlisting}[language=Matlab]
+    h = legend;
+    rect = [0.25, 0.25, .25, .25];
+    set(h, 'Position', rect);
+
+    legend('Position', rect);
+\end{lstlisting}
+
+The rectangle should be [x0, y0, width, height], in percentages, given that 1 is the size of the figure.
+
+
+\todo{check}
+
+Actually, I have the sensation that in this case, "Position" is nothing more than an internal variable.
+
+
+\subsection{Save images}
+
+\begin{lstlisting}[language=matlab,numbers=none]
+fig = figure;
+plot(t,x);
+pause(0.2); %may be necessary so that the figures ends plotting, before it starts saving
+print(fig,'-dpng','img_filename'); %as png
+\end{lstlisting}
+
+\par Or use the following for printing the current figure:
+\begin{lstlisting}[language=matlab,numbers=none]
+plot(t,x);
+print('myfig.png', '-dpng');
+\end{lstlisting}
+
+\par \bb{OR EVEN} imagining it was necessary to open a file to plot that picture. File named 'ola.bin' (binary file), for instance. If the image is going to be included in some report, using .eps is a good idea since it allows "infinite zoom" because it describes the picture by vectors, instead of saving the information of each pixel of compressed.
+\par The code below will save as .eps (Encapsulated PostScript) file.
+\begin{lstlisting}[language=matlab]
+plot(t,x, 'r');
+hold on;
+plot(t, x_window, 'b');
+print([file(1:end-4) '-hamming'], '-depsc')
+\end{lstlisting}
+\par Check more formats in \href{https://nl.mathworks.com/help/matlab/ref/print.html}{print page of matlab}.
+
+
+\subsection{Opening stuff}
+\par In CSV format:
+\begin{lstlisting}[language=matlab]
+file = csvread('file.csv');
+\end{lstlisting}
+
+\par But better is to open as a matrix, in a big variety of formats:
+\begin{lstlisting}[language = matlab]
+    %Excel
+    A = readmatrix('File.xlsx','Sheet', 3,'Range','A1:AX5000');
+    A = readmatrix('file.xlsx','Sheet', "name of sheet3",'Range','A1:AX5000');
+    %More formats coming when I use it for them
+\end{lstlisting}
+
+\subsection{Max and Min}
+\par \bb{Max} function is incredibly useful. Returns the maximum of a vector and the place it appears in! Of course, the \bb{min} flavour exists too.
+    \begin{lstlisting} [language = matlab]
+        [maximum, index] = max(1:10)
+    \end{lstlisting}
+    
+You can even specify the dimension on which you want the maximum. So, if you want the maximum of each row, max(A, 2) will do a column vector with as many maximums as there are rows, thus a column vector.
+
+
+
+
+\subsection{Other useful tools}
+
+\begin{itemize}
+	\item It is possible to see \bb{EVERY} command written in matlab. Just write 'commandhistory' or press the above arrow. The commands there are OLD!
+
+	\item \bb{Load}, \bb{save}, \bb{exist}, \bb{return} to stop execution and \bb{clear} one variable:
+	\begin{lstlisting}[language=matlab]
+        try 
+            B = load("A.mat");
+            B = B.A; %to get the matrix out of the structure
+        catch
+            if ~exist('Traces.xlsx', 'file')
+                return
+            end
+            %create A code here;
+            clear aux;
+            save('A.mat', 'A');
+        end
+    \end{lstlisting}
+    \item \bb{squeeze} to take away not needed dimensions. For instance in a 1x1x5000 vector, the following code will result in a 5000x1 vector.
+    \begin{lstlisting}[language = matlab]
+        squeeze(R(prb,1,:))
+    \end{lstlisting}
+    \item \bb{find} to find an element in an array! Simply returns a vector with the indexes of where that element appears.
+    \begin{lstlisting}[language=matlab]
+        find(a == 0)
+        find(a < 5)
+        find(a == b) %return all i that a(i) == b(i), i.e all elements that are in both vectors
+    \end{lstlisting}
+    ``The relational operators ($>$, $<$, $>=$, $<=$, $==$, $\sim =$) impose conditions on the array, and you can apply multiple conditions by connecting them with the logical operators and, or, and not, respectively denoted by the symbols \&, $|$, and $\sim$.'' From the \href{https://nl.mathworks.com/help/matlab/matlab_prog/find-array-elements-that-meet-a-condition.html}{\ul{Matlab Docs}}.
+    \par Additionally: ``[row,col] = find(X) returns the row and column subscripts of each non-zero element in array X '' And this explains the above uses of this function.
+    \item A cool way of \bb{copying an array size}:
+    \begin{lstlisting}[language=matlab]
+        a = zeros(size(b)) %copies size of b to the use we want to give a
+    \end{lstlisting}
+    
+    \item To select random elements of an array: permute the indexes and select the first n elements of that permutation.
+    \begin{lstlisting}[language=matlab]
+        m = 100; n = 10;
+        a = 1:m;
+        randIndexes = randperm(m);
+        b = a(randIndexes(1:n));
+    \end{lstlisting}
+    
+    \item Cell to Logical to Double:
+    \vspace{-.1cm}
+    \quickimage{cellToLogicalToDouble.png}{.4}
+\end{itemize}
+
+
+
+
+
+
+\subsection{Label data in Scatter plots}
+\par By far the best way of getting a decent result is to use an already written function. Adam Danz published \href{https://nl.mathworks.com/matlabcentral/fileexchange/46891-labelpoints}{\ul{here}} a function that does this perfectly for you. 
+
+\par From the examples it becomes very evident the use. The function requires at least the coordinates of every point and the labels to put in every data point.
+
+\begin{lstlisting}[language=matlab]
+    labelpoints(x, y, 'Color', [1 0.5 0.5], 'FontSize', 12);
+\end{lstlisting}
+
+
+
+
+
+
+\subsection{Create Gif from plots}
+\par It can't get easier than this. Chad Greene wrote a miraculous script and published it \href{https://nl.mathworks.com/matlabcentral/fileexchange/63239-gif}{\ul{here}}.
+
+\par Before any plot, write:
+\begin{lstlisting}[language=matlab]
+    gif('mygiffilename.gif');
+    gif(gif_name,'DelayTime',0.2,'LoopCount',1,'frame',gcf);
+\end{lstlisting}
+\par Then, to insert a frame simply write \bb{gif}:
+
+\begin{lstlisting}[language=matlab]
+    for i = 1:10
+        plot(x,y);
+        gif;
+    end
+
+    web('mygiffilename.gif'); %will open on matlab web.
+\end{lstlisting}
+
+\par That is it. It can't get simpler. To view the gif with controls you can use a video player.
+
+
+
+\subsection{Write table to Excel}
+\par A matrix looks like a table but will look like a line if you use the writematrix. Instead, use \bb{writetable} and convert the matrix to a table before!
+
+\begin{lstlisting}[language=matlab]
+    table = array2table(squeeze(avg_rates_perTest(1,:,:)))
+
+    for scheduler = 1:length(schedulers_for_testing)
+        writetable(table, ...
+                    num2str(scheduler) +"-avg_rates_per_test"+ ".xlsx");
+    end
+\end{lstlisting}
+
+\par Additionally, is possible to add the correct names to the columns, but they have to have possible variable names... So there are some limitations: just letters, numbers and underscores and has to start with a letter.
+
+\begin{lstlisting}[language=matlab]
+    table = array2table(array, 'VariableNames', {'first_name', 'second', 'etc'});
+\end{lstlisting}
+
+

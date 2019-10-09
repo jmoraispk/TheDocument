@@ -1,0 +1,27 @@
+
+
+\section{Theory on Variate Topics}
+
+\subsection{Erlang Models B and C}
+\par These are statistical models to predict the necessary resources to satisfy a certain amount of traffic with the constraint of not serving at most a certain percentage of the incoming traffic at a given time. 
+\par Instead of thinking like:
+\begin{center}
+    ``''\textit{Hey, it's simple arithmetic! We get 3 200 calls a day. That's 400 calls an hour. Each call lasts three minutes, so each person can handle 20 calls and hour. So we'll need 20 incoming  lines and 20 people to answer the phones.}''
+\end{center}
+Good models were created because of this! This is completely wrong if the calls don't arrive evenly distributed across the day, which is very likely. There are busy hours where the traffic is much bigger than in any other time of the day. 
+\par A.K. Erlang derived nice formulas for us to use. Note that the terms "call" and "resource" will be used interchangeable because these models can be used for a immense variety of applications besides call-centres. For instance, to figure how many printers to buy so that people in the office can print decently.
+\par One last note: these formulas were derived for "infinite sources" of incoming traffic. However, they work very very well for cases when there are about 10x more sources than trunks. For real world applications that tends to be the case. 
+
+\par The concepts:
+\begin{itemize}
+    \item \bb{Erlang}: Dimensionless unit. Regards the continuous use of a resource. Normally is referred to hours, therefore 90 minutes of traffic are regarded as 1.5 erlangs.
+    \item \bb{Grade of Service}: Probability of all servers/trunks being busy when a resource is requested for a given amount of traffic and for a certain amount of trunks.
+\end{itemize}
+
+
+\subsubsection*{Erlang B}
+Use if a call is really blocked, i.e if the person trying to use the resource doesn't wait to use it when all the trunks are busy at that time. Given 2 from \ul{Traffic}, \ul{Grade of Service} or \ul{Number of Trunks} one may calculate the other.
+\par Tables can be found \href{https://onlinelibrary.wiley.com/doi/pdf/10.1002/0470862696.app5}{here}.
+
+\subsubsection*{Erlang C}
+Use if a blocked call is delayed instead of the "come back later" that happens in the previous model. This one needs as well the \ul{average duration of each call}.

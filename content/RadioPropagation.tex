@@ -1,0 +1,133 @@
+
+
+
+\section{Antennas}
+
+\quickimage{Propagation/consts}{.5}
+
+The electric permittivity is what relates the Electric Displacement Vector (D) and the Electric Field (E). For a deeper meaning one has to look into the constitutive relations as well.
+Likewise, the magnetic permeability relates the Magnetic Induction Field (B) with the Magnetic Field (H).
+
+\quickimage{Propagation/constitutivas.png}{.5}
+
+The Electric Polarization and Magnetization vectors show how the material changes when to being subjected to a Electric/Magnetic field. This change can be displacement of charges according due to the application of the Electric field or similar in relation to the magnetic induction field. The higher the permittivity, the most charges move with the application of the field. The higher the permeability, the higher the internal magnetic field.
+
+
+
+
+\section{Radio Wave Propagation} 
+
+It is absolutely pivotal some nomenclature in order to understand each other.
+
+\quickimage{Propagation/1.png}{.6}
+
+Mainly, everything that is bold is a vector and everything that has a bar on top is a complex amplitude. With these definitions out of the way, we can start:
+\vspace{.5cm}
+
+
+A wave propagating across the z direction has the following (mathematical) shape:
+
+\begin{equation}
+    e(z,t) = E_o cos(wt - kz)
+\end{equation}
+
+We can only talk about waves when the field disturbance changes in time and propagates in space, thus the dependence with a spatial coordinate and time. Note further that we start off with a very simple wave: is sinusoidal, doesn't have attenuation, only propagates in one direction and only oscillates in one direction.
+
+To write a (slightly) more general formula for a wave, while taking advantage of the complex notation that assumes already a sinusoidal wave - note that the real part of a exponential is a cossine -, we get:
+
+\begin{equation}
+    e(z,t) = Re\{E e^{jwt}\}, E = E_o e^{-jkz}
+\end{equation}
+\begin{equation}
+    e(r,t) = E  cos(wt - \boldsymbol{k} \cdot \boldsymbol{r})
+\end{equation}
+
+
+Something important to keep in mind:
+
+\begin{center}
+    \bb{In free space, electric and magnetic fields are
+    mutually orthogonal and orthogonal to the
+    propagation direction.}
+\end{center}
+
+
+Note, however, that this is not true for propagation in matter that is anisotropic or when the waves are contained in a waveguide such like a metallic waveguide where there are TE/TM modes. But we won't consider those cases, at least for now.
+
+Also, the vector $\boldsymbol{k}  = k_x \hat{x} + k_y \hat{y} + k_z \hat{z}$ represents the direction of propagation because each of its components will contribute a phase to the oscillation of the wave.
+
+Further note that the above wave equation is for a plane wave. Fortunately in the far-field all waves are plane waves or can be obtained from them therefore that expression will pop-up fairly often. However, most waves are spherical waves that are no more than plane waves that decay with the radius to the source, therefore the surfaces of equal amplitude are spheres.
+
+\begin{equation}
+    \frac{A}{r} e^{j(wt-kr)}
+\end{equation}
+
+The more general formula for the complex amplitude is:
+
+\quickimage{Propagation/3.png}{.6}
+
+The last part is important because the expression for the free space impedance $Z_0$ comes directly from the Maxwell equations and it is easier to solve them in the frequency domain (with complex amplitudes/phasors).
+
+\quickimage{Propagation/2.png}{.5}
+
+Resulting in the expression below, from where we can prove the previous statement of orthogonality between fields and direction of propagation.
+
+\quickimage{Propagation/2-5.png}{.5}
+
+Then many expressions come from the Maxwell equations when we consider losses. Because the actual Dispersion Equation is the following:
+
+\quickimage{Propagation/4.png}{.5}
+
+
+\bb{Note that the amplitudes of the field for each component} can NOT be a positive number. They can be a complex number in the sense that they will influence the polarization of the field. We'll see that in the next section!
+
+In summary:
+\quickimage{Propagation/5.png}{.5}
+
+
+\subsection{Polarization}
+
+
+
+
+
+\bb{The polarization is the shape the field oscillation describes while looking at the wave from propagation direction with the wave going away from us}. An easier way of finding if it is rotating to the left or to the right, we can use the right-hand, with the thumb along the propagation. If it is rotating along the way our (right-)hand closes, then it is a right circular polarisation. 
+
+The reference for horizontal polarisation is the earth.
+
+
+This derivation of \href{http://kestrel.nmt.edu/~mce/Polarization}{\ul{The general Elliptic polarization}} shows why plane waves propagating freely can have its polarization described generally by an ellipse. Also shows that certain specific parameters of that ellipse can lead to certain more familiar polarizations, such as linear and circular.
+
+
+\quickimage{Propagation/pol1.png}{.5}
+%explain this
+
+\subsection{Reflection}
+
+All reflections' chapter is according to Snell Laws.
+
+A few bullet points to take away from the first class on reflection are:
+\begin{itemize}
+    \item a dry soil behaves as a metal for a very small angle with the ground, typical in very long distances. ``Behaving as a metal'' means that the reflection coefficient will be -1, for either polarisation;
+    \item Brewster's Angle is of incidence for which the parallel component of the field is passes completely to the other side of the surface. The reflected wave does a $90^{\circ}$ angle with the refracted wave and only has H field. Note that this only happens for parallel polarisation. In perpendicular is the H field that will be suppressed on reflection. The perpendicular component is never fully absorbed. 
+    \item Horizontal polarisation always has bigger reflection coefficients therefore is worst to use because it will cause more variability on the arrival. Other word for incidences with very short angles with the ground is "grazing incidences".
+    \item Dependences with frequency increase with dielectric conductivity. Else the losses will simply be too small.
+\end{itemize}
+
+One thing that needs to be introduced are the Fresnel coefficients:
+\quickimage{Propagation/6.png}{.5}
+
+
+Note further that the last bullet point mentioned the tangent of the loss angle.
+
+\begin{equation}
+    \tan \delta = \frac{\sigma}{\omega \epsilon}
+\end{equation}
+
+Note that if the conductivity is too small, the whole expression will be controlled by that and the frequencies would have to be very small as well to make a difference. Since we don't use those frequencies in Radio Propagation, we may say that only for a sufficiently high conductivity, the frequency dependence increases.
+
+
+\subsection{Spherical Earth}
+
+Surprise: the Earth is not flat, it's spherical. And this curvature needs to be accounted specially because even the direct ray may be influenced by this curvature.
+

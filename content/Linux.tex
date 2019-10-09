@@ -1,0 +1,484 @@
+
+
+
+\section{Linux }
+
+
+
+
+\subsection{How to build from source}
+\begin{enumerate}
+    \item Be sure you have everything needed: 
+    \begin{lstlisting} [language=bash]
+        sudo apt-get install build-essential
+    \end{lstlisting}
+
+    \item Download source. May come in various \textit{.tar} formats. The flags \textbf{xvf} mean e\textbf{x}tract to a \textbf{f}ile with \textbf{v}erbose. When not specified, the file will have the same name. Then flag \textbf{z} for \textit{.gz} or flag \textbf{j} for \textit{.bz2}. If the extension is \textit{xz} then no flag is needed because GNU tar recognizes the format by default. The code should be one of the following:
+    \begin{lstlisting} [language=bash]
+        tar -xzvf file.tar.gz
+        tar -xjvf file.tar.bz2
+        tar -xvf file.tar.xz
+    \end{lstlisting}
+    Note: sudo apt install xz-utils if tar gives error.
+    
+    \item Check dependencies, i.e if you have everything necessary to build that package. It may require libraries specific to that package. Do the following code or check the README or INSTALL files.
+    \begin{lstlisting} [language=bash]
+        ./configure
+    \end{lstlisting}
+
+    \item Now various paths are possible. First of all, read the README and/or the INSTALL to look for instructions. %The package is build it the standards \textit{make} or with \textit{cmake}.
+\end{enumerate}
+
+
+
+
+
+\subsection{How to change Permissions and Ownership}
+\par Sadly, this happens very often. Anytime something like "permission denied" is presented in the terminal or similar but anywhere else, it is because permissions and ownerships are not set the right way. If they were, the owner of the file would be able to do what he wants with it.
+
+\par First, what the permissions mean?
+\begin{itemize}
+    \item \textbf{read} restricts or allows viewing the directories contents, i.e. ls command
+
+    \item \textbf{write} restricts or allows creating new files or deleting files in the directory. (Caution: write access for a directory allows deleting of files in the directory even if the user does not have write permissions for the file!)
+    
+    \item \textbf{execute} restricts or allows changing into the directory, i.e. cd command
+\end{itemize}   
+\par 4 is read. 2 is write. 1 is executing. Therefore 6 is r+w, 7 is r+w+x-.
+\par Additionally, running \textbf{ls -l} one gets something like \textbf{-rw-r--r--}. Each 3 refer to Owner, Group or Other. In this order.
+
+\par Is possible to do the command in 2 different ways. The quickest is just using the numbers. One number per group. Like this:
+\begin{lstlisting}
+    chmod 754 filename
+\end{lstlisting}
+\par This way, the owner can rwx, group rw and other people/users can only read the file. Note: 770 is possible to not even allow the files to be discovered by other users.
+
+\par Now we know how to alter what certain groups can do to a file. However, if the files doesn't belong to the correct group, those permissions changes may not do much regards the "permission denied" problem. Therefore, how to change ownership?
+\par With \textbf{ch}ange \textbf{own}er duh!
+\begin{lstlisting}
+    sudo chown owner_name:group_name filename
+\end{lstlisting}
+\par A little small note: \textbf{whoami} gives the user name. Alternatevely, \textbf{users} and \textbf{groups} give the users with initiated sessions and the groups the current user belongs to.
+
+
+\par To finalize, why running \textbf{./script.sh} and running \textbf{bash script.sh} require different permissions? \\
+The first one needs executing permissions and the second just needs read permissions. This is because the first we are saying to execute the shell script. In the latter it is said to 1º load bash, then give "script.sh" as an argument to it. Therefore, bash just needs to read what is written in the script.sh file.
+
+\par Running scripts as ./script.sh is a more general way as it also works with ./script.py as long as the script has a \textit{hashbang} (\#!)inside to tell the program loader what should be used.
+
+
+
+
+
+\subsection{Formatting a partition as exFAT}
+
+\par exFat is readable in every computer. In linux is necessary to install some utilities:
+\begin{lstlisting}[language=bash]
+    sudo apt-get install exfat-fuse exfat-utils
+\end{lstlisting}
+
+\par First: HOW TO MANAGE PARTITIONS?
+\par Ans: install gparted, it does a good job.
+
+\vspace{1cm}
+\par Second: HOW TO FORMAT AS exFAT?
+\par Ans: gparted can't do this... supposing the devices has only one partition (all partitions can be deleted in gparted to achieve this) and is called mmcblk0 in the devices directory.
+
+\par To list all connected storage devices
+\begin{lstlisting}[language=bash]
+    sudo fdisk -l
+\end{lstlisting}
+
+\par To wipe the filesystem (almost the same as gparted does):
+\begin{lstlisting}[language=bash]
+    sudo wipefs /dev/mmcblk0
+\end{lstlisting}
+
+\par To create only one partition. Note: in the fdisk utility is necessary to confirm several intermediate steps, because of that "all enters" means to press enter until other instruction in the normal utility prompt is asked.
+\begin{lstlisting}[language=bash]
+    sudo fdisk /dev/mmcblk0
+    n
+    "all enters"
+    t
+    7
+    w
+    "all enters"
+\end{lstlisting}
+
+\par I am pretty sure until lhere it could be done in gparted as well. But now comes the important part! After creating a partition, when doing sudo fdisk -l, there is a partition in the device we want to format. This is the partition we will format as exFAT. That partition in this case is called mmcblk0p1 (makes sense right?). Do the following to format is as exFAT:
+\begin{lstlisting}[language=bash]
+    sudo mkfs.exfat -n hardDisk /dev/mmcblk0p1
+\end{lstlisting}
+
+\par hardDisk is nothing more than the name you want to call the partition, doesn't matter.
+
+\par You can check everything went fine with:
+\begin{lstlisting}[language=bash]
+    sudo fsck.exfat /dev/mmcblk0p1
+\end{lstlisting}
+
+\par Congratz, done :)
+
+
+
+
+\subsection{Install Custom ROM with Linux}
+\par The custom ROM is installed in the android device, as I hope you remember...
+
+
+\par The major difference in the processes between Windows and Linux is in the initial part. After the initial part concerning installing TWRP in the phone, the rest is trivial. In fact, I've just noticed that in Windows is necessary to write several commands as is required in Linux, so by covering the part in Linux the might be some transferability to Windows.
+
+\par The steps necessary (general, independent of Linux or Windows):
+
+\begin{enumerate}
+    \item Get developer options
+    \item Install adb and fastboot utilities
+    \item Backup (optional)
+    \item Allow OEM (Original Equipment Manufacturer) bootloader unlocking
+    \item Boot into fastboot
+    \item Unlock bootloader
+    \item Install TWRP (Team Win Recovery Project)
+    \item Put ROMs, Gapps and Magisk in an SD card and clean \& dirty flash as much as you like.
+\end{enumerate}
+
+\par The difference between the two OS's is on how to perform the step 2 and step 6 may be marginally different also. Regarding step 2, Windows has an executable that lets you do everything at once while Linux has to be more paced and do everything separately. Regarding step 6, one is done in the terminal (wanna guess which?) and the other has a somewhat nice gui.  
+\par Maybe it wouldn't be such a bad idea do use a windows virtual machine for this actually... But oh well. 
+
+
+\par \bb{NOTE}: If the phone can't transfer files to the pc, don't even start this! On linux MTP must be enabled and installed. Enabling can be done by simply pressing the pop up on the phone to MTP(Media Transfer Protocol) and installing on Linux:
+\begin{lstlisting}[language=bash]
+    sudo apt install mtp-tools libmtp mtpfs
+\end{lstlisting}
+
+\par ADB (Android Debugging Bridge) is the utility that allows a connection with the phone with a considerable degree of permissions, for debugging purposes.
+
+
+\par After this, in order:
+
+
+\vspace{.5cm}
+{\Large \bb{1} Enable Developer Options }
+\par Go to settings, system, tap 7 times in the build number of the phone. 
+
+\vspace{.5cm}
+{\Large \bb{2} Install ADB and fastboot utilities}
+\par In Linux, this is the hardest step! A list of the steps:
+
+\begin{enumerate}
+    \item Go \href{https://dl.google.com/android/repository/platform-tools-latest-linux.zip}{\ul{here}} to download the latest abd tool.
+    \item If the above doesn't download properly, is possible to get it from the apt repository from android-tools-adb. If it works, do one more thing to be installed system wide: change path to this adb tool by adding to .bashrc the following: \\export PATH=\$\{PATH\}:/home/joao/plataform-tools/adb \\, considering the extracted file was placed in my top user folder.
+    \item Run: sudo apt install android-tools-fastboot.
+    \item Now adb is "installed" and fastboot too.. If you want to make a FULL backup of your phone - worth it because TWRP will delete everything - do the following: \bb{suicide}.
+\end{enumerate}
+
+\par Obviously kidding, but this is uncertain territory. Now is necessary to be sure everything is 100\%. The following set of procedures did work for me after trying TOO many things: 
+\begin{enumerate}
+    \item don't turn on usb debugging still and don't connect the phone yet to the pc: DELETE .android from home!
+    \item revoke all usb debugging authorizations just below that option (on phone)
+    \item kill adb server with adb kill-server
+    \item connect phone to pc, enable MTP on phone and then enable usb debbuging
+    \item start adb server on pc: adb start-server
+    \item with "adb devices" the output should now be "number device" instead of "number unauthorized"
+\end{enumerate}
+
+\vspace{.5cm}
+{\Large \bb{3} Backup (optional)}
+
+\par If you still are with me, then we might be able to backup things now! The following will allow a complete backup to be placed in the Documents folder: (confirmation on phone required and a password for encryption can be used)
+\begin{lstlisting}[language=bash]
+    adb backup -apk -shared -all -f ~/Documents/backup.ab
+\end{lstlisting}
+
+\par To get everything back, the following can be done to restore the backup: (again confirmation needed and password requested if used before)
+
+\begin{lstlisting}[language=bash]
+    adb restore ~/Documents/backup.ab
+\end{lstlisting}
+
+
+\vspace{.5cm}
+{\Large \bb{4} Enable OEM Bootloader unlocking}
+\par Go to general settings again, developer options and activate: OEM unlocking and Advanced reboot. 
+
+
+\vspace{.5cm}
+{\Large \bb{5} Boot into fastboot}
+\par Reboot into bootloader/fastboot. Setting the advance reboot option makes this much easier. The other way would require booting into recovery and from recovery to fastboot.
+
+\vspace{.5cm}
+{\Large \bb{6} Unlock Bootloader}
+\par Check if the fastboot is working:
+\begin{lstlisting}[language=bash]
+    sudo fastboot devices
+\end{lstlisting}
+\par If one shows up, cool. 
+
+\par Next, unlock bootloader with:
+\begin{lstlisting}[language=bash]
+    sudo fastboot oem unlock
+\end{lstlisting}
+
+\par Confirm on phone and then should be cool. Takes a while to boot back to the OS, but then all is fine.
+
+\vspace{.5cm}
+{\Large \bb{7} Install TWRP}
+\par After booting to the OS, boot back to fastboot/bootloader with the restart method in number 5. It will be necessary to enable the previous options again.
+\par When in fastboot, check if everything is fine
+
+\begin{lstlisting}[language=bash]
+    sudo fastboot oem device-info
+\end{lstlisting}
+\par On the line saying "Device unlocked" is should be "true". The other lines don't matter.
+
+\par To install TWRP in the recovery partition, so that it runs when we try to recover, do:
+\begin{lstlisting}[language=bash]
+    sudo fastboot flash recovery recovery.img
+\end{lstlisting}
+
+
+\vspace{.5cm}
+{\Large \bb{8} Install custom ROMs, Gapps, Magisk and others}
+\par Now, put the ROMs you like in the SD card, Magisk and Gapps. 
+
+\vspace{.4cm}
+\par Some clarification on the above:
+\begin{itemize}
+    \item ROMs can be downloaded by searching 'name\_of\_phone ROM
+    \item Gapps is necessary with the given ROM doesn't come with google apps, like the playstore. I don't know if it happens always, but is very frequent. Can be downloaded here: \href{https://opengapps.org/}{opengapps.org}. Note that is necessary to know which processor architecture your smartphone uses. Oneplus X is ARM.
+    \item Magisk is the BEST way to rooting your phone and have full access to it inside the ROM. Can be downloaded here: \href{https://magiskmanager.com/#How_to_Download_Magisk_Manager_Latest_Version_711_For_Android_2019_Method_1}{magiskmanager.org} and go to install magisk for non-rooted phones, which will give you a zip from github. 
+\end{itemize}
+
+\vspace{.4cm}
+
+\par Some clarification on the differences between clean and dirty flash. \\
+Clean flash is FORMATTING COMPLETELY EVERYTHING in TWRP, by doing Wipe-> format data and only after that installing something. This is only needed when flashing incompatible ROMs, which are all ROMs that are not direct patches from the previous one. ROMs for different versions of android (8/Oreo to 9/Pie) are not compatible and from 8 to 8.1 I have might doubts.
+Dirty flash is just erasing some cache and then flashing/installing. It can be done with simple programs that don't change all the things like installing a new ROM does. 
+
+\vspace{.4cm}
+
+\par Having an Oneplus X, a great developer for this phone is YumeMichi and he/she posts everything here: \href{https://basketbuild.com/devs/YumeMichi}{YumeMichi Repo}. 
+
+
+
+
+
+\subsection{Android Studio with Linux}
+\par The above section is related with this one because ADB is necessary to run apps in the phone quickly.
+\par In practice, if "adb devices" detects a good "device", then is all good. this section is also related with the above because if you want to test on an older phone, let's say more than 3 years old, it may not be possible due to API constrains. Therefore, what I needed to do was installing a very stable custom ROM Omni, by YumeMichi, that can be found the repository mentioned above.
+
+\par To get everything ready to be able to plug and unplug the phone from the pc and still be recognized by Android Studio is was necessary to disconnect the phone, put MTP has a default mode, revoke USB debugging authorizations, delete .android, open android studio (the current session can't have already tried to connect to the phone once or else it will lead to a adb loop), "adb kill-server", then connecting the phone WITHOUT usb debugging enabled, then enable usb debugging and wait a bit. During about 10 seconds wait, there can be a popup on the phone which represents great news. Mark as "always trust". Check "adb devices" and the devices should be "device" and not "unauthorized" or anything.
+
+\par From here, android studio will almost certainly work.
+
+\vspace{1cm}
+
+\par From here on, I'll write EVERYTHING I learn about Android Studio. It is hard to structure the amount of random information I'll gather so my strategy will be not doing so. I'll just add titles with the objective task that I learned to perform and some related information. 
+
+
+{\Large Change text size}
+\par By adding:
+
+\begin{lstlisting}[language=java]
+    android:textSize="25sp"
+\end{lstlisting}
+
+to activity\_main.xml, near the part of "android:text="Hello World!" ", was possible to change the text size.
+
+\par Additionally, by messing with some things on the design tab, layout window, was possible to adjust the text window to the text.
+
+\par To end: WHAT'S THE DIFFERENCE BETWEEN SP AND DP?\\
+One means scale-independent pixels and the other density-independent pixels. The density of pixels a screen has is know as dpi/ppi (dots per inch/ pixels per inch). Now the choice is: is better to disregard the various format rations of screens of their density, what changes more? The form factor changes a lot more and a lot more abruptly. So it influences the text much more and we should use sp for text almost every time. Also, the scale can change with the user given scale and be messed up. Using sp prevents that.
+(a better look at this topic wouldn't be a bad idea...): DP change from phone to phone, regarding the aspect ratio. SP shouldn't...right?
+
+
+{\Large Java background}
+\par I've created a document with the essentials, very bare material of course, of Java. Additionally, I'll write in another google document the things I learn from experienced Java and Android programmers.
+
+
+{\Large Git with Android Studio}
+\par This is one of the best things about Android Studio: you can go to VCS (Version Control System) and check your previous commits, commit and push, resolve merges, ect...)
+
+
+
+
+\subsection{Downloading videos from all over the web}
+\par The Linux way, with the terminal.
+\par For this, a tool called youtube.dl.
+    
+\begin{lstlisting}[language=bash]
+    pip install --upgradable youtube_dl
+\end{lstlisting}
+
+\par There are a TON of supported websites that can be consulted \href{https://ytdl-org.github.io/youtube-dl/supportedsites.html}{here}.
+
+\par Some usage examples:
+\begin{itemize}
+    \item To downlaod description, metadata, annotations, subtitles and thumbnail
+    \begin{lstlisting}[language=bash, numbers=none]
+        youtube-dl --write-description --write-info-json --write-annotations --write-sub --write-thumbnail url
+    \end{lstlisting}
+    \item for the best single file video and audio quality
+    \begin{lstlisting}[language=bash, numbers = none]
+        youtube-dl -f best url
+    \end{lstlisting}[language=bash, numbers = none]
+    \item NOTE: the best quality may be really good... do you want 4k if you display if only FHD (1920x1080)? take the "best" out and choose the quality by number and just put it instead of the "best".
+\end{itemize}
+
+
+\par This topic came up because self english training required transcribing videos. From Ted is difficult to have the exact transcripts downloaded automatically, but they can be easily copied.
+\par However, a good video player is key for this so that it becomes much easier to jump to different parts of the video.
+
+\subsection{MPV - The best video player}
+\par Download as usual, these will be some advices to work with it.
+\par Check \href{https://mpv.io/manual/master/}{Manual} for a complete and clear description of all commands.
+
+\par For sound adjustments use 9 and 0, to decrease and increase the volume.
+\par For previous and next frame, use \bb{,} and \bb{.}, respectively.
+
+\par For controlling the speed use: \[\] or \{\}. Backspace to revert the speed back to normal.
+
+\par Ctrl + Shift + Left or Right to align subtitles in time.
+\par To use subtitles is just needed to use the GUI.
+\par All the rest is at the provided link.
+
+
+
+
+\subsection{Keybindings - Keyboard and Mouse}
+\par For the mouse: \href{https://askubuntu.com/questions/152297/how-to-configure-extra-buttons-in-logitech-mouse}{Configure mouse buttons to custom sets of commands} - Use to detect only mouse button presses:
+    \begin{lstlisting}[language=bash]
+        xev | grep -A2 ButtonPress
+    \end{lstlisting}
+    To detect anything, simply run 'xev' in the terminal. 
+
+    Then do as the examples show, 'keydown Control\_L', 'keyup', 'key z' for a short press. THEN: 'xbindkeys -p' to apply the .xbindkeysrc conf file.
+
+    And the Fn keys can't be used... Explanation \href{https://www.reddit.com/r/i3wm/comments/5jm408/xev_doesnt_see_my_fn_key/}{\ul{here}}.
+
+    \bb{BEFORE}: trying the same with the keyboard, like mapping the arrows to the middle of the keyboard, check Section \ref{sec:linux_life_lessons_keybindings} (clickable) .
+    
+    
+\vspace{.5cm}
+\par For the keyboard, the answer is using xmodmap if what you really need it is chaning functionalities instead of adding them. If you need to add them, xbindkeys is the way to go. 
+But I urge you, read \ref{sec:linux_life_lessons_keybindings} before doing anything, I've invested quite a bit of my life, speacially while I was the most busy, exploring no way out and very unefficient paths.
+
+
+
+
+
+
+
+\subsection{Linux Image Editor}
+\par If you want something like paint, don't bother. Use \href{https://pixlr.com/editor/}{\ul{pixlr.com/editor/}}.
+
+
+\subsection{Linux Video Editor \& Instagram}
+Yes, one may use Instagram. If one does, one may need some tools.
+To resize photographs or videos, something that is needed in case one needs to upload multiple files at once, \href{https://www.kapwing.com/resize-video}{\ul{the kapwing resize tool}} does that perfectly.
+
+
+Additionally, the general \href{https://www.kapwing.com/workspace}{\ul{Kapwing Tool}} is very usefull for video and image editing. Quick and easy really.
+
+
+
+
+\subsection{Other Linux related stuff}
+\begin{itemize}
+    \item \href{http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html}{More than enough about bash here} 
+    \item To download files from links: wget --user-agent="Mozilla" link
+    \item To convert .ppt to .pdf with libreoffice installed:
+\end{itemize}
+
+\begin{lstlisting}[language=Bash, basicstyle=\footnotesize]
+    libreoffice --headless --invisible --convert-to pdf *.ppt
+\end{lstlisting} 
+\begin{itemize}
+    \item \href{ https://nl.mathworks.com/help/stats/continuous-distributions.htm}{Matlab Continuous Distributions}
+    
+    
+    \item \href{https://nl.mathworks.com/support/bugreports/1765886}{MATLAB Ubuntu fix}Necessary for help displaying and no errors on terminal
+    
+    \item To search stuff on the terminal by name: \\ 
+    find directory -name "filename", e.g: find . -name "error.png"\\
+    Or add the following for files: find directory -type d -name "foldername"
+    
+    
+    \item sudo rm /var/crash/* \hspace{1cm}   for removing error reports every time they appear, or else they will continue to appear every time the computer boots
+    
+    
+    \item xdg-open . \hspace{1cm} to open the file explorer in the terminal location. xdg-open helo.mp4  \hspace{.5cm} is will open with the default program the specified file.
+    
+    
+    \item To create a File shortcut for Thunar, the beautiful file manager that XUBUNTU uses, visit \href{https://forum.xfce.org/viewtopic.php?id=9711}{\uline{this}};
+\end{itemize}
+
+
+
+
+
+\subsection{Linux Life Lessons}
+\subsubsection{Wine and PlayOnLinux - Project: Kindle to PDF}
+\par Sometimes Linux is not ready for somethings. Or somethings are not ready for Linux. In either case, the things should be used in the correct place.
+
+\par \bb{Lesson:} Wine and PlayOnLinux are fun and are becoming increasingly less of a cancer, but for now... they still a very substantial cancer. So, if something is meant to be done in Windows, for the next 2 years, at least, do so. 
+
+\par It took me 10 minutes in windows to achieve what I couldn't after 4 hours in different days in Linux. Don't waste your life in stupid things like this.
+
+\par The solution for achieve kindle to PDF convertion is below. Basicly, uses a older version of kindle to pc to download a file that is protected with a breakable cypher and is just needed to load a plug-in in a e-book reader called Calibre. Full instructrions are below and work flawlessly in windows. In Linux they don't: the plug-in loaded into Calibre is meant to run on windows, so it requires far more stuff and has too many windows dependencies, so it would take too much time to even have the possibility of making it work. Completly not worth the try.
+
+\par Do \href{https://askubuntu.com/questions/1011989/where-are-amazon-kindle-ebooks-on-my-linux-pc-after-i-download-them-for-offline/1012193#1012193}{\ul{this}} in windows and get the pdf after that.
+
+\par Then you can use stuff like this to have a nice print out of it.
+\begin{lstlisting}[language=bash]
+    pdfnup --nup 2x1 --suffix test file.pdf
+\end{lstlisting}
+
+
+\subsubsection{Keyboard keybindings} \label{sec:linux_life_lessons_keybindings}
+
+{\large \bb{Know what you are looking for}. \par Simplify the problem. \par Ask in Ubuntu Forums.}
+
+\par After more than a morning on this, the major difficulty with mapping keyboard keys is that most of them already have a mapping that completely interferes what any other function you want to give them! For instance, \bb{Alt} is used when your mouse is f*cked and you need press menus in windows. \bb{Control} is practically reserved for every application. Not all keys thought, but if you want to map the arrows to JKLI for instance, Ctrl is not a very good key to use because everytime you press an arrow it will count the Ctrl as a modifier of the arrow and jump a whole word, for instance. \bb{Shift} similar. \bb{Alt Gr} seemed to be the answer, but for some reason, it prints f*cked up characters when you try to use it... Combinations of these are out of question. 
+
+\par Then what other modifiers do you have that aren't being used, are close to your hands when you write and you never use them? \bb{Caps Lock}? Haven't you been paying attention to what I said: You have to remove the function that keypress has, or else it will still be identifier as a caps Lock.
+
+\par Bottom line: if you can find a way of changing the event that a certain keypress sends, you can make it seem like that key is being pressed... For instance: when you press ctrl, you make it seem like you are presing Insert (that no one f*cking uses), then you can make combinations with Ctrl. \bb{HOWEVER} you completely miss the ability of pressing control!
+
+\par \uline{What you really want to do is changing the response to a set of key presses.} If your keyboard is already taken, and most of those things don't serve any purpose, you want to change what happens when you press those things! \bb{Alt Gr} is the perfect example! Do you know that when you press that cripple cousin of Alt that is Alt Gr, you end up with a modifier letter? Moreover, if you press Shift + AltGr you get yet another variation! \bb{Here is the opportunity!}
+
+\par \ul{You will change what happens when you press those combinations!} Use \bb{xmodmap} for this!
+
+\vspace{.5cm}
+For knowing what you need to change, look this what for the key. The "h H h H" is just something that is uniquely in the line of the h key. Do this for every key you want to change.
+\begin{lstlisting}
+    xmodmap -pke | grep "h H h H"  
+\end{lstlisting}
+
+\vspace{.5cm}
+From \href{https://askubuntu.com/questions/1025765/how-to-map-alt-hjkl-keys-to-arrow-keys}{here} the image below. You want to change that line because every key means what happens when it is pressed.
+
+\quickimage{answerkeybindings.png}{.64}
+
+\par The exact mappings can be different. I did something like:
+
+\begin{lstlisting}[language=bash, numbers=none]
+    joao@joaoPC:~$ xmodmap -e "keycode 44 = j J j J Left dead_hook dead_horn"
+    joao@joaoPC:~$ xmodmap -e "keycode 45 = k K k K Down ampersand kra"
+    joao@joaoPC:~$ xmodmap -e "keycode 46 = l L l L Right Lstroke lstroke"
+    joao@joaoPC:~$ xmodmap -e "keycode 31 = i I i I Up idotless rightarrow"
+    joao@joaoPC:~$ xmodmap -e "keycode 30 = u U u U Home downarrow uparrow"
+    joao@joaoPC:~$ xmodmap -e "keycode 32 = o O o O End oslash Oslash"
+\end{lstlisting}
+
+\par So, with AltGr JKLI I have the arrows and have the Home and End in U and O, respectively. And this way is not necessary to change any shortcuts anywhere, will work everywhere and is the fastest way possible of doing it.
+
+\par \bb{The lesson} to take away is that if something somewhat simple is already becoming a mess, you are probably asking the wrong questions and there is a much shorter and more pleasant path that you are not finding. Take a step back, look and think about the problem verbally... Ask a question in the Ubuntu forums because they sugest a load of different answers that most certainly will have your question!
+
+
+
+\vspace{1cm}
+
+One last thing: if you want to make everything "reboot proof", put everything into a script and run it at the beginning.
+
+
+

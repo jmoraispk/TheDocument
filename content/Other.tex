@@ -1,0 +1,227 @@
+
+
+\section{Database work - SQL}
+
+
+\subsection{SQL commands}
+
+\par The basic syntax is:
+
+SELECT \{Column name \} FROM  \{Table name\} WHERE \{condition\}
+
+From here, there are a lot of variety that can be added to be possible lot of flexibility. 
+
+There are also other types of commands, that I haven't used so I won't talk here. Search :)
+
+\subsection{Browsing Tool with Filters}
+\par To use filters while using DB browsing tool installed on linux from \href{https://sqlitebrowser.org/}{\ul{sqlitebrowser.org}} with:
+\begin{lstlisting}[language = bash]
+    sudo apt install sqlitebrowser
+\end{lstlisting}
+Consult their wiki on that, it can be found \href{https://github.com/sqlitebrowser/sqlitebrowser/wiki/Using-the-Filters}{\ul{here}}.
+
+\vspace{1cm}
+
+\par Additionally, is possible to export the result of filters to a csv by selecting the table with the mouse, pasting it in the side window and selecting ``Export'', not forgetting to add the .csv extension to the file name.
+
+\par One last important feature: is possible to import and merge tables: if there is a similar database with a table with the same name (and structure) is possible to open that database with the same program, press on the table and Export it to csv. Then when opening the database where we want to import a table or various rows to, we select import from the File menu and select the csv. Note that the columns names in that csv may be in the first row. If this happens, we must check the square box that says "columns in the first row" so that the table can be read appropriately. Then it will ask if we want to merge and the previous table with the same name as the imported table will have the new rows from the imported table. If we want to do some filtering, for instance, \ii{if we just wanted to import certain rows} we can now filter the table, or we could've filtered the table that was imported before importing it.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\pagebreak
+\section{Visual Studio Code: The Environment for Development}
+
+\par This whole document was created with \LaTeX \ on Visual Studio Code. 
+\par I ran commands for installing the necessary \LaTeX \ stuff, these can be seen below.
+\par I installed vscode with the software center from the .deb package downloaded throught their website and then installed 2 extensions. The first extensions is Latex Workshop from the extensions market inside vscode. The second I can't remember which one was or even if it did something...
+
+\vspace{.5cm}
+\begin{lstlisting}[language=bash] 
+    sudo add-apt-repository ppa:jonathonf/texlive
+    sudo apt update && sudo apt install texlive-full
+\end{lstlisting}
+\vspace{.5cm}
+
+\par In addition, I configured \textit{Ctrl + .} for compilation opening every shortcut with \textit{Ctrl + K + Ctrl + S} (ctrl + K then lift the K key and press S). However, with the dual window mode, just as I it \textit{Ctrl + S} to save, it automatically compiles which is very pleasant.
+\textit{Alt + Z} for word wrap is useful too.
+To finish is possible to have 2 windows side by side in the same vscode instance by right clicking the window on the top bar and selecting "Slit Left/Right".
+
+\vspace{1cm}
+\par Some useful things to know:
+\begin{itemize}
+    \item F1 opens the command pallet. From there, type what you need :P
+    \item Ctrl + Alt + V -> open on a window on the right the document that is being edited on the main window;
+    \item Ctrl + Alt + H -> go to the same place on the \LaTeX document as where the source is;
+    \item You can commit and push and all that git stuff with vscode;
+    \item Ctrl + Alt + A -> After selecting a word, adds it to user dictionary, therefore is not considered an error anymore.
+    \item Ctrl + T + Ctrl + A -> Toggle Activity Side-bar (shows files, ect...)
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+\section{GitHub}
+\par So far, what a pain. A globally used tool that takes so much to learn. Here's the short guide.
+
+\vspace{.5cm}
+
+{\large Crete or clone}
+\vspace{.5cm}
+\par It depends who starts it. If you start it, you have to create it. If someone else already created it, then clone.
+
+\par In the creation part, it can be done in the terminal, with some kind of GUI/in an IDE (Visual Studio Code and Android Studio do this very nicely). Or it can be done on a Git website which is has been necessary for me, due to terminal problems.
+
+\par Create on Website. Works all the times, then clone it.
+\vspace{.5cm}
+
+
+{\large How Git works}
+\vspace{.5cm}
+
+
+\vspace{.5cm}
+
+{\large Other important files}
+
+\vspace{.5cm}
+\par They are: gitignore, README, license...
+
+\par GitIgnore is made to make git ignore certain files in the directory, so that those aren't included in the repository. Examples of those files are the .log files generated by compilations, build auxiliary files, etc...
+
+\par About README, there's a whole website about this practice \href{https://www.makeareadme.com/}{HERE}. Normally, markdown is used to do this and that is a fairly easy language that can be fully consulted in \href{https://commonmark.org/help/}{HERE}.
+\par Another very good guide done on GitHub is \href{https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet}{Cheatsheet}.
+
+\par Regarding the license, it should be included if the code is to be used by others. A good example of a classical license is the \href{https://choosealicense.com/licenses/mit/}{MIT License}. The website \href{https://choosealicense.com}{Choose a License} explains everything perfectly.
+
+
+
+
+\section{Interesting stuff and People}
+
+\subsection{ArcXiv}
+\par It's pronounce "archive" because the X is read as a $\chi$ (Chi, the greek letter).
+\par \href{https://arxiv.org/}{\ul{arxiv.org}} has more than 1.5 million papers, including the paper published by \bb{Grigori Perelman}, the man who cracked the first millenium problem rejecting the one million euros price and won a Fields medal rejecting the medal as well because he didn't want fame: 
+
+\begin{center}
+    ``After 10 hours of attempted persuasion over two days, Ball gave up. Two weeks later, Perelman summed up the conversation as follows: "He proposed to me three alternatives: accept and come; accept and don't come, and we will send you the medal later; third, I don't accept the prize. From the very beginning, I told him I have chosen the third one ... [the prize] was completely irrelevant for me. Everybody understood that if the proof is correct, then no other recognition is needed.''
+\end{center}
+\par Overall, a place to read freely about what is and what once was the state of the art in science.
+
+\subsection{The writings of IST president}
+\par He writes well. Very well. After hearing him once talk for less than 5 minutes I did see why he was president.
+\par Some of his writings in Public, one of the most well known portuguese newspapers, can be found in \href{https://www.publico.pt/autor/arlindo-oliveira}{\ul{publico.pt/autor/arlindo-oliveira}}.
+\par Just in case he gets retired or something, his name is \bb{Arlindo Oliveira}.
+
+
+
+\subsection{YIFY/YST release group}
+A release group so famous for their quality content, speed of delivery and that due to their websites taken down somewhat simultaneously. 
+
+Most of movie related piracy would still have their names attached. In quite a few cases, they don't have anything to do with it anymore. 
+
+In conclusion, search [YSF][YIFY] when you are searching a movie, it will be found much much faster.
+
+Likewise, searching for yify subtitles will give great results very fast as well.
+
+A good way of organizing movies would be: movie, jpeg with credits for release (yify jpeg), subtitle for yify and torrent source. Then ship all this to the drive.
+
+About formats, in essence BLU > WEB > everyhing else. You can read everything about them in the Wikipedia:\\ \href{https://en.wikipedia.org/wiki/Pirated_movie_release_types}{\uline{Pirated movie release types}}.
+
+
+
+\subsection{Interesting links}
+
+\begin{itemize}
+    \item \href{https://www.sciencedirect.com/browse/journals-and-books}{\ul{https://www.sciencedirect.com/browse/journals-and-books}} a website with many scientific articles
+\end{itemize}
+
+
+\section{Books}
+\par Every book I find interesting, reasons why I want to read it and what I thought after reading it.
+
+\subsection{Emotional Inteligence - Daniel Goleman}
+
+\subsection{The Digital Mind - Arlindo Oliveira}
+
+\subsection{Inteligência Artificial - Arlindo Oliveira}
+
+\subsection{12 Rules for Life: An Antidote to Chaos - Jordan Peterson}
+
+\subsection{Maps of Meaning - Jordan Peterson}
+
+\subsection{Enlightenment Now: The Case for Reason, Science, Humanism, and Progress - Steven Pinker}
+
+\subsection{The Better Angels of Our Nature: Why Violence Has Declined - Steven Pinker}
+
+\subsection{The Beginning of Infinite - David Deutsch}
+
+
+
+
+\section{A few lessons}
+
+\subsection{Be professional \& make up your mind}
+Make your decisions. Sometimes in life you have to know what you want to do to make effective choices! Don't let the time pass, don't be a fucking passive cunt that only watches a mess unroll in front of you. Be there, be conscious of the decisions you are making and the impact they'll have and make them anyway because if you don't, you'll just get a random result and you'll probably piss-off and disrespect the people around you that are dependent on your decisions.
+
+
+\subsection{Insure properly}
+Insurance is the best way of risk transferring. Ensure until the money you would get back is preferable to the contents of the package. The money you are spending in the first place is probably completely irrelevant to make sure you get out of the situation winning.
+
+This lesson came from insuring the package for 100 euro and paying for the shipping 33.5 euro while I could have insure it for 500 euro paying only 36. Of course the package got lost and I totally regret because it had important things that costed much more than that and that I valued much much more than that. Also I am in a phase I would like to buy a 500 euro headphones for motor cortex stimulation during workouts/trainings and I just sold a huge amount of hours of work in notes in TU Delft for 100 euro. Looking back, 500 euro wouldn't even be enough.
+
+\begin{center}
+    \bb{Be fucking sure you value your time properly.}
+\end{center}
+
+
+
+\subsection{Read}
+
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

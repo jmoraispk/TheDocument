@@ -1,0 +1,547 @@
+\section{\LaTeX}
+\par In this section, basic easy to search commands will be presented.
+\vspace{1cm}
+
+\par As a very honourable mention as a perfectly clear \LaTeX tutorial, please visit \href{https://www.latex-tutorial.com/tutorials/}{\ul{latex-tutorial.com/tutorials/}}. I couldn't like that website more. It has the symbols, the tools and the tutorials in the top bar. 
+\par Although I prefer much more to use \href{https://www.tablesgenerator.com/}{\ul{tablesgenerator.com/}} a table generator, the symbols and tutorial sections are simply perfect.
+
+
+
+
+
+
+
+
+\subsection{Symbols that you never remember}
+
+\par First of all, the best place to search is \href{http://detexify.kirelabs.org/classify.html}{\ul{Detexify}}. You can draw a symbol and the latex correspondence appears right away. 
+For other common options, here a list:
+
+
+\begin{multicols}{2}
+\begin{itemize}
+    \item \bb{$\sim$} \qquad \bb{Tilde}:  \$ \textbackslash sim \$ \\(uses: textcomp)
+    \item \bb{\textbackslash} \bb{Backslash}: \textbackslash textbackslash %why this error???
+    \item \bb{$\ll$} and \bb{$\gg$} : \textbackslash ll and \textbackslash gg
+    \item $\mathbf{\widetilde{h}}$ : \textbackslash widetilde\{h\}
+    \item $\mathbf{\circledast}$:  \textbackslash circledast
+    \item $\mathbf{\otimes}$: \textbackslash otimes
+\end{itemize}
+\end{multicols}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\subsection{Important Packages}
+\par Import packages with:
+\begin{lstlisting}[language=Tex]
+    \usepackage{packagename}
+\end{lstlisting}
+
+\par Some important package to keep around:
+\begin{itemize}
+    \item verbatim: allows for "$\backslash$comments" which are very useful.
+    \item todo or todonotes: allows for "$\backslash$todo" and that is the best way of having reminders in your code.
+    \item bm: allows for bold math "\$$\backslash$mathbf\{H\}\$" = $\mathbf{H}$
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Margins}
+To change the margins of the document this is simply the best place to go. 
+The example sets you up with a standard wide paper size.
+\href{https://www.overleaf.com/learn/latex/Page_size_and_margins#Paper_size.2C_orientation_and_margins}{\ul{Overleaf - Margins}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\subsection{Code listings}[language=Tex]
+\par Use package:
+\begin{lstlisting}
+    \usepackage{listings}
+\end{lstlisting}
+
+\par To input a complete file of code, use the expression below. \\
+In this case, the file is assumed to be right outside the report folder. Note also that the code should not have non unicode characters like º or else \LaTeX won't do a proper job, even if they are in strings.
+\begin{lstlisting} [language=Tex]
+    \lstinputlisting{../gen_data1.m}
+\end{lstlisting}
+
+\par To paste code in a certain language do:\\
+(the "no numbers" serves to suppress the numbers on the left, to be easier to copy)
+%\begin{lstlisting}[language=Tex, numbers= none]
+%    \begin{lstlisting}[language=Tex, numbers=none]
+%        code
+%    \end{lstlisting}
+%\end{lstlisting}
+
+
+\par Create a list of all code listings with:
+\begin{lstlisting}
+    \lstlistoflistings
+\end{lstlisting}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\subsection{Images side by side}
+\par From \href{https://tex.stackexchange.com/questions/37581/latex-figures-side-by-side}{\ul{this tex.stackexchange question}}:
+\begin{itemize}
+    \item 2 images: Side by side with one legend for each and one for both
+    \begin{lstlisting}[language=Tex, numbers=none]
+        \begin{figure}
+            \centering
+            \begin{subfigure}{.5\textwidth}
+              \centering
+              \includegraphics[width=.4\linewidth]{image1}
+              \caption{A subfigure}
+              \label{fig:sub1}
+            \end{subfigure}%
+            \begin{subfigure}{.5\textwidth}
+              \centering
+              \includegraphics[width=.4\linewidth]{image1}
+              \caption{A subfigure}
+              \label{fig:sub2}
+            \end{subfigure}
+            \caption{A figure with two subfigures}
+            \label{fig:test}
+        \end{figure}
+    \end{lstlisting}
+        
+    \item 2 images: Side by side with one legend for each:
+    \begin{lstlisting}[language=Tex, numbers=none]
+        \begin{figure}
+            \centering
+            \begin{minipage}{.5\textwidth}
+              \centering
+              \includegraphics[width=.4\linewidth]{image1}
+              \captionof{figure}{A figure}
+              \label{fig:test1}
+            \end{minipage}%
+            \begin{minipage}{.5\textwidth}
+              \centering
+              \includegraphics[width=.4\linewidth]{image1}
+              \captionof{figure}{Another figure}
+              \label{fig:test2}
+            \end{minipage}
+            \end{figure}
+    \end{lstlisting}
+    \item 4 images: 2x2 config. Note that is possible to replicate the reasoning for this code and make any number of figures side by side.
+    \begin{lstlisting}[language = Tex, numbers = none]
+        \begin{figure}[ht] 
+            \label{ fig7} 
+            \begin{minipage}[b]{0.5\linewidth}
+              \centering
+              \includegraphics[width=.5\linewidth]{example-image-a} 
+              \caption{Initial condition} 
+              \vspace{4ex}
+            \end{minipage}%%
+            \begin{minipage}[b]{0.5\linewidth}
+              \centering
+              \includegraphics[width=.5\linewidth]{example-image-b} 
+              \caption{Rupture} 
+              \vspace{4ex}
+            \end{minipage} 
+            \begin{minipage}[b]{0.5\linewidth}
+              \centering
+              \includegraphics[width=.5\linewidth]{example-image-c} 
+              \caption{DFT, Initial condition} 
+              \vspace{4ex}
+            \end{minipage}%% 
+            \begin{minipage}[b]{0.5\linewidth}
+              \centering
+              \includegraphics[width=.5\linewidth]{example-image} 
+              \caption{DFT, rupture} 
+              \vspace{4ex}
+            \end{minipage} 
+          \end{figure}
+    \end{lstlisting}
+\end{itemize}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\subsection{Equations and Math}
+\par As before, a list of useful commands. First the code, then the result.
+\begin{itemize}
+    \item System of equations:
+
+    \begin{lstlisting}[language=Tex, numbers=none]
+        \begin{equation*}
+            \begin{cases}
+                a = b \\
+                c = 0
+            \end{cases}
+            \end{equation*}
+        \end{itemize}        
+    \end{lstlisting}
+       
+    \begin{equation*}
+        \begin{cases}
+            a = b \\
+            c = 0
+        \end{cases}
+        \end{equation*}
+
+    \item Matrixes: short story
+    \begin{lstlisting}[language = Tex, numbers = none]
+        \[
+        \begin{bmatrix}
+            x_{11} & x_{12} & x_{13} & \dots  & x_{1n} \\
+            x_{21} & x_{22} & x_{23} & \dots  & x_{2n} \\
+            \vdots & \vdots & \vdots & \ddots & \vdots \\
+            x_{d1} & x_{d2} & x_{d3} & \dots  & x_{dn}
+        \end{bmatrix}
+        \]
+    \end{lstlisting}
+
+    \[
+    \begin{bmatrix}
+        x_{11} & x_{12} & x_{13} & \dots  & x_{1n} \\
+        x_{21} & x_{22} & x_{23} & \dots  & x_{2n} \\
+        \vdots & \vdots & \vdots & \ddots & \vdots \\
+        x_{d1} & x_{d2} & x_{d3} & \dots  & x_{dn}
+    \end{bmatrix}
+    \]
+    \item Matrixes long story: from \href{https://tex.stackexchange.com/questions/342385/matrix-operations-in-latex}{matrix environment stackexcange question}, `` amsmath: it defines 6 types of matrix environments: matrix (without any delimiter), pmatrix (delimiters: ( )), bmatrix ([ ]), Bmatrix ({ }), vmatrix (| |), Vmatrix (|| ||)''
+    
+    \[ \begin{pmatrix}x'\\y'\end{pmatrix}=
+    \begin{bmatrix}
+        \cos\theta & -\sin\theta\\
+        \sin\theta & \cos\theta
+    \end{bmatrix}
+    \begin{pmatrix}x \\y \end{pmatrix} \]
+
+    \item If the matrix is coefficient extended, then some smart stuff needs to be used. Use the command below to implement the workaround, \href{http://texblog.net/latex-archive/maths/amsmath-matrix/}{\ul{written by Stefan Kottwitz}}
+    \begin{lstlisting}[language = Tex, numbers = none]
+        \makeatletter
+        \renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+        \hskip -\arraycolsep
+        \let\@ifnextchar\new@ifnextchar
+        \array{#1}}
+        \makeatother
+    \end{lstlisting}
+    After that you can use:
+    \begin{lstlisting}[language = Tex, numbers = none]
+        \begin{equation}
+            \begin{bmatrix}[cccc|c]
+             1 & 0 & 3 & -1 & 0 \\
+             0 & 1 & 1 & -1 & 0 \\
+             0 & 0 & 0 & 0 & 0 \\
+          \end{bmatrix}
+        \end{equation}
+    \end{lstlisting}
+    \begin{equation}
+        \begin{bmatrix}[cccc|c]
+         1 & 0 & 3 & -1 & 0 \\
+         0 & 1 & 1 & -1 & 0 \\
+         0 & 0 & 0 & 0 & 0 \\
+        \end{bmatrix}
+    \end{equation}
+    \item \bb{A good practice} (depending on the context) would be to only number referenced equations. For this, all equations should have a short label like ``eq:eqlabel'', be referenced with $\backslash$eqref and you need to use this to enable that automatic behaviour of only display names if referenced:
+    \begin{lstlisting}[language = Tex, numbers = none]
+        \usepackage{mathtools}
+        \mathtoolsset{showonlyrefs}
+    \end{lstlisting}
+    \item Funky stuff. Argmin and a way of doing the norm. If a norm that fits automatically is required, then Google it and put it  here.
+    \begin{lstlisting}[language = Tex, numbers = none]
+        \begin{equation}
+            \hat{\bb{S}} = \operatorname*{argmin}_\bb{S} \left\Vert\bb{X} - \bb{A}\bb{S}\right\Vert^2_F
+        \end{equation}
+    \end{lstlisting}
+    \begin{equation}
+        \hat{\bb{S}} = \operatorname*{argmin}_\bb{S} \left\Vert\bb{X} - \bb{A}\bb{S}\right\Vert^2_F
+    \end{equation}
+\end{itemize}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\subsection{Multicolumns}
+
+\subsubsection{Multicolumns in Text}
+
+\begin{lstlisting}[language=Tex]
+\setlength{\columnseprule}{1pt}
+\def\columnseprulecolor{\color{blue}}
+ 
+\begin{document}
+ 
+\begin{multicols}{3}
+[
+All human things are subject to decay. And when fate summons, Monarchs must obey.
+]
+ 
+Hello, here is some text without a meaning.  This text should show what 
+a printed text will look like at this place.
+ 
+If you read this text, you will get no information.  Really?  Is there 
+no information?  Is there.
+ 
+\columnbreak
+ 
+This will be in a new column, here is some text without a meaning.  This text 
+should show what a printed text will look like at this place.
+ 
+If you read this text, you will get no information.  Really?  Is there 
+no information?  Is there...
+
+
+A blind text like this give you information about the selected font, how the letters are written and an impression of the look. This text should contain all letters of the alphabet and it should be written in the original language. There is no need for special content, but the length of words should match the language.
+\end{multicols}
+\end{lstlisting}
+
+Results in:
+
+\setlength{\columnseprule}{1pt}
+\def\columnseprulecolor{\color{blue}}
+
+\begin{multicols}{3}
+[
+All human things are subject to decay. And when fate summons, Monarchs must obey.
+]
+ 
+Hello, here is some text without a meaning.  This text should show what 
+a printed text will look like at this place.
+
+
+
+If you read this text, you will get no information.  Really?  Is there 
+no information?  Is there.
+ 
+\columnbreak
+ 
+This will be in a new column, here is some text without a meaning.  This text 
+should show what a printed text will look like at this place.
+ 
+If you read this text, you will get no information.  Really?  Is there 
+no information?  Is there...
+
+A blind text like this give you information about the selected font, how the letters are written and an impression of the look. This text should contain all letters of the alphabet and it should be written in the original language. There is no need for special content, but the length of words should match the language.
+\end{multicols}
+
+%back to normal...
+\setlength{\columnseprule}{0pt}
+\def\columnseprulecolor{\color{black}}
+
+
+\subsubsection{Multicolumns in lists}
+\begin{lstlisting}[language=Tex]
+    \usepackage{multicol}
+    \begin{multicols}{2}
+        \begin{itemize}
+            \item item 1
+            \item item 2
+            \item item 3
+            \item item 4
+            \item item 5
+            \item item 6
+        \end{itemize}
+    \end{multicols}
+\end{lstlisting}
+
+Results in:
+\begin{multicols}{2}
+    \begin{itemize}
+        \item item 1
+        \item item 2
+        \item item 3
+        \item item 4
+        \item item 5
+        \item item 6
+    \end{itemize}
+\end{multicols}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\subsection{Itemize, Enumerate and Lists}
+\par I just found \href{https://www.latex-tutorial.com/tutorials/lists/}{\ul{this website}} that has a great tutorial about these. 
+\par The main and most interesting thing I wanted to show here is a thing that is also present in the link with further explanations: is possible to change the bullet point style very easily:
+
+\begin{lstlisting}[language=Tex]
+    \begin{itemize}
+        \item here is one item
+        \item[--] here is another
+        \item[$\ast$] here another
+        \item[$-$] Here another and I can continue!
+    \end{itemize}
+\end{lstlisting}
+
+Just by putting the character inside the rectangular parentheses is possible to create a list with that character as a bullet. The result of the above code:
+\begin{itemize}
+    \item here is one item
+    \item[--] here is another
+    \item[$\ast$] here another
+    \item[$-$] Here another and I can continue!
+\end{itemize}
+
+\par Another way, better in terms of verbose per list, is this one:
+\begin{lstlisting}[language=Tex]
+    %requires \usepackage{enumitem}
+    \begin{itemize}[label=$\ast$]
+        \item ok, now they are the same
+        \item see?
+    \end{itemize}
+\end{lstlisting}
+\begin{itemize}[label=$\ast$]
+    \item ok, now they are the same
+    \item see?
+\end{itemize}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\subsection{How to insert images from files outside the report file}
+\par Don't know... Tell me if you find out. I just know from inside the folder.
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\subsection{Good Tables with that diagonal line}
+\par Make a table with the \href{www.tablegenerator.com}{\ul{tablegenerator.com}} and then use this:
+\begin{lstlisting}[language=Tex]
+    %uses \usepackage{diagbox}
+
+\begin{table}[h]
+    \small
+    \begin{tabular}{c|c|c|c}\hline
+        \backslashbox{Room}{Date} & Monday & Tuesday & Wednesday \\ \hline
+        room1 & & & \\ \hline
+        room2 & & & \\
+    \end{tabular}
+\end{table}
+\end{lstlisting}
+
+
+\begin{table}[h]
+    \small
+    \begin{tabular}{c|c|c|c}\hline
+        \backslashbox{Room}{Date} & Monday & Tuesday & Wednesday \\ \hline
+        room1 & & & \\ \hline
+        room2 & & & \\ 
+    \end{tabular}
+\end{table}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\subsection{Useful little things}
+\subsubsection{Tables}
+\begin{itemize}
+    \item \bb{Centre tables' captions}, works for figures and tables
+    \begin{lstlisting}[language=Tex]
+        \usepackage[center]{caption}
+    \end{lstlisting}
+    \item \bb{Set space between columns}
+    \begin{lstlisting}[language = Tex]
+        \setlength{\tabcolsep}{2.8pt}
+    \end{lstlisting}
+    \item \dots
+    
+\end{itemize}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+\subsubsection{Horizontal lines in a page} 
+\par Like this:
+\vspace{1cm}
+
+\hrule
+``An important quote here should be placed.''
+\hrule
+\vspace{1cm}
+\noindent\Vhrulefill \ \bb{or even like this} \Vhrulefill
+
+Explain what "I am hungry" means in Portuguese/Spanish if translated literally, i.e if translated to "Eu sou esfomeado"/"Yo soy hambriento".
+
+\noindent \Vhrulefill
+\vspace{.5cm}
+
+I used, respectively these two pieces of code:
+\begin{lstlisting}[language = Tex]
+    \hrule
+    ``An important quote here should be placed.''
+    \hrule
+
+    %needs the definition before.
+    \def\Vhrulefill{\leavevmode\leaders\hrule height 0.7ex depth \dimexpr0.4pt-0.7ex\hfill\kern0pt}
+
+    \noindent\Vhrulefill \ \bb{or even like this} \Vhrulefill
+
+    Explain what "hello" means.
+
+    \noindent \Vhrulefill
+
+\end{lstlisting}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Others}
+\begin{itemize}
+    \item \textbackslash appendix - used to start an appendix. Right after that, put \textbackslash section and a label inside the section and then the appendix will be referenced with a letter.
+\end{itemize}
+

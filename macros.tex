@@ -1,0 +1,43 @@
+\newcommand{\image}[4]{
+	\begin{center}
+
+		\includegraphics[scale = #4]{#1}
+    	\captionsetup{type=figure} 
+   		\caption{#2}			
+        \label{#3}
+        
+    \end{center}
+}
+%possible to use: \ifthenelse{\isempty{#1}}{#1}{default value for #1} for optional arguments
+
+
+\newcommand{\bb}[1]{
+	\textbf{#1}
+}
+ 
+\newcommand{\ii}[1]{
+	\textit{#1}
+}
+
+\newcommand{\ul}[1]{
+	\uline{#1}
+}
+
+
+\newcommand{\defining}[1]{
+	\bb{Definition}\hspace{-.2cm} \ii{#1}:
+}
+
+
+%to make an \hrule have the ruler in the middle of the line. Use \Vhrulefill
+\def\Vhrulefill{\leavevmode\leaders\hrule height 0.7ex depth \dimexpr0.4pt-0.7ex\hfill\kern0pt}
+
+
+\newcommand{\quickimage}[2]{
+	\begin{center}
+
+		\includegraphics[scale = #2]{#1}
+    	
+        
+    \end{center}
+}

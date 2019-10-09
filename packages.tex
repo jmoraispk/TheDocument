@@ -1,0 +1,109 @@
+\usepackage{mmap}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\graphicspath{{Images/}}
+\usepackage{amsmath}
+\usepackage{amssymb} %specially for circledash (convolution)
+\usepackage{bm} %bold math
+
+
+
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+
+
+
+
+
+
+\usepackage{subcaption}
+\usepackage{indentfirst}
+
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,columns=flexible}
+
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+    linktoc=all,     %set to all if you want both sections and subsections linked
+}
+
+
+\usepackage{verbatim}
+\usepackage{ulem} %for uline
+\usepackage{todonotes} %for \todo
+
+\usepackage{parskip}
+
+
+\usepackage{textcomp} %for putting low tildes like $\sim$
+
+\usepackage{enumitem} %for changing easily the items in enumerates and itemizes
+
+\usepackage{multicol} %duh, for multi columns. In itemises, for instance.
+
+
+\usepackage{multirow} %maybe not used, but to merge cells vertically
+\usepackage{diagbox} %to make that sweet diagonal line in tables
+
+
+\usepackage{multicol}
+
+%for full script matlab listings.
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+
+\lstset{language=Matlab,%
+    %basicstyle=\color{red},
+    breaklines=true,%
+    morekeywords={matlab2tikz},
+    keywordstyle=\color{blue},%
+    morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+    identifierstyle=\color{black},%
+    stringstyle=\color{mylilas},
+    commentstyle=\color{mygreen},%
+    showstringspaces=false,%without this there will be a symbol in the places where there is a space
+    numbers=left,%
+    numberstyle={\tiny \color{black}},% size of the numbers
+    numbersep=9pt, % this defines how far the numbers are from the text
+    emph=[1]{for,end,break},emphstyle=[1]\color{red} 
+}
+\lstset
+{
+    language=[LaTeX]TeX,
+    breaklines=true,
+    basicstyle=\tt\scriptsize,
+    keywordstyle=\color{blue},
+    identifierstyle=\color{magenta},
+}
+
+%test for an alternative for lslisting
+%\usepackage{lmodern} % for bold teletype font
+%\usepackage{minted}
+
+%for extended coefficient form of the matrixes
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+%serve only to only number the referenced equations
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+%it is a good practice to use this and label everything because it becomes much easier to modify the text know that all labels will be safe
+
+
+
+
+\renewcommand\textbullet{\ensuremath{\bullet}} %to prevent itemize warnings about the font...

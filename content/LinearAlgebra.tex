@@ -1,0 +1,163 @@
+\section{Linear Algebra}
+\par Before anything else, I strongly recommend watching a series of short videos that will give you a very graphical notion of Linear Algebra. That series of videos is \href{https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab&index=1}{\uline{“Essence of linear algebra” by 3Blue1Brown}}.
+
+\vspace{1cm}
+\par Here will be presented a concise analysis of Linear Algebra topics ranging from:
+\begin{itemize}
+    \item various topics from one of the best resources to learn linear algebra, the MIT professor \textbf{Gilber Strang}'s \href{https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/video-lectures/}{\uline{lectures}}
+    \item a summary of the above course can be found in \href{https://medium.com/sho-jp/towards-understanding-linear-algebra-part-1-d43710535503}{\ul{here}}
+    by Sho Nakagome (``A neuroengineer researching Brain Computer Interface (BCI)'');
+    \item geometric interpretations on a basic matrix, from \href{https://www.coranac.com/documents/geomatrix/}{\ul{here}};
+    \item orthogonality, from MIT \href{https://ocw.mit.edu/courses/mathematics/18-06sc-linear-algebra-fall-2011/least-squares-determinants-and-eigenvalues/orthogonal-vectors-and-subspaces/MIT18_06SCF11_Ses2.1sum.pdf}{\ul{here}};
+    \item important information for Signal Processing and various other applications.
+\end{itemize}
+
+
+\subsection{What is a matrix?}
+\par We know what a matrix looks like, but what it is exactly? 
+\par Well, it can be seen as a group of vectors, as an equation and probably as many other things I haven't figured out yet.
+
+\subsubsection{A system of Equations}
+\par Let's start as seeing it as means of simplifying the process of solving a set of equations. Imagine that we have the following equations:
+
+\begin{equation}
+\begin{cases}
+    3x + 5y = 11 \\
+    x + 4y = 6
+\end{cases}
+\end{equation}
+
+\par These can be written in matrix from like this:
+
+\begin{equation}
+    \begin{bmatrix}
+        1 & 2 \\
+        3 & 4
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\
+        y
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        11 \\
+        6
+    \end{bmatrix}
+\end{equation}
+
+\par And solvable through the Row Echelon Form (REF):
+\begin{equation} \label{eq:ref}
+    \begin{bmatrix}[cc|c]
+        3 & 5 & 11\\
+        1 & 4 & 6
+    \end{bmatrix}
+    =
+    \begin{bmatrix}[cc|c]
+        1 & 4 & 6\\
+        0 & -7 & -7
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}[cc|c]
+        1 & 4 & 6\\
+        0 & 7 & 7
+    \end{bmatrix}
+\end{equation}
+
+\par Is important to note that to obtain the REF, only \ul{elementary equation operations} can be used. These are the sum/subtraction of two equations, the multiplication of a equation by a scalar different from 0 and change the place of the equations. In the particular case of \eqref{eq:ref} the operations that took place were: row1 - 3*row2, switch rows and multiply the last row by -1.
+\par From the our new form, is trivial to go back to the equation formula and directly attribute values to x and y. However, a few calculations are still required. The absolute best way is using the Reduced Row Echelon Form (RREF). This consists of using the rows with less elements to ``cut out'' elements from the other rows, leading to a very simplified matrix (see \eqref{eq:rref})
+
+\begin{equation}\label{eq:rref}
+    \begin{bmatrix}[cc|c]
+        1 & 4 & 6\\
+        0 & 7 & 7
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}[cc|c]
+        1 & 4 & 6\\
+        0 & 1 & 1
+    \end{bmatrix}
+    =
+    \begin{bmatrix}[cc|c]
+        1 & 0 & 2\\
+        0 & 1 & 1
+    \end{bmatrix}
+\end{equation}
+
+
+\par Note that this RREF is unique and characterised by 1's in the diagonal and in stairs, i.e the only non-zero entry in that column starting with the leftmost column. In this form, all results can be obtained immediately.
+\par However, putting a matrix in this form isn't always possible. For instance, is impossible to do so if two rows are \bb{linearly dependent} meaning that is possible to multiply a constant to one to obtain the other - seeing rows as equations, linear dependency can be thought of an equation that adds absolutely no other constraint to the solution set or, in other words, does the exact same as one equation that already exists thus can be discarded hence ending with more unknowns than equations.
+
+\par Before further analysing the concept of linear dependency and all that derives from that, is pertinent to have yet another look at the matrix. A geometric interpretation is often useful.
+
+\subsubsection{Vectors in Space}
+\par Exactly, have you thought your matrix could be vectors in space?
+\par Well, maybe this decomposition helps to thing about it:
+
+\quickimage{./Images/algebra/1.jpeg}{.3}
+
+\par Thus we can imagine the vectors (5,4) and (3,1) is space. And one solution to obtain the vector (11, 6) is by multiplying 2 by the first vector and 1 by the second.
+
+\par Note that we broke the matrix in half and gave it a meaning: ``What do you have to multiply to this vector and to this vector to obtain the vector you want?'' Where the vectors were the columns of the matrix. And the solution were the x and the y that were going to scale those vectors.
+
+\par One can also think, despite being a bit more complicated, that what we want is to write (11, 6) in the basis of those two vectors (3,1) and (5,4). This is how the matrix represents a transformation. We are transforming the "normal" into the space defined by those two vectors. Further note that that space is given by the column vectors of the matrix! This will be important in the future.
+\par Let's have a look at basis and spaces.
+
+\subsection{Basis, Spaces and Subspaces}
+
+\par A space is nothing more than a set of vectors that can be obtained from a linear combination from vectors in the basis. 
+
+\par If we want to take a subset of a space that is also a space we call that a subspace.
+
+\par About basis: these are the vectors which when linearly combined generate a certain space. Note that one space can have infinite many basis. Actually, any set of N linearly independent vectors from a space with dimension N is a basis of that space. A set of vectors is only considered a basis if it spans a space (all linear combinations of its vectors create a space) and the vectors in it are linearly independent. 
+
+\par A good image to describe what "span" is:
+
+\quickimage{./Images/algebra/3.jpeg}{.3}
+
+
+\subsubsection{Column Space or Range}
+
+\par The range of A (ran(A)) is the space spanned by the columns of A.
+
+\quickimage{./Images/algebra/2.jpeg}{.3}
+
+\par As expected, the row space is nothing more than the exact same thing for the rows. 
+
+\subsubsection{Row Nullspace or Kernel}
+
+\par The kernel of A (ker(A)) is the space created by the vectors that when A is applied to them the result is 0.
+\par Mathematically, the nullspace of a is nothing more than the vectors $x$ that lead to $A x = 0$. 
+\par Note that that thinking from before as "what vectors should be multiplied to get a certain solution" will now have a problem: there can be more than one answer to the null result. This only happens if there is a problem with the transformation. If the transformation is well done (if the matrix has full rank), then the column subspace will be the full space and anything multiplied to the matrix will have one and only one solution. If the problem/matrix is ill-conditioned (the rank is less than the dimension of the vectors of the columns), then there can be more than one solution to a give problem. 
+
+
+\Vhrulefill
+From an answer in \href{https://math.stackexchange.com/questions/987146/why-null-space-and-column-space/987657#987657}{\uline{math.stackexchange.com}}: 
+``Let's suppose that the matrix A represents a physical system. As an example, let's assume our system is a rocket, and A is a matrix representing the directions we can go based on our thrusters. So what do the null space and the column space represent?
+
+Well let's suppose we have a direction that we're interested in. Is it in our column space? If so, then we can move in that direction. The column space is the set of directions that we can achieve based on our thrusters. Let's suppose that we have three thrusters equally spaced around our rocket. If they're all perfectly functional then we can move in any direction. In this case our column space is the entire range. But what happens when a thruster breaks? Now we've only got two thrusters. Our linear system will have changed (the matrix A will be different), and our column space will be reduced.
+
+What's the null space? The null space are the set of thruster instructions that completely waste fuel. They're the set of instructions where our thrusters will thrust, but the direction will not be changed at all.''
+
+\Vhrulefill
+
+\par If you are someone with some linear algebra background you might have spotted some kind of connection between the null space and the column space. So it is worth to talk now about the rank and the relation these spaces.
+
+\subsection{Rank and Spaces relationships}
+
+\par The rank of the matrix is nothing more than the number of pivots in the Reduced Row Echelon Form.
+\par Seeing a matrix as a set of equations with N variables, a full rank matrix has rank N meaning that is possible to discover the N variables without ambiguity. If the matrix is rank deficient or ill-ranked, that means we have too many unknowns for our equations.
+
+\par Is common sense that if a matrix has more columns than rows, it won't have full rank as this is exactly the same as saying it will have more unknowns than equations.
+
+\par In terms of the relations between the spaces: was it evident so far that the less precise is the matrix (the less rank it has compared to full rank), the more it will nullify vectors, in other words, take away their identity and the more vectors would the space that gets to zero have.
+
+\par Therefore, the sum of the dimensions of the column span and nullsubspace should equal the rank that the matrix needs to be full rank, i.e the number of unknowns or simply the number of columns.
+
+
+
+
+
+
+(there are a few more subspaces and we still need to explain the question that is asked every time.)
+
+

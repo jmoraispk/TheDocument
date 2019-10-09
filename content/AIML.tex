@@ -1,0 +1,112 @@
+
+
+\section{Artificial Intelligence / Machine Learning}
+
+\subsection{Supervised Learning}
+
+
+
+
+
+\subsubsection*{Extrema Conditions and Hessian Matrix}
+
+Videos: \href{https://www.youtube.com/watch?v=nRJM4mY-Pq0&list=PLSQl0a2vh4HC5feHa6Rc5c0wbRTx56nF7&index=87}{\ul{87 - Warm up to the second partial derivative test}} to\dots \href{https://www.youtube.com/watch?v=sJo7D74PAak&list=PLSQl0a2vh4HC5feHa6Rc5c0wbRTx56nF7&index=89}{\ul{89 - Second partial derivative test intuition}}
+
+
+
+
+This sub (...) sub section aims to explain why the conditions imposed on the Hessian matrix - the second derivative matrix - correspond to imposing in 2D what we know already.
+
+In practice, in 2D, to find a extrema we need to guarantee that the first derivative is zero, which in N dimensions is correspondent to guaranteeing that the gradient is zero in that point, because the gradient is nothing more than all partial derivatives in that point. Therefore, setting $\triangledown f = 0$ means that, in that point, the function is not increasing or decreasing in any of the N directions. So the first derivative makes sense.
+
+However, when we go to the second derivative, the meanings get a bit more complicated.
+
+In 2D, if the second derivative was 0, it was probably (not certainly) a saddle point, if it was $> 0$ or $< 0$ it was, respectively, a local minimum or maximum.
+
+The conditions we should impose in 3D is to have a positive (for finding a minimum) or negative (for finding a maximum) definite Hessian Matrix. While second derivatives in order to just one variable is possible to attribute a sense to it, why do the cross derivatives play a role as well? And, why do they mean really?
+
+Well, first the explanation on why it is needed: there are functions that across multiple dimensions still show that it is an extrema but then there's an inflexion along directions that are not along the axis. So, checking the axis is not enough. Why checking the cross partial derivatives makes it enough?
+
+\ul{The Second Derivative Test}
+
+\begin{equation}
+    f_{xx}(x_o, y_o) f_{yy}(x_o, y_o) - f_{xy}(x_o, y_o)^2 \gtrless 0
+\end{equation}
+
+If it is greater than 0, we have a maximum or a minimum and have to check the value of $f_{xx}$ or $f_{yy}$ to be sure. If it is less than 0, we have a saddle point. If it equals 0, then we don't know if it is a saddle point, but it is not a min or max therefore, at least for now, we certainly don't care.
+
+Cross or Mixed partial derivatives can be switched? Yes if the function is $C^2$. 
+(Boring to prove theorem called: Schwarz' Theorem)
+
+Therefore, we just need to compute one of the cross derivatives.
+
+
+Also this works because the second derivative test is nothing more than the determinant of the Hessian matrix. The determinant is the product of every eigenvalue of that matrix, therefore it can only be positive if they are both positive or both negative, in which cases there is, respectively, a minimum or a maximum. 
+
+But why do eigenvalues tell us this? Because they tell us how the eigenvectors are scaled! And the eigenvectors of such matrix will be the greatest and the least curvatures. Therefore, they either have the same signal / are scaled the same amount, or 
+
+
+
+Some other links that helped with this:
+\begin{itemize}
+    \item \href{http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/MORSE/diffgeom.pdf}{\ul{Differential Geometry}}
+    \item \href{http://math.mit.edu/classes/18.013A/HTML/chapter11/section02.html}{\ul{Criterior for critical points - Maximum, Minimum or Saddle?}}
+    \item \href{https://www.adelaide.edu.au/mathslearning/play/seminars/evalue-magic-tricks-handout.pdf}{David Butler - Facts about Eigenvalues}
+\end{itemize}
+
+
+
+
+
+\subsubsection{Neural Networks - BackPropagation}
+
+Two of the most useful websites to check while trying to demonstrate the backpropagation algorithm:
+\begin{itemize}
+    \item \href{https://medium.com/@pdquant/all-the-backpropagation-derivatives-d5275f727f60}{\ul{all backpropagation derivatives}}
+    \item \href{https://stats.stackexchange.com/questions/94387/how-to-derive-errors-in-neural-network-with-the-backpropagation-algorithm}{\ul{Error (deltas) derivation for backpropagation in neural networks}}
+    \item \href{https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi}{3Blue1Brown Neural Networks} - Specially the last one, on backpropagation.
+    
+\end{itemize}
+
+
+
+Why kernels are important? They facilitate a lot the mapping of features to higher dimensions!
+
+\href{https://medium.com/@zxr.nju/what-is-the-kernel-trick-why-is-it-important-98a98db0961d}{\ul{Why kernels?}}
+
+
+
+\subsection{Unsupervised Learning}
+
+\subsubsection{Lagrange Multipliers}
+
+Perfect Explanation why it works:
+
+\href{https://www.quora.com/Why-does-the-method-of-Lagrange-multipliers-work-for-optimization-in-multivariable-calculus-Why-exactly-given-a-function-f-x-y-and-a-constraint-g-x-y-c-can-we-set-the-gradients-of-the-functions-to-be-multiples-of-each-other}{\ul{Quora - Intuition on Langrange Multipliers}}
+
+And a video showing exactly how it's done:
+
+\href{https://www.youtube.com/watch?v=yuqB-d5MjZA}{\ul{Khan Academy - Lagrange Multipliers Example}}
+
+
+
+\subsection{Reinforcement Learning and Decision Making}
+
+
+An agent to make the wisest decision in its situation has to have knowledge on what state he is in, how the environment will evolve, how it will be like if he performs a certain action (taking into account stochastic environments) and a utility function to  know how much that state contributes to its happiness.
+
+
+\subsubsection{Search Problems}
+There are some goal states and one initial state. The objective is to find the goal state that is closer (with the shortest path to the root/ with the least search cost). Is given as the solution the steps necessary to perform that path.
+
+To keep the formulation as general as possible, abstractions are required, keeping in mind that they will need a correspondence when applied to a real problem.
+
+%slide 10
+
+
+
+
+
+
+
+

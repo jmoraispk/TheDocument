@@ -1,0 +1,119 @@
+\section{Python}
+
+
+\subsection{Important Concepts}
+Python is a language with many characteristics, ones more obvious and easy to understand, like in-fix notation, others are more complex, like Dynamic Typing and Automatic Memory Allocation.
+
+Moreover, many programming principles like anonymous functions, map, zip are important and should be addressed in order to achieve flexible and overall good programming skills.
+
+Beforehand, check the Python Notebook and the slides from Rodrigo Ventura in the ``Additional Material'' Folder. They are very complete and give a proper insight on how everything works.
+
+Tuples are faster than lists. 
+\subsubsection{Lambda and Anonymous functions}
+Lambda is the keyword used to make an anonymous function. The following 2 pieces of code do exactly the same.
+
+\begin{lstlisting}[language=python]
+    def my_key(x):
+    return x[0]
+
+    l.sort(key=my_key)
+
+
+    OR
+
+    l.sort(key = lambda x: x[1])
+\end{lstlisting}
+
+And a short example is:
+\begin{lstlisting}[language=python]
+    -----short example on how cool python is-----
+    def make_multiplier(factor):
+    return lambda x: factor*x
+
+    f = make_multiplier(2)
+    ---------------------------------------------
+\end{lstlisting}
+
+Therefore, lambda is nothing more than defining a function, without giving it a name. It helps keeping the code simple specially when the function is just going to be used once.
+
+
+
+
+\subsection{}
+
+\subsection{Some useful tools}
+To check if a variable points to a certain data type:
+\begin{lstlisting}[language=python]
+    isinstance(var, [list, tuple, int])
+\end{lstlisting}
+
+\vspace{1cm}
+To define functions with optional arguments and call them in the incorrect order:
+
+\begin{lstlisting}[language=python]
+    
+    def draw_point(x, y, color='red', thickness=2): 
+        print('x =', x, 'y =', y, 'color=', color, 'thickness=', thickness)
+
+    x = 1
+    y = 2
+    draw_point(x,y,'blue', 5)
+
+    draw_point(x,y,thickness=2, color='blue')
+
+\end{lstlisting}
+
+
+
+
+
+
+
+\subsection{Pandas}
+\href{https://towardsdatascience.com/pandas-tips-and-tricks-33bcc8a40bb9?gi=29663f5b3e5
+}{\ul{Check this link :)}}
+
+
+
+\subsection{Jupyter Notebooks}
+\par Along with Anaconda comes a full installation of the most recent python version and the Jupyter Notebooks, which are awesome to write python.
+\par Here are some very useful shortcuts to tame that beast:
+\vspace{.5cm}
+
+\begin{center}
+    There are 2 modes of shortcutting: 
+\begin{itemize}
+    \item The Command Mode (when border of the cell is blue). Press ESC to 
+    access this mode.
+    \item The Edit Mode (when border of the cell is green). Press ENTER to access this mode.
+\end{itemize}
+
+The Edit Mode is clearly superior: 
+\begin{itemize}
+    \item Ctrl + Enter to run cell
+    \item Shift + Enter to run cell and get directly to the next
+    \item Ctrl + D to delete a whole line
+    \item Ctrl + arrows jumps words (usual)
+    \item Ctrl + Backspace deletes whole word (usual)
+\end{itemize} 
+
+The Command Mode can be usefull sometimes, especially when adding cells is needed, but remember that the cell has to have a blue border:
+\begin{itemize}
+    \item A - insert cell before
+    \item B - insert cell after
+    \item DD - delete current cell
+    \item Z - undo cell deletion
+\end{itemize}
+
+
+\end{center}
+
+
+
+\subsection{From Python 2 to Python 3}
+In Linux, if 2to3 is installed, one may simply run:
+\begin{lstlisting}[language=bash]
+    2to3 -w -n file.py    
+\end{lstlisting}
+This will write the file translated into python 3 in the same file(-w) and without creating a backup(-n).
+

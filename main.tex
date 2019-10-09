@@ -1,0 +1,87 @@
+\documentclass[]{article}
+
+\input{packages.tex}
+\input{macros.tex}
+
+
+
+\title{The Document}
+
+\author{
+    João Morais
+}
+
+\date{\today}
+
+
+\includeonly{
+    %content/Intro,
+    %content/LinearAlgebra,
+    %content/RadioPropagation,
+    %content/TelecomNetworks,
+    content/AIML,
+    %content/TheoryVariate,
+    %content/Matlab,
+    %content/Latex,
+    content/Python,
+    %content/Linux,
+    %content/Other
+}
+
+
+
+\begin{comment} A temporary note
+    Be sure the include only has the section we want, or else it can be from the beginning removed from the "compilation tree" or something of the sort and then you can't save and have it compile the whole file but only the small subfile.
+    IS THERE A SOLUTION TO THIS? It is possible to add the file to the work tree so that one can always compile it by saving? Or the only solution is going back to the main file and executing there.
+\end{comment} 
+
+
+
+\begin{document}
+
+\maketitle
+
+\include{content/Intro}
+
+
+\tableofcontents
+
+
+\include{content/LinearAlgebra}
+
+\include{content/RadioPropagation}
+
+\include{content/TelecomNetworks}
+
+\include{content/AIML}
+
+\include{content/TheoryVariate}
+
+\include{content/Matlab}
+
+\include{content/Latex}
+
+\include{content/Python}
+
+\include{content/Linux}
+
+\include{content/Other}
+
+
+%\pagebreak
+%\bibliographystyle{abbrv}
+%\bibliography{main}
+
+\end{document}
+ 
+
+
+
+
+
+
+
+
+
+
+
