@@ -8,7 +8,11 @@ Moreover, many programming principles like anonymous functions, map, zip are imp
 
 Beforehand, check the Python Notebook and the slides from Rodrigo Ventura in the ``Additional Material'' Folder. They are very complete and give a proper insight on how everything works.
 
-Tuples are faster than lists. 
+Tuples are faster than lists. So, if the idea is doing a very big iteration where there's no memory problem, converting to tuple before probably helps. 
+
+However, regarding speed, always use built-in functions and libraries! Almost always what is slowing the program down is a huge for loop... Libraries are compiled already and are very optimised, therefore by using them you are probably running very optimised C code, which couldn't be faster than it is.
+
+
 \subsubsection{Lambda and Anonymous functions}
 Lambda is the keyword used to make an anonymous function. The following 2 pieces of code do exactly the same.
 
@@ -39,7 +43,12 @@ Therefore, lambda is nothing more than defining a function, without giving it a 
 
 
 
-\subsection{}
+\subsubsection{\_\_main\_\_}
+This can be perfectly understood in the following \href{https://stackoverflow.com/questions/419163/what-does-if-name-main-do}{\ul{stackoverflow post}}.
+
+In a nutshell, when a script is executed python assigns many names to certain variables like \_\_main\_\_. Is the script is executed in the terminal, then main will be the name of that script (without the .py). The \ii{if \_\_name\_\_ == '\_\_main\_\_':} aims to distinguish between situation where the script was imported, so that the functions it contains can be used elsewhere (in this case the main name won't be the name of the script which is stored in \_\_name\_\_) and the situation where the script is directly called in the terminal. If the script is directly called, for it to do something, something has to execute and that's usually what goes inside that if. When the script is imported, most of the times only the definitions matter and the calls will be made in the script that is calling that one. 
+
+Therefore, is a good tool in case you want to make a script importable but also callable.
 
 \subsection{Some useful tools}
 To check if a variable points to a certain data type:

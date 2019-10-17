@@ -137,12 +137,38 @@ Considering now a Dynamic Traffic case, a few concepts arise:
     \item Peak rate is the maximum instantaneous intensity.
 \end{itemize}
 
-Aggregation level or multiplexing level reduces the traffic \ii{burstiness} because.....
-%SLIDE 58! slides 19 do segundo set de slides
+Aggregation level or multiplexing level reduces the traffic \ii{burstiness} because there less often flows get fully used and is more likely that the information can flow at a constant pace instead of in bursts.
+
+
+\bb{Note} one important distinction between Logical and Physical Topologies that we haven't done yet is that there can be many logical topologies on one physical topology. This can happen in the following way: 
+
+
+\quickimage{RTel/Cap2-007.png}{.5}
 
 
 
+\bb{Routing} is how a packet travels in a network. Therefore, routing ends up being the map between logical and physical topologies. 
+
+In optical networks the path between two nodes is usually called ``lightpath''.
+
+We can also define a \bb{Cost Matrix (C)} where each element $c_{ij}$ represents the costs between nodes i and j.
+
+The path can be performed manually (static routing - Demand matrix is time invariable) or dynamically, through routing algorithms (dynamic routing - Traffic matrix is time dependent, with constant arrival and termination of new demands).
+
+Additionally, if the a given traffic demand(connection) is able to use more than one route, it is called a multipath routing process, else it is a mono-path process. Because there are usually many paths connecting two nodes, some metrics are taken into account when choosing which to follow:
+
+\quickimage{RTel/Cap2-008.png}{.5}
 
 
+From the physical topology, described by a graph G(V,E) and the traffic matrix T, describing all the traffic demands to be routed, one can perform shortest path algorithms such as Dijkstra's algorithm.
 
+\quickimage{RTel/Cap2-009.png}{.5}
+
+\bb{Dijkstra's Algorithm}
+
+\quickimage{RTel/Cap2-010.png}{.5}
+
+Now is pertinent to introduce yet another matrix, the \bb{Hop Matrix (H)} where each element $h_{ij}$ denotes the minimum number of hops from node i to node j.
+
+The average number of hops %to the next class... we are at slide 27 of cap 2.
 

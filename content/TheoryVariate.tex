@@ -2,6 +2,23 @@
 
 \section{Theory on Variate Topics}
 
+\subsection{Taylor Series}
+Incredibly important for simplifications, approximations and to have a notion of the shape of the function.
+
+The definition is as follows:
+A real or complex-valued function $f(x)$ that is infinitely differentiable at a real or complex number $a$ can be written as a power series the following way
+
+\begin{align*}
+    f(x) &= \sum_{n = 0}^{\infty} \frac{f^{(n)}(a)}{n!} (x-a)^n = \\
+    &= f(a)+{\frac {f'(a)}{1!}}(x-a)+{\frac {f''(a)}{2!}}(x-a)^{2}+{\frac {f'''(a)}{3!}}(x-a)^{3}+\cdots
+\end{align*}
+
+Some utilities of this formula:
+\begin{itemize}
+    \item The approximation $(1+x)^n \approx 1-x^n$, when x is much smaller than 1. (Binomial Series)
+    \item When approximating $y(x) = cos(2x) + \epsilon$ with a polynomial using least squares, the coefficients fo that polynomial will tend for the coefficients of Taylor's polynomial. Many MacLaurin Series (Taylor Series at the origin) can be found \href{https://en.wikipedia.org/wiki/Taylor_series#List_of_Maclaurin_series_of_some_common_functions}{\ul{Here in the Wiki}}.
+\end{itemize}
+
 \subsection{Erlang Models B and C}
 \par These are statistical models to predict the necessary resources to satisfy a certain amount of traffic with the constraint of not serving at most a certain percentage of the incoming traffic at a given time. 
 \par Instead of thinking like:
@@ -25,3 +42,6 @@ Use if a call is really blocked, i.e if the person trying to use the resource do
 
 \subsubsection*{Erlang C}
 Use if a blocked call is delayed instead of the "come back later" that happens in the previous model. This one needs as well the \ul{average duration of each call}.
+
+
+

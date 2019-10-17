@@ -233,6 +233,18 @@ In this case, the file is assumed to be right outside the report folder. Note al
     \end{bmatrix}
     \begin{pmatrix}x \\y \end{pmatrix} \]
 
+    \begin{lstlisting}[language = Tex, numbers = none]
+        \[ 
+        \begin{pmatrix}x'\\y'\end{pmatrix}=
+        \begin{bmatrix}
+            \cos\theta & -\sin\theta\\
+            \sin\theta & \cos\theta
+        \end{bmatrix}
+        \begin{pmatrix}x \\y \end{pmatrix} 
+        \]
+    \end{lstlisting}
+
+
     \item If the matrix is coefficient extended, then some smart stuff needs to be used. Use the command below to implement the workaround, \href{http://texblog.net/latex-archive/maths/amsmath-matrix/}{\ul{written by Stefan Kottwitz}}
     \begin{lstlisting}[language = Tex, numbers = none]
         \makeatletter
