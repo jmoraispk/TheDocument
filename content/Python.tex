@@ -74,13 +74,33 @@ To define functions with optional arguments and call them in the incorrect order
 
 
 
+\subsubsection{Unpacking Argument Lists}
+
+\href{https://docs.python.org/3.7/tutorial/controlflow.html#unpacking-argument-lists}{\ul{Unpacking Argument Lists}}
+
+A very useful trick to pass many arguments at once.
 
 
+
+
+\subsection{Anaconda}
+Basically, it is the Python distribution. Because Python is so big, with so many packages and Python development is becoming quite big, a program to install things was created.
+
+Go to the official Anaconda website and download the installation script for Python 3 and for Linux: \href{https://www.anaconda.com/distribution/}{\ul{anaconda.com/distribution}}
+
+
+Install \href{https://linuxize.com/post/how-to-install-anaconda-on-ubuntu-18-04/}{\ul{Linuxize - How to Install Anaconda on Ubuntu 18.04}}
+
+(base) Problem \href{https://askubuntu.com/questions/1026383/why-does-base-appear-in-front-of-my-terminal-prompt}{\ul{Ask Ubundu (base) in terminal}} - then close and open the terminal to take effect.
+
+
+Note that tornado 6.0 breaks jupyter notebooks. Is required to uninstall it through pip and/or pip3 and through anaconda!
 
 
 \subsection{Pandas}
 \href{https://towardsdatascience.com/pandas-tips-and-tricks-33bcc8a40bb9?gi=29663f5b3e5
 }{\ul{Check this link :)}}
+
 
 
 
@@ -119,6 +139,27 @@ The Command Mode can be usefull sometimes, especially when adding cells is neede
 
 
 
+\subsection{Spyder}
+Jupyter Notebooks is very fun for prototyping, however, to hard debug and develop some complex stuff, Spyder is the tool.
+
+Install Anaconda. It is the absolute best way of getting everything up to date and running smoothly with the least complications. Check \href{https://linuxize.com/post/how-to-install-anaconda-on-ubuntu-18-04/}{\ul{here}} for the complete tutorial on how to do so (very easy).
+
+After installing Anaconda, check the \href{https://github.com/spyder-ide/spyder/releases}{\ul{Official Spyder Releases github page}} and install the most recent one. \bb{Also remember never to run pip install spyder or similar or it can completely break Anaconda installation}.
+
+
+
+
+Some useful shortcuts in Spyder:
+\begin{itemize}
+    \item Add \# \% \% to separate cells.
+    \item Ctrl + Enter - Run cell
+    \item Alt + Ctrl + Enter - Debug cell
+    \item Ctrl + Shift + I - Go to Console
+    \item Ctrl + Shift + E - Go to Editor
+\end{itemize}
+
+
+
 \subsection{From Python 2 to Python 3}
 In Linux, if 2to3 is installed, one may simply run:
 \begin{lstlisting}[language=bash]
@@ -126,3 +167,14 @@ In Linux, if 2to3 is installed, one may simply run:
 \end{lstlisting}
 This will write the file translated into python 3 in the same file(-w) and without creating a backup(-n).
 
+
+\subsection{Good Practices for Python Code}
+
+This section is irrelevant if you only code alone for yourself. In case someone else will see your code, then you should write it as everyone else likes it. You'll probably agree with most if not all of these guidelines.
+
+\href{https://www.python.org/dev/peps/pep-0008/}{\ul{Style Guide for Python Code}}
+
+Some of the ones I tend to violate the most:
+\begin{itemize}
+    \item Variable names with underscore (underline)
+\end{itemize}

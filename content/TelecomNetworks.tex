@@ -88,6 +88,7 @@ Also, if amplifiers are required, note that they are directed as well.
 
 A path can be represented by a set of links, starting at some node. Source and sink are the names for the first and last vertex of that path.
 
+\subsubsection{Network Topologies}
 
 \quickimage{RTel/Cap2-002.png}{.5}
 
@@ -96,6 +97,7 @@ Bus, Ring and Star are the main physical topologies. Tree as well.
 
 A tree is simply a graph with no cycles.
 
+\subsubsection{Network representative Matrices}
 
 A graph can be represented with an \bb{Adjacency matrix (A)}, with $a_{ij} = 1$ if there's a direction from the vertices i to j.
 
@@ -120,8 +122,8 @@ The mean number of demands is the number of demands divided by the number of nod
 
 \quickimage{RTel/Cap2-005.png}{.5}
 
-The number of unidirectional demands (edges) is $D_1  = N (N-1)$. N nodes x the other N-1 nodes, however, not every node is connected to every other node.
-One other way of seeing it is that the D matrix is $N \times N$ but we need to take N away due to the empty diagonal. $D_2 = \frac{D1}{2}$ is the number of bidirectional demands, which is one of the triangles of the D matrix. 
+The number of unidirectional demands (edges) in a case of full mesh logical topology is $D_1  = N (N-1)$. N nodes x the other N-1 nodes. Note that 
+One other way of seeing it is that the D matrix is $N \times N$ but we need to take N away due to the empty diagonal. $D_2 = \frac{D1}{2}$ is the number of bidirectional demands, which is when only the top triangle of the D matrix is considered. This is usual because with bidirectional links the D matrix will always be symmetric.
 
 
 
@@ -170,5 +172,70 @@ From the physical topology, described by a graph G(V,E) and the traffic matrix T
 
 Now is pertinent to introduce yet another matrix, the \bb{Hop Matrix (H)} where each element $h_{ij}$ denotes the minimum number of hops from node i to node j.
 
-The average number of hops %to the next class... we are at slide 27 of cap 2.
+The average number of hops per demand is nothing more than the sum of the hops of all demands divided by the number of demands. The number of demands was set as the unidirectional links between two nodes. Therefore, if 2 nodes share information between themselves (don't need to have a physical link, a logical one is enough) then there's a demand. 
+
+Therefore, the average number of hops can be computed:
+
+\quickimage{RTel/Cap2-011.png}{.5}
+
+Note that coherence is key here. If the amount of demands are the bidirectional demands, then the number of hops considered should only be the top half of the hop matrix. \bb{If links are bidirectional, then there will always be a symmetry in these matrices} and we should compute the average with amount that mean the same thing.
+
+
+As means of simplifying this calculation, because hops and demands can be dynamic, a way of having a notion on the order of magnitude and get a fairly good approximation, when the number of nodes N is $4 \leq N \leq 100$ and the average node degree $<\delta>$ is $2.5 \leq  <\delta> \leq 5 $, is by computing the semi-empirical relation:
+
+\quickimage{RTel/Cap2-012.png}{.5}
+
+
+
+\subsubsection{Layers}
+
+Typically, there's a layered structure in the network. The layer above acts as a client of the layer beneath and each layer appears a black box that supplies a service to the layer above.
+
+
+The service layer is the one closer to us. 
+
+\quickimage{RTel/Cap2-013.png}{.5}
+
+
+\bb{Add/Drop Multiplexing(ADM)} are multiplexers controlled by \bb{Control Centres (CC)} that decide what to add and what to drop form the fibre. Note that these don't manage the network, they just use it.
+
+Nowadays, apart from local networks, everything is connected with fibre. Therefore, is pertinent to mention 4 key technologies for transport networks:
+
+\quickimage{RTel/Cap2-014.png}{.5}
+
+SDH is also used in Hertzian links, MPLS is Multiprotocol Label Switching and is very useful for routing through different technologies and to choose more carefully the paths. As said above, OTN will be our transport technology.
+
+OTN has become the new standard for a while now and has a few differences compared with SDH. The most important of which is distinction between fixed frame size and fixed rates. SDH has a fixed rate while OTN can increase it's rate to match the client's and this is very important for scalability and being more future proof
+
+\bb{A very important distinction between the transport and the service layers} is that the representation in the service layer has nodes connected with \bb{logical topologies} while the transport layer has nodes connected with \bb{physical topologies}.
+
+
+\quickimage{RTel/Cap2-015.png}{.5}
+
+The network management systems sends configurations through the \bb{Data Communication Channel (DCC)}. Moreover, not all parts of the network are the same!
+
+\quickimage{RTel/Cap2-016.png}{.5}
+
+
+In a more abstracted way, one can identify three planes:
+
+\quickimage{RTel/Cap2-017.png}{.5}
+
+As you already know, there are circuit switched or packet switched networks.
+
+Circuit Switched require circuit establishment and tear-down at the beginning and at the end, respectively. However, a distinction is made between physically \ii{switchable} circuits and semi-permanent circuits. The first ones, a physical circuit is easily switched to connect one end to the other, while the second type regards circuits that are more static, that are much more difficult to switch. They are basically assembled. 
+\quickimage{RTel/Cap2-019.png}{.5}
+
+
+
+
+
+
+
+
+
+
+
+
+
 

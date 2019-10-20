@@ -51,6 +51,8 @@ Consult their wiki on that, it can be found \href{https://github.com/sqlitebrows
 To finish is possible to have 2 windows side by side in the same vscode instance by right clicking the window on the top bar and selecting "Slit Left/Right".
 
 \vspace{1cm}
+
+
 \par Some useful things to know:
 \begin{itemize}
     \item F1 opens the command pallet. From there, type what you need :P
@@ -117,6 +119,37 @@ To finish is possible to have 2 windows side by side in the same vscode instance
 
 \par Regarding the license, it should be included if the code is to be used by others. A good example of a classical license is the \href{https://choosealicense.com/licenses/mit/}{MIT License}. The website \href{https://choosealicense.com}{Choose a License} explains everything perfectly.
 
+
+\subsection{After Carolina's help}
+merge this subsection with the above things.
+
+\subsubsection{Start a repository}
+
+\quickimage{Other/git001.png}{.6}
+
+
+\subsubsection{Pull}
+When you want to pull, two cases may happen: 
+
+Either there are no changes in you local repository to the last remote repository and you can simply pull and the changes in the remote repository are implemented in your local one. In this case, simply \bb{pull}
+
+Or, in case you made changes to your local files, a merges must occur!
+So do, \bb{git stash} to put your changes safely in a stash, then \bb{git pull} to overwrite your local repo. Then \bb{git stash pop} to take you local changes out of the bag and attempt a merge. Usually, it goes well. If it doesn't check the merge section!
+
+\subsubsection{Merge}
+\dots
+
+\subsubsection{SSH key}
+``You won't be able to pull or push project code via SSH until you add an SSH key to your profile''
+Is it even necessary? It seems to work fairly well through https.
+
+
+\subsubsection{Delete a repository}
+It is hard on purpose! 
+
+To cut local updates is just to delete the ``.git'' file.
+
+To delete the remote repo as well (usually not needed), it required to open GitLab/GitHub page, open project repository, settings, general, advanced and delete project.
 
 
 
