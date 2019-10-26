@@ -91,10 +91,21 @@ Go to the official Anaconda website and download the installation script for Pyt
 
 Install \href{https://linuxize.com/post/how-to-install-anaconda-on-ubuntu-18-04/}{\ul{Linuxize - How to Install Anaconda on Ubuntu 18.04}}
 
+\subsubsection{Package Manager}
+\href{https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html}{\ul{User's Guide for Package Manager}}
+
+Has instructions on how to install non-conda packages and many other useful things. It allowed the installation of streamlit!
+
+\subsubsection{Broken Jupyter}
+
+Tornado 6.0 breaks jupyter notebooks. Is required to uninstall it through pip and/or pip3 and through anaconda! Downgrade to 4.5.3. (This subsubsection will probably be removed in the future when it's fixed.)
+
+
+
+\subsubsection{Other}
+
 (base) Problem \href{https://askubuntu.com/questions/1026383/why-does-base-appear-in-front-of-my-terminal-prompt}{\ul{Ask Ubundu (base) in terminal}} - then close and open the terminal to take effect.
 
-
-Note that tornado 6.0 breaks jupyter notebooks. Is required to uninstall it through pip and/or pip3 and through anaconda!
 
 
 \subsection{Pandas}
@@ -132,6 +143,7 @@ The Command Mode can be usefull sometimes, especially when adding cells is neede
     \item B - insert cell after
     \item DD - delete current cell
     \item Z - undo cell deletion
+    \item M - markdown input type (Check: \href{https://gtribello.github.io/mathNET/assets/notebook-writing.html}{\ul{Netbook MarkDown}})
 \end{itemize}
 
 
@@ -159,6 +171,18 @@ Some useful shortcuts in Spyder:
 \end{itemize}
 
 
+
+\subsection{Artifical Intelligence: A Modern Approach - Search Configuration}
+
+Clone the 3 repositories below.
+
+\href{https://github.com/aimacode/aima-python}{\ul{Aima Code}}
+
+\href{https://github.com/aimacode/aima-data/tree/f6cbea61ad0c21c6b7be826d17af5a8d3a7c2c86}{\ul{Aima Data}}
+
+\href{https://github.com/jiffyclub/ipythonblocks/blob/master/ipythonblocks/ipythonblocks.py}{\ul{ipythonblocks GitHub}}
+
+Then put the ipythonblocks.py and the data folder inside the aima-python folder. That way the Jupyter notebooks should work
 
 \subsection{From Python 2 to Python 3}
 In Linux, if 2to3 is installed, one may simply run:

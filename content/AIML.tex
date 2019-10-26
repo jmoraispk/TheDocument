@@ -252,28 +252,101 @@ A problem-solving agent is a goal-based agent that acts on the environment,
 leading him to go through a series of states in order to achieve the desired goal
 
 
+\bb{In this course, we only study the single-state problems}
+
+
 \subsection{Supervised Learning}
 
+Supervised learning concerns the problems where the objective is to predict something based on previous data. The counterpart Unsupervised Learning tries to find patterns in unlabelled data.
+
+More generally, the dataset for supervised learning problems consists on a feature vector $\mathbf{x}$ and a output vector $\mathbf{y}$. Regarding unsupervised learning, everything is features / data.
+
+
+\subsubsection{Regression Problems - Least Squares}
+These are the two most commons types of problems. Probably every supervised learning problem can be \ii{classified} as one of these.
+
+Regression is when the output should be continuous, classification when the output should be in discrete classes. 
+
+About the first, a measure to minimize is the difference between our prediction to the value we want to achieve. The Sum of the Square Errors (SSE) is very standard cost function to minimize.
+
+The function that is required to minimize is loss/cost/risk function. Nomenclature wise is a problem... Therefore, the following letters/terms can be will be used interchangibly: $L$ (Loss Function) or $J$ (more used when the weights or coefficients are $\theta$) or $R$ (Risk Function):
+\begin{equation}
+    R = \frac{1}{2m} \sum_{i = 1}^m \left(y^{(i)} - \hat{y}^{(i)}\right)^2
+\end{equation}
+
+Where $\hat{y}$ is our prediction or estimation of the true value of $y$ and \bb{m} is the number of training samples we have. Therefore $y^(i)$ constitutes the outcome of sample $i$.
+
+One prediction can be made with:
+\begin{equation}
+    \hat{y} = \beta_0 + \beta_1 x_1 + \dots + \beta_n x_n
+\end{equation}
+Where \bb{n} is the number of features we are using. Note that features and data points are different things. We can have data regarding only one measure but take the square and the cube of the measure multiplied to different coefficients in order to try to better estimate the function.
+
+$\beta$'s are usually used in regressions while in neural networks letters like $\theta$ or $w$ are more common.
+
+
+One intuition that is important to have is that \bb{the more we increase the features, the more likely it is that we end up overfitting our training set and loosing generalization capabilities for the actual test data}. This is why it is important to divide all the available data in sets, the model will be trained to guess the training samples, not samples that it never saw before.
+\begin{itemize}
+    \item One set for training and one set for testing the prediction capabilities;
+    \item One training set, one validation set and one test set.
+\end{itemize}
+
+The last option is meant to validate the model. The model is trained with the training set, then some parameters are tuned with the validation set, namely the number of polynomial features, regularization term and step size related parameters (like momentum or adaptive step size), and the actual performance is testing in the test set. This way, we avoid optimistic measures of performance by not testing in data used for training. 
+
+\quickimage{AIML/AA-cap1-017.png}{0.4}
+
+The result wouldn't be very different if done with the number of iterations or number of features. In particular, it is called doing an ``early stop'' when the iteration that minimises the loss in the test set is early in the minimization process. It is useful when the model starts overfitting the data.
 
 
 
+\subsubsection{So, how do we calculate the coefficientes}
+\label{sec:calcBetas}
+After having the coefficients, given any other set of data points we can already give predictions on the output.
 
-\subsubsection*{Extrema Conditions and Hessian Matrix}
+Note that we are trying to minimize the cost/risk/loss function. The actual cost function would have to be some sort of prediction because it's impossible to know exactly how much the actual outcome will be, despite knowing  exactly what the outcome of the model will be to a certain feature vector. As opposed to the empirical risk function where the training outcome and the training predicted result are used, therefore being able to calculate the difference between each estimation and the supposed outcome. To compute the real risk, the expected value of the SSE is necessary. Also, there are continuous results so an integral is required:
+\begin{equation}
+    R = E[y-\hat{y}] = \int_{-\infty}^{+\infty} L(y, x) \phi(y) dx dy 
+\end{equation}
+
+Because a potential function to give us a measure on how frequent certain values are is not known, the only way is to approximate the actual error empirically, using the model with some test data. This will degenerate in the actual cost function presented before. L here is meant to denote the loss of one sample which is nothing more than the squared error.
+
+
+One thing that won't happen in all problems is having an analytical and optimum solution for them. Actually, minimizing the SSE is a kind of problem is called the \bb{Least Squares}. \ul{This kind of problem is very usually used in optimisation and often a closed solution is possible.}
+
+
+In this case, since we are searching for the function's minimum, the functions partial derivatives need to be zero in order to have a critical point (maximum, minimum or saddle point).
+
+In this case, 
+
+\begin{align*}
+    \frac{\delta R}{\delta \beta_0} = -2 \sum_{i = 1}^n (y^{(i)} - \beta_0 - \beta_1 x^{(i)}) = 0 \\
+    \frac{\delta R}{\delta \beta_1} = -2 \sum_{i = 1}^n (y^{(i)} - \beta_0 - \beta_1 x^{(i)})x^{(i)} = 0 \\
+\end{align*}
+
+Is possible to simplify further these equations, putting the $\beta$'s in evidence and separating sums, arriving at:
+
+\quickimage{AIML/AA-cap1-001.png}{0.6}
+
+Is possible to invert these equations and get the expressions for the coefficients. However there's one important factor to have in mind. Are we aiming at a minimum, maximum or something different like a saddle point? The Hessian Matrix will tell us.
+
+
+
+\subsubsection{Extrema Conditions and Hessian Matrix}
 
 Videos: \href{https://www.youtube.com/watch?v=nRJM4mY-Pq0&list=PLSQl0a2vh4HC5feHa6Rc5c0wbRTx56nF7&index=87}{\ul{87 - Warm up to the second partial derivative test}} to\dots \href{https://www.youtube.com/watch?v=sJo7D74PAak&list=PLSQl0a2vh4HC5feHa6Rc5c0wbRTx56nF7&index=89}{\ul{89 - Second partial derivative test intuition}}
 
 
+\quickimage{AIML/AA-cap1-002.png}{0.6}
 
+In one dimension, to find an extrema is necessary to equalise the first derivative to zero, and the second derivative must be positive - in case of a minimum - or negative - in case of a maximum. If the second derivative is zero at the critical point, then there's an inflexion point. A similar analysis must be done in ($n$+1)-D where $n$ is the number of features used in the regression.
 
-This sub (...) sub section aims to explain why the conditions imposed on the Hessian matrix - the second derivative matrix - correspond to imposing in 2D what we know already.
-
-In practice, in 2D, to find a extrema we need to guarantee that the first derivative is zero, which in N dimensions is correspondent to guaranteeing that the gradient is zero in that point, because the gradient is nothing more than all partial derivatives in that point. Therefore, setting $\triangledown f = 0$ means that, in that point, the function is not increasing or decreasing in any of the N directions. So the first derivative makes sense.
+Guaranteeing that the first derivative is zero, which in N dimensions is correspondent to guaranteeing that the gradient is zero in that point, is the first step. Setting $\triangledown f = 0$ means that, in that point, the function is not increasing or decreasing in any of the N directions. So the first derivative makes sense.
 
 However, when we go to the second derivative, the meanings get a bit more complicated.
 
-In 2D, if the second derivative was 0, it was probably (not certainly) a saddle point, if it was $> 0$ or $< 0$ it was, respectively, a local minimum or maximum.
+In 2D, if the second derivative was 0, it was certainly a saddle point, if it was $> 0$ or $< 0$ it was, respectively, a local minimum or maximum.
 
-The conditions we should impose in 3D is to have a positive (for finding a minimum) or negative (for finding a maximum) definite Hessian Matrix. While second derivatives in order to just one variable is possible to attribute a sense to it, why do the cross derivatives play a role as well? And, why do they mean really?
+The conditions we should impose in 3D is to have a positive (for finding a minimum) or negative (for finding a maximum) definite Hessian Matrix. While it is possible to attribute a meaning to second derivatives in order to just one variable, being nothing more than the concavity in those 2 directions, why do the cross derivatives play a role as well? And, why do they mean really?
 
 Well, first the explanation on why it is needed: there are functions that across multiple dimensions still show that it is an extrema but then there's an inflexion along directions that are not along the axis. So, checking the axis is not enough. Why checking the cross partial derivatives makes it enough?
 
@@ -305,21 +378,266 @@ Some other links that helped with this:
 \end{itemize}
 
 
+The two main properties of eigenvalues that allow us to quickly calculate them from the Hessian matrix (specially if it is 2x2) are:
+
+\begin{equation}
+    \text{tr}(A) = \sum^n_{i = 1} \lambda_i    
+\end{equation}
+
+\begin{equation}
+    \text{det}(A) = \prod^n_{i = 1} \lambda_i
+\end{equation}
+
+Because there are only 2 variables, there can't be very big changes across more than 2 main directions, so it is possible to quantify the main directions which will be the eigenvectors directions.
+
+\bb{The eigenvalues of the Hessian Matrix are also called principal curvatures and the eigenvectors the principal directions.}
 
 
+
+
+
+
+
+
+
+
+
+
+\subsubsection{Analytical Expression for the Coefficientes}
+
+From the equation presented in the end of \ref{sec:calcBetas}, we can re-write the SSE and the normal equations in the following way. 
+
+
+\quickimage{AIML/AA-cap1-003.png}{0.6}
+
+And arrive at the analytical expression through the simple inversion of the normal equations. Another way of reaching the analytical expression is deriving the cost function.
+\quickimage{AIML/AA-cap1-004.png}{0.6}
+\quickimage{AIML/AA-cap1-006.png}{0.6}
+
+
+Note however that:
+\quickimage{AIML/AA-cap1-005.png}{0.6}
+
+
+A final remark on multiple outputs: in case our feature vector serves to estimate more than one output, we can simply use it separately for each output!
+
+
+\subsubsection{Regularization}
+
+This is the method of taking importance away from the minimization of the errors between the training set supposed outcomes and the actual model outcomes for those samples. If we don't take importance away, the model may become too good at predicting training examples and may forget that it should predict a tendency and generalize well for the test data.
+
+\quickimage{AIML/overfitting.png}{0.3}
+
+Performing a regularization consists on nothing more than adding a new parameter to the cost function, in order to shift away the focus of minimizing the SSE.
+
+There are generally two terms that can be added. One with the \bb{norm of the coefficients squared} and the other is the with the module of the coefficients squared.
+
+For the norm squared, if the regularization is applied to a regression - \bb{which is not a necessity since regularization can even be applied to Neural Networks} - it's called Ridge Regression:
+\quickimage{AIML/AA-cap1-007.png}{0.6}
+
+
+\quickimage{AIML/AA-cap1-008.png}{0.6}
+
+Two key things to note:
+
+\begin{itemize}
+    \item Note that $\beta_0$ is usually not included as the data should be normalised already for much better results. Normalised data means data that has zero mean in every feature and outcome.
+    \item If $\left(X^TX\right)$ is singular, the least squares estimate is not unique. Regularization will help finding an estimate even then because $\left(X^TX + \lambda I\right)$ is always non-singular.
+\end{itemize}
+
+For the simple norm of the coefficients, when applied to a regression problem it is called the Lasso Regression:
+
+\quickimage{AIML/AA-cap1-009.png}{0.6}
+
+\begin{equation}
+    ||\beta||_1 = \sum_{j=1}^{n} |\beta_j|
+\end{equation}
+
+The key difference between the two is that Ridge aims to minimize the norm of all of them while Lasso aims to minimize the sum of module of each of them. Therefore, Ridge it is much likely to pull closer to zero the biggest ones as those are the ones that matter the most for the Euclidean norm, while Lasso will try to pull each of them to 0, there's a direct dependency between a coefficients and the cost function. This is also why the Lasso Regression is called to do feature selection: because if the SSE doesn't depend on the coefficients, the regularization term with the sum of the norms will put that coefficients to zero very quickly.
+
+\quickimage{AIML/AA-cap1-010.png}{0.4}
+
+
+
+Again, recall that the data should be centered - have zero mean - and that after calculating the model we need to de-centre it to obtain the real predictions!
+\quickimage{AIML/AA-cap1-011.png}{0.5}
+
+\subsubsection{Optimization problems - Gradient Descent and Newton's Method}
+
+The gradient descent is probably the most know method to approximate a functions minimum. By changing the direction of the step we have the gradient ascent. 
+
+\quickimage{AIML/AA-cap1-012.png}{0.6}
+
+The above expression works because the gradient points the direction of the maximum growth of the function. Therefore, taking a step in the opposite direction will lead to the minimum.
+
+\subsubsection*{Momentum and Adaptive StepSize}
+Momentum $0 \leq \alpha \leq 1$:
+\quickimage{AIML/AA-cap1-013.png}{0.6}
+
+
+Note that we want to pick the $\mathbf{x}$ that brings the function to a minimum. Therefore, the ``exponent'' will simply refer to the iteration number, not the sample like in the previous section.
+If $\alpha$ is closer to 1 the memory of the previous increment is more taken into account, meaning that the increment will change only slightly. The closer the parameter gets to 0, the closer we get to the normal situation. This is called the momentum term because it gives the convergence some inercia, the behaviour of momentum. By changing the increment slowly, it may converge faster and have less abrupt changes.
+
+
+Adaptive Step size, with typical values: $u = 1.2, d = 0.8$:
+
+\quickimage{AIML/AA-cap1-014.png}{0.6}
+
+Let f be the function where the objective minimum lies, the Divergence criterium is given by:
+\begin{equation}
+    f(x^{(n+1)}) > f(x^{(n)})
+\end{equation}
+Where the threshold is found in the equality.
+
+\subsubsection*{Newton's method}
+
+Given by:
+\quickimage{AIML/AA-cap1-015.png}{0.4}
+
+
+Where the gradient and the Hessian Matrix are given by:
+
+\quickimage{AIML/AA-cap1-016.png}{0.4}
+
+The Newton's method converges insanely fast! But requires the inversion of the Hessian matrix which can be a serious problem...
+
+
+\subsubsection{Newton's Method - Intuition and Demonstration}
+This is a very very good proof!
+
+%do. it. It is in the notebook...
+
+
+\subsubsection{How to optimise hyperparameters}
+There will always be parameters to optimise in order to obtain the best model possible.
+It was said before that 3 sets should be selected: training, validation and testing.
+And that it was in the validation set that all hyperparameter tunning should be done.
+The simplest way is calculate the model with all combinations of the parameters possible and see which one performs better in the validation set. 
+
+There can be one other problem: little data. If the data is too little, dividing it into sets can start to give biased results to the accuracy.
+
+One way of calculating the accuracy with more ... accuracy \dots is splitting the data in k folds and rotate:
+
+\quickimage{AIML/AA-cap1-018.png}{0.4}
+
+
+
+Finally, if both things need to be done at the same time, then:
+1- k folds need to be made. 
+2- for each fold, all values of the hyperparameters need to be used for training and tested in the test set.
+Note: it will be used for training T except ($T_i$ and $T_j$) that are, respectively, the test set and the validation set. So the hyperparameters testing will be done with $T_i$.
+When the all combinations are done, the hyperparameters are selected for the bet one and the actual model is trained with T except $T_i$ depending on the fold considered.
+3- use the performances of each fold to get the best average of performance.
+
+(Note that this is not very used...)
+\quickimage{AIML/AA-cap1-019.png}{0.4}
+
+
+
+
+
+
+
+
+\subsubsection{Neural Networks}
+
+
+\subsubsection*{Some history}
+\quickimage{AIML/AA-cap1-018.png}{0.4}
+
+\quickimage{AIML/AA-cap1-023.png}{0.4}
+
+However, there's a big problem with only being able to distinguish data that can be separate with an hyperplane: very often the data doesn't behave that way.
+
+\quickimage{AIML/AA-cap1-024.png}{0.4}
+
+One can make a more complex analysis of the situation...
+
+
+
+\subsubsection*{Activation Functions and Architecture}
+
+Some activation functions: 
+
+\quickimage{AIML/AA-cap1-021.png}{0.4}
+
+Two other are Rectifier Linear Unit and the softmax:
+\quickimage{AIML/AA-cap1-022.png}{0.4}
+
+\quickimage{AIML/softmax.png}{0.2}
+
+
+In the all layers with the exception of the last one, ReLu or the logistic function work very well. The last layer must have a function that returns results between 0 and 1, therefore only SoftMax and sigmoid functions like the logistic function would work properly.
+
+
+
+
+
+Training methods:
+\quickimage{AIML/AA-cap1-025.png}{0.4}
+
+
+
+One very interesting fact is that the image features are not selected by anyone. The network itself crafts its features throught backpropagating the changes required to get the images right. This is true for all Neural Networks.
+
+Also, in image recognition for instance, but in deep neural networks in general, the last layers usually are fully connected.
 
 \subsubsection{Neural Networks - BackPropagation}
 
-Two of the most useful websites to check while trying to demonstrate the backpropagation algorithm:
+Some of the most useful websites to check while trying to demonstrate the backpropagation algorithm:
 \begin{itemize}
     \item \href{https://medium.com/@pdquant/all-the-backpropagation-derivatives-d5275f727f60}{\ul{all backpropagation derivatives}}
     \item \href{https://stats.stackexchange.com/questions/94387/how-to-derive-errors-in-neural-network-with-the-backpropagation-algorithm}{\ul{Error (deltas) derivation for backpropagation in neural networks}}
     \item \href{https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi}{3Blue1Brown Neural Networks} - Specially the last one, on backpropagation.
-    
 \end{itemize}
 
+The fastest way is the following:
+
+%do. it.
 
 
+Note that multiple training modes are possible. The normal one is on-line, where the increment to the weight is nothing more than the step multiplied by the respective partial derivative - Equation \eqref{eq1:online}. Then one can do the batch-mode where all the samples are considered for the weights update - Equation \eqref{eq2:batch}. Finally, there's the mini-batch mode that doesn't use all the training samples.
+
+\begin{align}
+    w_{ij}^{(l)} &= w_{ij}^{(l)} + \bigtriangleup w_{ij}^{(l)} \\
+    \bigtriangleup w_{ij}^{(l)} &= -\eta \frac{\delta C^k}{\delta w_{ij}^{(l)}} \label{eq1:online} \\
+    \bigtriangleup w_{ij}^{(l)} &= -\frac{\eta}{m} \sum_{k=1}^m  \frac{\delta C^k}{\delta w_{ij}^{(l)}} \label{eq2:batch}
+\end{align}
+
+
+
+\subsubsection{Neural Networks - Convolutional} 
+
+Convolutional Neural Networks are extremely useful for applications like image recognition. They take a width x height x image depth 3D array and convolve it with a kernel, generating an 2D array. 
+
+Because many elements in an image are translation invariant, considering patches of the image is one of the best ways of acquiring features.
+
+Convolutional neural networks allow us to use less inputs to our neural networks. We map a region of a picture to just one pixel/input. We tend to use many different kernels - a set of weights to multiply to each of pixel in the set we chose - to perform this step.
+
+
+\quickimage{AIML/AA-cnn.png}{0.6}
+
+
+At the end of the convolution, an activation function (like ReLu) is applied.
+
+Note that this convolutional layer can be applied to a 3D array to reduce it to 2D. Moreover, many different kernels can be convolved with the section of the 3D array creating several layers. If there are 20 kernels, we'll have 20 2D arrays, therefore a new 3D array that is all the pixels in the several vicinities, weighted with different kernels.
+
+\quickimage{AIML/AA-cnn3.png}{0.6}
+
+
+
+
+\subsubsection*{Pooling}
+2D to 2D but with smaller dimensions.
+Downsize the feature array by choosing what we consider to be the most important values. For instance, for each 4x4 square of pixels, we choose the maximum of them (the highest value in grey scale, for instance). Therefore, the end result will have 16x less pixels/inputs. 
+
+\quickimage{AIML/AA-cnn2.png}{0.6}
+
+
+Overall, the tendency is the kernel to be smaller, but the network to have many many layers.
+
+
+\subsubsection{Kernels}
 Why kernels are important? They facilitate a lot the mapping of features to higher dimensions!
 
 \href{https://medium.com/@zxr.nju/what-is-the-kernel-trick-why-is-it-important-98a98db0961d}{\ul{Why kernels?}}
@@ -329,6 +647,8 @@ Why kernels are important? They facilitate a lot the mapping of features to high
 \subsection{Unsupervised Learning}
 
 \subsubsection{Lagrange Multipliers}
+
+The Lagrange Multipliers is a mathematical optimization method, allows the finding of local maxima or minima of a function, subject to equality constraints.
 
 Perfect Explanation why it works:
 

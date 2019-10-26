@@ -1,6 +1,6 @@
 
 
-\section{Telecommunication Networks - Overview}
+\section{Telecommunication Networks - Transport Networks}
 
 From the courses Internet Networks and Services (RSI in portuguese) and Telecommunication Networks (RTel in pt) I've had an insight about how the whole network is multiplexed into optic fibers and many other interesting topics such as the triple play services and a bunch of protocols that are used in today's world to make everything communicate with everything. Therefore, I propose to write a sum up of the slides and bibliography of RSI and RTel in this section. I'll mainly give importance to RTel since it is what I'm studying at the moment, but I hope to go through the slides of RSI as well.
 
@@ -217,25 +217,187 @@ The network management systems sends configurations through the \bb{Data Communi
 \quickimage{RTel/Cap2-016.png}{.5}
 
 
+One important distinction in terms of how things are connected physically is evident comparing the access networks with the other parts of the network. Access Networks, as opposed to what happens to the rest of the network, uses twisted pair or one optic fiber. This is because of the cost versus the bandwidth a fiber offers. One fiber can carry several times the traffic of one user, therefore can be used for multiple users. Moreover, very often the final leg is done with twisted pair due to cost reasons.
+
 In a more abstracted way, one can identify three planes:
 
 \quickimage{RTel/Cap2-017.png}{.5}
 
 As you already know, there are circuit switched or packet switched networks.
 
-Circuit Switched require circuit establishment and tear-down at the beginning and at the end, respectively. However, a distinction is made between physically \ii{switchable} circuits and semi-permanent circuits. The first ones, a physical circuit is easily switched to connect one end to the other, while the second type regards circuits that are more static, that are much more difficult to switch. They are basically assembled. 
+Circuit Switched require circuit establishment and tear-down at the beginning and at the end, respectively. However, a distinction is made between physically \ii{switchable} circuits and semi-permanent circuits. The first ones, a physical circuit is easily switched to connect one end to the other, while the second type regards circuits that are more static, that are much more difficult to switch. The semi-permanent must be switched by the administrators in order to attribute these circuits to a user for a somewhat long period of time (not just one transmission).
 \quickimage{RTel/Cap2-019.png}{.5}
 
+Then, of course, there are packet switched networks that allow a much better share and efficient use of resources.
+
+\bb{The key notion to have is that all services use the transport network! This is the highway of data! Nowadays it is impossible to have dedicated physical connections for each service. And this section of \ii{Networks - Transport Networks} is based on that!}
+
+
+
+\subsubsection*{Telephone Networks}
+Telephone Networks before used circuit-switching. Note that the only ones that use circuit-switching are the landlines! Nowadays, our mobile communications are able to replace this fixed circuits lines
+
+Local exchanges (Access) - are small switching centres that serve a small area.
+
+Transit exchanges(metro, core) occur in \bb{Primary trunk exchanges} is used to transfer the traffic and to interconnect several circuits.
+
+They usually have a physical connection between them, but not one of their own. It wouldn't be viable to have dedicated circuits. It's here that the transport networks comes.
+
+Different components have different topologies. The network is a hierarchy, having different topologies in different parts of the network.
+
+Digital Circuit-switching meaning that the data being switched is of digital nature.
+
+
+
+\subsubsection*{Hybrid Fibre-Cable Network}
+
+There's an head end that distributes all the channels for all the users. 
+
+The network is called hybrid because it uses both fibre and coaxial cable.
+
+
+Excellent example of a tree network. Like all the networks with share mediums, it required multiple access protocols to allow everyone to use the medium (FDMA and TDMA are 2 of the multiple access technologies).
+
+
+\quickimage{RTel/Cap2-020.png}{.5}
+
+The transport network is represented by the optical fibre that connects the head head to the optical access node. Like the cellular communications, one optical access node covers a certain area, with coaxial cable.
+
+
+\subsubsection*{IP Networks}
+
+There are 2 ways of sending IP packets:
+
+- Without Connection, it is necessary to have a buffer to reassemble all the IP packets. The packets are simply send to the network in a best effort way.
+
+- With Connection: when certain QoS is required, then MPLS is used, so that certain resources can be reserved and the QoS met.
+MPLS establishes a virtual circuit before starting transmitting the packets.
+MPLS acts between layer 2 and layer 3. It places a label between the layer 2 and layer 3 labels.
+
+There are 2 types of MPLS routers:
+- LER - Label Edge Router are the ones that put the labels and take them out;
+- LSR - Label Switching Router simply take labels out.
+
+MPLS works by pre-establishing a path for information flow. Then, at each hop, according to the label id's available in each LSR the label arrives with one number and it leaves with other, based on the MPLS routing table in each MPLS capable router. This table entries are created based on the MPLS protocol and pre-path find procedures.
+
+
+This is how a MPLS table looks like: 
+
+\quickimage{RTel/Cap2-025.png}{.5}
+
+
+
+
+Generalized MPLS (GMPLS) is the \ii{de facto} (practice that exists practically even though it is not formalized by law) of the control plane of the Wavelength Switched Optical Network (WSON).
+
+Label Switching allows Traffic Engineering:
+
+\quickimage{RTel/Cap2-024.png}{.5}
+
+
+
+
+\subsubsection{Layered Model Overview}
+Open Systems Interconnection Model:
+\quickimage{RTel/Cap2-021.png}{.5}
+
+
+Transport layer connects applications.
+Network layer connects machines with different IPs.
+Data link layer connects two machines with their interfaces' MAC addresses.
+Physical layer is what is responsible for putting the data into a cable or into the air to perform the actual transmission. For instances, spectrum, modulation and coding techniques and intervals of transmission.
+
+
+
+
+\quickimage{RTel/Cap2-022.png}{.5}
+
+\quickimage{RTel/Cap2-023.png}{.5}
+
+
+
+
+\subsection{Ethernet Networks}
+
+Most of today's network traffic is generated from Ethernet interfaces. Made from twisted copper pair, through slightly more advance techniques and protocols is still possible to get quite a good throughput with a low cost cable.
+
+Uses CSMA/CD Carrier-sense multiple access with collision detection because it can sense if there's anyone using the bus at all times. WiFi for instances CSMA/CA is used since we may be causing a collision we can't detect.
+
+The Ethernet protocol 802.3 is used in all parts of the transport layer, not only at the access level and specially not only in LAN (Local Area Networks). Note that the Ethernet protocol was standardised by IEEE and the standard specifies not only the physical specifications but also Data Link Layer frame formats.
+WiFi 802.11 is another protocol that includes physical, like transmit powers and modulations, and Data Link specifications 
+
+A rule of thumb is to use optical cables for distances above 100 metres.
+
+\quickimage{RTel/Cap3-001.png}{0.6}
+
+\begin{itemize}
+    \item The LLC (Logical Link Control) sub-layer is responsible
+    for the flow and error control between the nodes.
+    \item The MAC sub-layer is responsible for the media
+    access control, addressing, error detection, frame
+    delimitation, by organizing the bit sequences into
+    frames.
+    \item The physical layer deals with the bit transmission
+    and reception, with the electrical, optical and
+    mechanical properties of the interfaces, with the type
+    of connectors used, etc.
+\end{itemize}
+
+
+The Data Link layer is responsible for frame processing, and error detection through the calculation of a CRC (Cyclic Redundancy Check). If a frame has errors, it is discarded.
+Most of error correction is done higher up in the stack. TCP guarantees error free transmissions when it says they were successful.
+
+MAC stands for Media Access Control. Thus, the MAC addresses are addresses to access the physical media. CSMA protocols are placed in this layer. 
+
+There are 2 bits in the MAC address, the two least significant ones form the first octet.
+
+\quickimage{RTel/Cap3-004.png}{.5}
+
+U/L refers to the uniqueness of the interface. The MAC address can be changed becoming a local one. I/G refers to one interface only or a group that has that MAC address that received always the same thing. 
+
+Write \ii{ifconfig} or \ii{ip a} in linux (or \ii{ipconfig} in windows) is possible to see this MAC address.
+
+
+\quickimage{RTel/Cap3-002.png}{.5}
+
+
+Because there are only 1500 bytes to address (to count) with the Length/Type field, then there will be quite a few empty bits in this field. The rest of the bits are used to denote the type of the frame: 
+
+
+\quickimage{RTel/Cap3-003.png}{.5}
+
+
+The purpose of the Preamble is to achieve clock synchrony.
 
 
 
 
 
+\subsubsection{Multiple Access}
+
+TDMA, FDMA (WDMA), CDMA all have the same principle: divide signals in a given domain. 
+
+TDMA divides signals in the time domain: different transmissions occupy different time slots.
+
+FDMA divides in frequencies, WDMA divides in wavelengths. The only difference is that one is more used in wireless applications and the other with fibres.
 
 
 
+OFDMA starts combine the previous ideas: divides in the time and in the frequency domains, therefore is able to attribute resource blocks with much better efficiency. A use of OFDMA is in 4G and 5G where a physical resource block is nothing more than a set of sub-carriers used for a given time period, usually called one TTI (Transmission Time Interval).
+
+CDMA is used in 3G and with GPS, so that different satellite can transmit all at the same time.
+
+Then there's another category of multiple access techniques like CSMA. Namely CD and CA, collision detection and collision avoidance. 
 
 
+Collision Detection is when a collision is possible to be detected and after being detected certain steps are taken to minimize the risk of happening again.
+
+Collision Avoidance is when the collision can't be detected and 
 
 
+\subsubsection{light in fibre}
+The speed of light inside an optical fibre, considering an average glass refractive index of 1.5, is:
+\begin{equation}
+    v = \frac{c}{n} = 2 \times 10^8 m/s
+\end{equation}
 
