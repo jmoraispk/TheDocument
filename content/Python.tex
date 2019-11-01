@@ -190,14 +190,97 @@ However, learning how to use the api can take a while. Following are the main pa
 
 \subsubsection{Basic Flow - Image Classification Example}
 
+Imports, data load, normalization, on mean and on stddev(not included in the example), create model, add layers, check summary, configure callback(s) and the optimizer, compile the model to apply the loss function and the optimizer, fit the model, predict with the model, plot training and validation loss curves, plot confusion matrices and accuracy scores opposing the predicted data with the actual test data outcomes.
+
 \begin{lstlisting}[language = python]
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow.keras as keras 
-from keras import utils, models, layers, callbacks, optimizers
+from keras import utils, layers, models, callbacks, optimizers
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 from sklearn.metrics import confusion_matrix, accuracy_score
 
+x = np.load("mnist_train_data.npy")
+y = np.load("mnist_train_labels.npy")
+
+x_test = np.load("mnist_test_data.npy")
+y_test = np.load("mnist_test_labels.npy")
+
+print(x.shape)
+print(y.shape)
+
+plt.imshow(np.squeeze(x[5]))
+
+#normalizing
+x_norm = x / 255
+x_test_norm = x_test / 255
+
+#y to categorical
+labels = keras.utils.to_categorical(y, num_classes=None)
+
+model = keras.models.Sequential()
+
+model.add(keras.layers.Flatten(input_shape = (28,28,1)))
+#in case the samples are one dimensional, Input layer is enough.
+
+#after the first layer it is not necessary to specify the input size
+model.add(Dense(64, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(10, activation='softmax'))
+
+#Expected: Layer 1 weights: (784+1) * 64 = 50240
+#          Layer 2 weights: (64 +1) * 128 = 8320
+#          Layer 3 weights: (128+1) *  10 = 1290
+#                                Total   = 59850
+model.summary()
+
+"""
+Example of CNN:
+model2.add(Conv2D(16,kernel_size=(3,3), activation='relu'))
+model2.add(MaxPooling2D(pool_size=(2,2)))
+
+model2.add(Conv2D(32,kernel_size=(3,3), activation='relu'))
+model2.add(MaxPooling2D(pool_size=(2,2)))
+
+model2.add(Flatten(input_shape = (5,5,32)))
+model2.add(Dense(64, activation='relu'))
+model2.add(Dense(10, activation='softmax'))
+"""
+
+
+
+stopper = callbacks.EarlyStopping(patience=15, restore_best_weights=True)
+#restore_best_weights - restore weights from best epoch 
+
+# min_delta may me zero because the epochs after the best only count if there's improvement
+
+Adam = optimizers.Adam(lr=0.01, clipnorm = 1)
+
+model.compile(loss='categorical_crossentropy', optimizer=Adam)
+
+hist1 = \
+    model.fit(x = x_norm, y=labels, batch_size=300, epochs=400,\
+        verbose = 0, callbacks = [stopper], validation_split=0.3)
+
+y_pred_labels = model.predict(x_test_norm)
+
+y_pred = np.argmax(y_pred_labels, axis=1)
+
+plt.plot(hist1.history['loss'])
+plt.plot(hist1.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+
+
+sns.heatmap(matrix,annot=True,cbar=True)
+plt.ylabel('True Label')
+plt.xlabel('Predicted Label')
+plt.title('Confusion Matrix')
+
+print('Accuracy:', accuracy_score(y_test, y_pred, normalize=True)* 100, '%')
 \end{lstlisting}
 
 \subsubsection{Sequential Model}
