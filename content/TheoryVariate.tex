@@ -1,6 +1,6 @@
 
 
-\section{Theory on Variate Topics}
+\section{Also Useful Math}
 
 \subsection{Taylor Series}
 Incredibly important for simplifications, approximations and to have a notion of the shape of the function.
@@ -45,3 +45,30 @@ Use if a blocked call is delayed instead of the "come back later" that happens i
 
 
 
+
+\subsection{Probabilities}
+
+\subsubsection{Bayes Theorem}
+
+This an important topic. Is appears just about everywhere!
+
+What is the probability of something, given that something happened.
+
+What we'll see very very often is that this is associated with decision 
+boundaries and thresholds. Depending on what we saw, the likeliness of what we 
+thing was transmitted or the class we thing our data may belong, may change.
+
+This is Bayes' Theorem in its discrete form:
+
+\quickimage{Other/math2.png}{.5}
+
+\quickimage{Other/math1.png}{.5}
+
+
+In just about every case, we want to choose:
+\begin{itemize}
+    \item the symbol that was most likely transmitted given that we received a certain signal (the maximum likelihood criteria, which Bayes Theorem definitely is, may degenerate in a shortest distance criteria in phase and quadrature plots - remember QAM and PSK)
+    \item the class that a certain sample most likely fits into is the class that most likely would generate that kind of sample. 
+\end{itemize} 
+
+Therefore

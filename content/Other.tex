@@ -37,7 +37,7 @@ Consult their wiki on that, it can be found \href{https://github.com/sqlitebrows
 
 \par This whole document was created with \LaTeX \ on Visual Studio Code. 
 \par I ran commands for installing the necessary \LaTeX \ stuff, these can be seen below.
-\par I installed vscode with the software center from the .deb package downloaded throught their website and then installed 2 extensions. The first extensions is Latex Workshop from the extensions market inside vscode. The second I can't remember which one was or even if it did something...
+\par I installed vscode with the software center from the .deb package downloaded through their website and then installed 2 extensions. The first extensions is Latex Workshop from the extensions market inside vscode. The second I can't remember which one was or even if it did something...
 
 \vspace{.5cm}
 \begin{lstlisting}[language=bash] 
@@ -46,21 +46,45 @@ Consult their wiki on that, it can be found \href{https://github.com/sqlitebrows
 \end{lstlisting}
 \vspace{.5cm}
 
-\par In addition, I configured \textit{Ctrl + .} for compilation opening every shortcut with \textit{Ctrl + K + Ctrl + S} (ctrl + K then lift the K key and press S). However, with the dual window mode, just as I it \textit{Ctrl + S} to save, it automatically compiles which is very pleasant.
-\textit{Alt + Z} for word wrap is useful too.
-To finish is possible to have 2 windows side by side in the same vscode instance by right clicking the window on the top bar and selecting "Slit Left/Right".
-
-\vspace{1cm}
 
 
 \par Some useful things to know:
 \begin{itemize}
-    \item F1 opens the command pallet. From there, type what you need :P
-    \item Ctrl + Alt + V -> open on a window on the right the document that is being edited on the main window;
-    \item Ctrl + Alt + H -> go to the same place on the \LaTeX document as where the source is;
+    \item F1 $->$ opens the command pallet. From there, type what you need :P
+    \item Ctrl + S $->$ saves file. Sometimes compiles if everything is well defines(Latex for instances)
+    \item Alt + Z $->$ word wrap
+    \item Ctrl + . $->$ Compiles and allows for choosing the rules beforehand.
+    \item Ctrl + Alt + V $->$ open on a window on the right the document that is being edited on the main window;
+    \item Ctrl + Alt + H $->$ go to the same place on the \LaTeX document as where the source is;
     \item You can commit and push and all that git stuff with vscode;
-    \item Ctrl + Alt + A -> After selecting a word, adds it to user dictionary, therefore is not considered an error anymore.
-    \item Ctrl + T + Ctrl + A -> Toggle Activity Side-bar (shows files, ect...)
+    \item Ctrl + Alt + A $->$ After selecting a word, adds it to user dictionary, therefore is not considered an error anymore.
+    \item Ctrl + T + Ctrl + A $->$ Toggle Activity Side-bar (shows files, ect...)
+    \item Ctrl + K + Ctrl + S $->$ Show all shortcuts (They can be edited but close and open between changes, they are not written right away - a bug)
+    \item Ctrl + P $->$ Allows action taking! 
+        \begin{itemize}
+            \item :10 $->$ takes you to like 10
+            \item ? $->$ help on what you can do! probably much more than I know.
+        \end{itemize}
+    \item Ctrl + Shift + P $->$ is the same as doing > in the Action box, allows running commands.
+    \item Ctrl + 1 $->$ go to the first windows when they are side by side. This is useful for Python Interactive Console or when editing side by side documents.
+    \item Ctrl + K + Ctrl + $\geq 0$ $->$ Fold all level $\geq 0$ depth sections. \textbackslash section is depth 0. \textbackslash  is depth 1, \textbackslash subsubsection is depth 2 and subsequent blocks inside that will be the next depths. Similarly, with code: no indentation is depth 0, 1 indentation is depth 1, etc\dots
+    \item Ctrl + K + Ctrl + J $->$ unfold all sections.
+    \item Ctrl + K + Ctrl + L $->$ toggle fold in current section.
+\end{itemize}
+
+\subsection{Using VS Code as an Environment for Debugging Python}
+Install the correct python package, the one from Microsoft and that should be enough
+
+\begin{itemize}
+    \item F5 $->$ debugs the file
+    \item Ctrl + F5 $->$ runs the file
+    \item F9 $->$ toggle breakpoint
+    \item Shift + F9 $->$ Go to Next breakpoint
+    \item Ctrl + F9 $->$ Disable all breakpoints
+    \item Alt + F9 $->$ Remove all breakpoints
+    \item Ctrl + Shift + F9 $->$ Inline Breakpoint (only useful if it's a line with many commands)
+    \item Ctrl + Alt + D $->$ Open Debug Mode (needs to be configure View: Show Debug)
+    \item Ctrl + Shift + Y $->$ Debug Console
 \end{itemize}
 
 

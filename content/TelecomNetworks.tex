@@ -46,7 +46,7 @@ As a public service, the public networks must provide fidelity (transmit the inf
 
 Nowadays, most of transmission is digital. A series of pulses is transmitted through a channel with attenuation, dispersion, interference from other signals and noise. Therefore what reaches the other side is considerably different and has to be estimated what the original input was.
 
-\quickimage{RTel/Cap1-001.png}{0.6}
+\quickimage{RTel/Cap1-001.png}{0.9}
 
 As having a dedicated physical infrastructure for each service would be far to expensive and messy, the big majority of services share the same channel, the optic fiber. It is easily shared because of the available bandwidth in it. Thus, the signals are multiplexed at the entrance, using different wavelengths (\bb{Wavelength-Division Multiplexing (WDM)}) and de-multiplexed at the other end, to follow each one to their device that is requiring the service. 
 
@@ -228,6 +228,9 @@ As you already know, there are circuit switched or packet switched networks.
 Circuit Switched require circuit establishment and tear-down at the beginning and at the end, respectively. However, a distinction is made between physically \ii{switchable} circuits and semi-permanent circuits. The first ones, a physical circuit is easily switched to connect one end to the other, while the second type regards circuits that are more static, that are much more difficult to switch. The semi-permanent must be switched by the administrators in order to attribute these circuits to a user for a somewhat long period of time (not just one transmission).
 \quickimage{RTel/Cap2-019.png}{.5}
 
+\bb{The biggest difference is the amount of time each one uses de circuit for. Switched circuits is around minutes, Semi-permanent are months.}
+
+
 Then, of course, there are packet switched networks that allow a much better share and efficient use of resources.
 
 \bb{The key notion to have is that all services use the transport network! This is the highway of data! Nowadays it is impossible to have dedicated physical connections for each service. And this section of \ii{Networks - Transport Networks} is based on that!}
@@ -392,12 +395,142 @@ Then there's another category of multiple access techniques like CSMA. Namely CD
 
 Collision Detection is when a collision is possible to be detected and after being detected certain steps are taken to minimize the risk of happening again.
 
-Collision Avoidance is when the collision can't be detected and 
+Collision Avoidance is when the collision can't be detected and should at all costs be avoided.
 
-
-\subsubsection{light in fibre}
-The speed of light inside an optical fibre, considering an average glass refractive index of 1.5, is:
+A curiosity: he speed of light inside an optical fibre, considering an average glass refractive index of 1.5, is:
 \begin{equation}
     v = \frac{c}{n} = 2 \times 10^8 m/s
 \end{equation}
 
+
+In cabled Ethernet, CSMA/CD is used. Disregarding all other phenomena that limit the debit - dispersion that leads to distortion, attenuation, etc\dots - the use of CSMA/CD is limited by the distance that the information can travel before one discovers that a collisions as occurred. In essence, if the maximum debit is 10 Mbit/s and the maximum ethernet frame is around 1500 bytes long, it will take $\frac{1500 * 8 bits}{10 \times 10^6 bits/s} = 0.0012 s$. 
+
+The electrical signals propagate at speed of light - don't confuse with the speed of light in the fibre, in the fiber the light is propagating in glass, here there's a wave propagating in TEM mode along a twisted pair or coaxial cable. Therefore, in order to notice a collision, the signal must be able to go all the way to the other end and comeback BEFORE the sender is ready to send another frame. Mathematically: $T_{max-frame} \geq 2 T_{propagation}$. This is because, if there is a collision at the other end, the sending machine must receive that collision before finishing the transmission, otherwise it would keep sending frames without knowing about the collision.
+
+\quickimage{RTel/Cap3-006.png}{.5}
+
+Since $T_{propagation}$ is proportional to the length of the connection, and the time of transmission is inversely proportional to the bit rate, then the bigger the rate, the smaller the maximum distance between machines can be. 
+
+That is also why CSMA/CD is not used when the rates get too high!
+
+\quickimage{RTel/Cap3-005.png}{.5}
+
+
+Note that this is only necessary if a medium is shared! If it is dedicated, it is not necessary.
+
+
+A switch is a layer 2 - the Link Layer - equipment that commutes Ethernet frames,
+
+Switches with higher capacities are higher up in the grid, closer to the core, because they have to handle many more traffic flows.
+
+Some functions of switches:
+\begin{itemize}
+    \item Forwarding - Simply check the destination, it knows to which port that destination is connected to and send the frame in that port destination is 
+    \item Broadcasting - Sending to all destinations, this happens when it doesn't know where to send it and needs to find out. 
+    \item Filtering - 
+\end{itemize} 
+
+In order to avoid problems such as exponential spreading of frames, a \bb{Spanning Tree Protocol} at a logical level is used. Closed loops go away with this protocol since a tree is created and all notes still are connected since it is a spanning tree. BPDU - Bridge Protocol Data Units are the frames sent to establishing this tree.
+
+
+Ethernet frames don't have time to live. But in BPDU's have TTL 
+
+
+This Spanning Tree Protocol can be implemented in the following way:
+\begin{enumerate}
+    \item Root Switch election - typically the one that has the smallest MAC in the network because computing the one that has the smallest distance to every other node is too troublesome. Therefore, after receiving a BPDU with an ID lower than the current root, it replaces his belief of root and propagates that information.
+    \item Convergence to Spanning tree starting at the Root - The root propagates BPDU's with a cost to root (if the root is sending, the cost is 0). The nodes that receive do the same: \bb{(root id, my id, cost to root)}. 
+    - If the received packet tells a cost to root that is smaller than before, that port is designated as the root port. 
+
+    - If the received packet tells a cost that is bigger, than that port will be blocked: not packets should be sent that way!
+
+    - The ports that are not blocked and that will connect the lower nodes to the root will be called \bb{designated ports}. These are the ports that node can send things to.                                                                                                                                                                                                                                                                                                    
+\end{enumerate}
+
+
+This is an example of the status of each 
+\quickimage{RTel/Cap3-007.png}{.5}
+
+
+
+
+\ul{How is the switch able to build the Source Address Table (SAT)}
+
+It can be filled by hand, by the network administrator. Or it can learn the MAC that communication to each port.
+
+
+
+
+\begin{center}
+    \bb{How packets Travel in the network}
+We write a message in the phone or in the laptop and press send in the application (layer). First, there is some compression and encryption done by the application layer right away. Then in the application code, there is a section that is defining TCP or UDP sockets - very likely TCP - 
+%CONTINUEEEEEEEEEEEE
+
+\end{center}
+
+
+\ul{How to build minimum spanning trees?}
+They are needed for the spanning tree algorithms like the Link Layer LAN minimum spanning tree algorithm.
+
+With the Kruskal's Algorithm: %is it really?
+\begin{enumerate}
+    \item order the edges by their cost, minimum first.
+    \item keep adding edges to a the spanning tree, as long as the edge doesn't create a loop (connects two nodes already connected in another way).
+    \item stop when the tree has \bb{n - 1} edges.
+\end{enumerate}
+
+
+
+
+
+\subsubsection{Physical Layer of the Ethernet}
+
+The Ethernet protocol includes physical specifications.
+
+Between the link layer and the physical layer (the layer right before the physical medium) there's a \bb{medium independent interface (MII)}. In the picture below, depending on the debits being transmitted, this interface has several names. It has different names because it is a parallel interface that depends on the debit.
+
+
+\quickimage{RTel/Cap3-008.png}{.5}
+
+The first sublayer of the physical layer is coding. It will had signals to the bits. Each bit will 
+
+The second sublayer is responsible for the parallel/series conversion.
+
+The last sublayer must generate the signal into the medium being optic fibre, twister pair, etc...
+
+\subsubsection*{Code - mBnB}
+
+Firstly, the code. Required for robustness of transmission and to send symbols at lower frequencies than the actual bitrate.
+
+\bb{m input, n output bits}
+
+
+
+By switching between Mode 1 and Mode 2, the number of 0's is identical to the number of 1's, which is important to keep the stochastic balance between 1's and 0's - important for detection.
+\quickimage{RTel/Cap3-010.png}{.5}
+
+
+
+After the coding, a 1Gbit/s bit rate is converted into a $\frac{n}{m} * Rate$. For 3B4B, it will be necessary to transmit 4 bits in the time it took to transmit 3. Before, the rate per bit would be $\frac{1Gbit/s}{3}$. And this needs to be multiplied by 4 to have the 4 bits going at the same time. Therefore, 1.(3) Gbaud (symbols per second) is the new rate.
+
+
+
+The ethernet transmission is done in baseband, no modulation.
+
+\quickimage{RTel/Cap3-009.png}{.5}
+
+For the correct names \href{https://en.wikipedia.org/wiki/Ethernet_physical_layer}{\ul{Ethernet phy layer}}.
+
+
+\subsubsection*{Avoiding Crosstalk}
+Electromagnetic interference becomes a limiting problem in very high frequencies.
+To reduce these interferences, a metal sheet foil can be used. A more effective solution is really to use a shield 
+Therefore, shielding is necessary for twisted pairs.
+
+
+The necessary bandwidth to transmit 10Gbaud/s, CHEEEEEEEEEEEEEEEECK HOOOOWWWWWWW
+
+\quickimage{RTel/Cap3-011.png}{.5}
+
+\subsubsection*{Gigabit + Ethernet}
+When the speeds are too big, either the distances need to be smaller or fibres must be used. Single mode even...

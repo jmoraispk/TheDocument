@@ -18,6 +18,52 @@ grep -i filters without concerning about the case.
 
 \subsubsection{grep}
 
+\subsection{Redirect with >}
+One can redirect the stdout and the stderr to other files with that little ``bigger than '' sign.
+
+xdg-open ~/Pictures/1.png > /dev/null will redirect the stdout to null. 
+xdg-open ~/Pictures/1.png &> /dev/null will redirect everything to null.
+xdg-open ~/Pictures/1.png > /dev/null 2>&1 will perform the above and redirect stderr to stdout.
+\quickimage{Other/BashRedirecting.png}{.5}
+
+
+\subsection{Shortcuts or Link [ln]}
+ln -s ~/Docs/importantFolder .
+will create a shortcut in the current folder for the importantFolder.
+
+However, there's much more to links that what meets the eye!
+
+\begin{center}
+    \bb{A link is an entry in your file system which connects a file name to the actual bytes of data on the disk. }
+\end{center}
+
+The previous Redirect > command does this exactly. Actually, doing 
+ln test1.txt test2.txt will link them both and they become the same file with different names
+>> allows for line appending! Try to append a line to one and check the other!
+echo "hey" >> test1.txt
+cat test2.txt
+
+We can delete test1.txt but test2.txt still exists, therefore the data is not forgotten. If there isn't any link to the information, then it becomes useless and is marked as available - to be writable over eventually.
+
+
+What is the difference between an hard link and a symbolic link (the -s option in the command)?
+
+
+\quickimage{Other/hardLink.png}{.5}
+\quickimage{Other/symbolicLink.png}{.5}
+
+
+The main difference is that the symbolic link point to where a link is, not to the exact location. Like a pointer to pointer. If we delete the actual hard link to where it points, it can no longer access the file.
+
+
+This should change, even if slightly, the perspective on Linux filesystem. Without the link, nothing can ``hold'' in memory, it is simply lost and the space is marked as available.
+
+
+Also, it can save quite a bit of verbose while changing directories in the terminal because a symbolic link will get you to the same location.
+
+
+What a great site this one proved to be: \href{https://www.computerhope.com/unix/uln.htm}{\ul{Computer Hope uln}}
+
 \subsection{How to build from source}
 \begin{enumerate}
     \item Be sure you have everything needed: 
