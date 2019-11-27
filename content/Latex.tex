@@ -182,7 +182,7 @@ In this case, the file is assumed to be right outside the report folder. Note al
 
 
 
-\subsection{Equations and Math}
+\subsection{Math - All of it}
 \par As before, a list of useful commands. First the code, then the result.
 \begin{itemize}
     \item System of equations:
@@ -290,6 +290,51 @@ In this case, the file is assumed to be right outside the report folder. Note al
         \underset{x}{\operatorname{min}} 
     \end{lstlisting}
     $\underset{x}{\operatorname{min}} $
+
+    \item \bb{Vectors} $\vec{o}$
+    \begin{lstlisting}[language=TeX]
+        \usepackage{ dsfont }
+        \vec{o}
+    \end{lstlisting}
+
+    \item To center equations, use:
+    \begin{lstlisting}[language=tex]
+    \begin{gather}
+        x = 3+4+5+6+7+9\\
+        \Leftrightarrow x = \sum_{i=3}^9 i
+    \end{gather}    
+    \end{lstlisting}
+    
+    Result:
+    \begin{gather}
+        x = 3+4+5+6+7+9\\
+        \Leftrightarrow x = \sum_{i=3}^9 i
+    \end{gather}    
+
+    \item Is also possible to have \ul{gathered} and \ul{aligned} environments inside equations:
+    \begin{lstlisting}[language=TeX]
+        \begin{equation}
+            \begin{aligned}
+                3(a-x) = 3.5x + a - 1           \\
+                3a - 3x = 3.5x + a -1           \\
+                a = \frac{13}{4}x - \frac{1}{2} 
+            \end{aligned}
+        \end{equation}
+    \end{lstlisting}
+
+    \begin{equation}
+        \begin{aligned}
+            3(a-x) = 3.5x + a - 1           \\
+            3a - 3x = 3.5x + a -1           \\
+            a = \frac{13}{4}x - \frac{1}{2} 
+        \end{aligned}
+    \end{equation}
+
+    \item \bb{Tilde}
+    \begin{lstlisting}[language=TeX]
+        $\tilde{x}$        
+    \end{lstlisting}
+    Gives: $\tilde{x}$
 \end{itemize}
 
 
@@ -560,5 +605,11 @@ I used, respectively these two pieces of code:
 \subsubsection{Others}
 \begin{itemize}
     \item \textbackslash appendix - used to start an appendix. Right after that, put \textbackslash section and a label inside the section and then the appendix will be referenced with a letter.
+    \item This is a HUGE one for the use of \LaTeX and VS code. You can type ``\textbackslash be equa'' letting the autocomplete do the work and then TAB your way into the scope! It doesn't get faster than that.
 \end{itemize}
 
+\subsection{How to Debug LaTeX}
+\begin{enumerate}
+    \item Isolate the Error. If you can comment all the code where you are sure the error is not it, do so. If you have many included parts, including only the one with the error is quite a good measure as well.
+    \item Open the Log. ``.tex:'' and line number will tell you the error EXACTLY. What usually happens is that the error you see is the lack of references or something because as a consequence to the problem, the .aux files generated a problem as well. \bb{The actual error description and the precise place where to find it is above! You might as well start in the beginning of the log.} There also is a log file where you can Ctrl + F.
+\end{enumerate}

@@ -1,14 +1,18 @@
 
-\section{Machine Learning}
+\section{Machine Learning - Supervised Learning}
 
-\subsection{Supervised Learning}
 
 Supervised learning concerns the problems where the objective is to predict something based on previous data. The counterpart Unsupervised Learning tries to find patterns in unlabelled data.
 
-More generally, the dataset for supervised learning problems consists on a feature vector $\mathbf{x}$ and a output vector $\mathbf{y}$. Regarding unsupervised learning, everything is features / data.
+More generally, the dataset for supervised learning problems consists on a feature vector $\mathbf{x}$ and a output vector $\mathbf{y}$ as opposed to unsupervised learning where everything is features / data.
 
 
-\subsubsection{Regression Problems - Least Squares}
+There are two main types of problems, regression and classification. The only difference between them is the expected output: regression aims to predict continuous outcomes while classification regards separating inputs in classes, thus a discrete output.
+
+Some tools can be used to solve both problems, like Neural Networks. We'll have a look which tools are best for which problems.
+
+
+\subsection{Regression Problems - Least Squares}
 These are the two most commons types of problems. Probably every supervised learning problem can be \ii{classified} as one of these.
 
 Regression is when the output should be continuous, classification when the output should be in discrete classes. 
@@ -45,7 +49,7 @@ The result wouldn't be very different if done with the number of iterations or n
 
 
 
-\subsubsection{So, how do we calculate the coefficientes}
+\subsubsection{How to calculate the coefficientes}
 \label{sec:calcBetas}
 After having the coefficients, given any other set of data points we can already give predictions on the output.
 
@@ -77,7 +81,7 @@ Is possible to invert these equations and get the expressions for the coefficien
 
 
 
-\subsubsection{Extrema Conditions and Hessian Matrix}
+\subsubsection{Extrema Conditions and Hessian Matrix} \label{sec:Hessian}
 
 Videos: \href{https://www.youtube.com/watch?v=nRJM4mY-Pq0&list=PLSQl0a2vh4HC5feHa6Rc5c0wbRTx56nF7&index=87}{\ul{87 - Warm up to the second partial derivative test}} to\dots \href{https://www.youtube.com/watch?v=sJo7D74PAak&list=PLSQl0a2vh4HC5feHa6Rc5c0wbRTx56nF7&index=89}{\ul{89 - Second partial derivative test intuition}}
 
@@ -248,7 +252,7 @@ Where the gradient and the Hessian Matrix are given by:
 The Newton's method converges insanely fast! But requires the inversion of the Hessian matrix which can be a serious problem...
 
 
-\subsubsection{Newton's Method - Intuition and Demonstration}
+\subsubsection*{Newton's Method - Intuition and Demonstration}
 This is a very very good proof!
 
 %do. it. It is in the notebook...
@@ -285,7 +289,113 @@ When the all combinations are done, the hyperparameters are selected for the bet
 
 
 
-\subsubsection{Neural Networks}
+\subsection{Neural Networks}
+
+\subsubsection{Formalisation}
+
+
+
+On the surface, a NN is nothing more than a set of weights connecting a set of neurons. This is represented in Figure \ref{mlp}.
+
+\image{AIML/mlp.png}{Overview of a Neural Network}{mlp}{.7}
+
+This particular architecture is called a Multilayer Perceptron (MLP), the standard NN. In other architectures not all layers are required to be fully connected e.i every neuron from the previous layer is connected to all neurons from the next layer, however, for simplicity, let's restrict this formalisation to MLPs.
+
+Let $w_{ij}^{(l)}$ be the weight that connects the output of the $j$-th neuron of layer $l-1$ to the $i$-th neuron of layer $l$. If we call the output of a neuron $j$-th of layer $l$, $z_j^{(l)}$, and the input of the $i$-th neuron of layer $l$ $s_i^{(l)}$, one may write Equation \eqref{eq:s}.
+
+\begin{equation} \label{eq:s}
+    s_{i}^{(l)} = w_{i 0}^{(l)} + \sum_{j=1}^{N^{(l)}} w_{ij}^{(l)} z_j^{(l-1)}
+\end{equation}
+
+With $N^{(l)}$ being the number of neurons of layer $l$. Also, the input of the first layer is the input of the network, i.e $z^{(0)} = \mathbf{x}$. 
+
+Note further that is possible to relate the input of a neuron to its output through that neuron's activation function $g(x)$. Equation \eqref{eq:act} shows this relation, with L the number of layers in the MLP. 
+
+\begin{equation}\label{eq:act}
+    z_{i}^{(l)} = g\left(s_{i}^{(l)}\right) \quad , i = 1, ..., N^{(l)} \quad, l = 1, ... , L
+\end{equation}
+
+Activation functions of neurons may vary across layers and they simply relate the input with the output. 
+
+There are many kinds of activation functions, each with its advantages and disadvantages - refer to \href{towardsdatascience.com/comparison-of-activation-functions-for-deep-neural-networks-706ac4284c8a}{\ul{actFunctions}} for a more in-depth analysis. In this work only two are used, Rectified Linear Unit (ReLu) and Softmax, which are represented in the set of Equations \eqref{eq:actFuncs}.
+
+\begin{equation} \label{eq:actFuncs}
+    \begin{cases}
+        \text{ReLu}\left(s_{i}^{(l)}\right) = \max\left(0,s_{i}^{(l)}\right) \\
+        \text{Softmax}\left(s_{i}^{(l)}\right) = \frac{\exp\left(s_i^{(l)}\right)}{\sum_{j=1}^{N^{(l)}} \exp(s_j)} 
+    \end{cases}
+\end{equation}
+
+So far we've see how to get the input to the output - forward propagation is the technical term - but wasn't explained yet how to adjust the weights such that the networks starts behaving like expected. It is done with backpropagation.
+
+Backpropagation is an algorithm that consists of calculating the effect that each weight has on the output and adjust that weight accordingly to that relation and accordingly to how wrong the output is. Backpropagation can be done with Gradient Descent methods and all their associated optimization techniques. The simple version of backpropagation with the classic gradient descent is presented in Equation \eqref{gradDesc} where $\eta$ denotes the step size.
+
+\begin{equation} \label{gradDesc}
+    w_{ij}^{(l)} = w_{ij}^{(l)} - \eta \ \bigtriangledown_{ij}^{(l)} \quad , \text{with} \ \ \bigtriangledown_{ij}^{(l)} = \frac{\delta J}{\delta w_{ij}^{(l)}}
+\end{equation}
+
+The complete expression for the partial derivatives of every weight is in Equation \eqref{gradExpr}.
+
+\begin{equation} \label{gradExpr}
+    \bigtriangledown_{ij}^{(l)} = \delta_i^{(l)} z_j^{(l-1)} \quad,  
+\end{equation}
+
+\begin{equation}
+    \text{with} \ 
+    \begin{cases}
+    \delta_i^{(l)} = g\left(s_i^{(l)}\right) 
+    \sum_{k=1}^{N^{(l+1)}} \delta_k^{(l+1)} w_{ki}^{(l+1)} \quad, \text{for} \ l = 1, ..., L-1\\ 
+    
+    \delta_i^{(L)} = g\left(s_i^{(L)}\right) \ \frac{\delta J}{\delta z_i^{(L)}}
+    \quad, \ \text{otherwise, i.e for} \ l = L)
+    \end{cases}
+\end{equation}
+
+
+
+
+Note that $z_i^{(L)} = \hat{y_i}$. Additionally, J is the cost/loss function, the function that tells us how far from the correct result the output is. For classification problems, a good cost function usually is Cross Entropy, Equation \eqref{crossEnt}. However, bear in mind that modifying the cost function to one that is more frequently used in Regression problems one can easily use the NN in regression problems.
+
+
+\begin{equation} \label{crossEnt}
+    J(y, \hat{y}) = -\frac{1}{N} \sum_{i=1}^{N} \sum_{k=1}^K \mathbb{1}_{y_i = y_k} \log\left(\hat{y_i}\right)
+\end{equation}
+
+Where $N$ is the number of samples and $\mathbb{1}_{y_i = y_k}$ denotes the indicator function that only is 1 when the supposed output is $y_k$. In other words, the inner sum should always have just one term corresponding to the logarithm of exit of the neural network that should be 1 for that class. This is because due to the common use of Softmax activation function in the last layer, the outputs will be percentages of certainty. And the cost function should be the logarithm of that the certainty of that class only.
+
+More specifically, if we want to categorise images of digits, our neural networks will have 10 outputs, one for each class/digit. When a sample that has the number 3 written on it is propagated until the end, the loss of that computation should be the logarithm of the probability in the $3^{rd}$ exit, because a perfect NN would output a 1 in the $3^{rd}$ exit and 0 in the others. In fact, $\log(1)$ is 0 loss and $-\log(0)$ is infinite (positive) loss.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsubsection*{Further optimizations}
+
+
+In order to achieve an efficient implementation, the previous equations can be written in a vectorized way and the forward and backward propagation will be reduced to matrix multiplications. Additionally, for a low level analysis it becomes relevant to keep track of all matrices dimensions, thus they are the following:
+\begin{itemize}
+    \item $z^{(l)}$ is $\left(1 + N^{(l)}\right) \times 1$ and   $z^{(l)} = $ %that vertical matrix;
+    \item $s^{(l)}$ is $N^{(l)} \times 1$ and $s^{(l)} = W^{(l)} z^{(l-1)}$;
+    \item $W^{(l)}$ is the weights matrix and is $ N^{(l)} \times \left(1 + N^{(l-1)}\right)$ which should make sense when looking for the above formula and that along its rows are the weights multiplied to the previous layer plus one for the bias unit;
+    \item $\bigtriangledown^{(l)} = \delta^{(l)} \dots$
+\end{itemize}
+
+Note that feed forward of all samples at once is possible through the correct definition of $X$ matrix and the correct changes.
+
+
+
+
+
+
 
 
 \subsubsection*{Some history}
@@ -389,23 +499,244 @@ Why kernels are important? They facilitate a lot the mapping of features to high
 
 \href{https://medium.com/@zxr.nju/what-is-the-kernel-trick-why-is-it-important-98a98db0961d}{\ul{Why kernels?}}
 
+They will become specially important in support vector machines when the data is not separable in certain dimensions but if we increase the dimensions is possible to separate the data by an hyperplane.
+%therefore, I'll write here in a few days/weeks
 
 
-\subsection{Unsupervised Learning}
 
-\subsubsection{Lagrange Multipliers}
+\subsubsection{Classification Problems}
 
-The Lagrange Multipliers is a mathematical optimization method, allows the finding of local maxima or minima of a function, subject to equality constraints.
-
-Perfect Explanation why it works:
-
-\href{https://www.quora.com/Why-does-the-method-of-Lagrange-multipliers-work-for-optimization-in-multivariable-calculus-Why-exactly-given-a-function-f-x-y-and-a-constraint-g-x-y-c-can-we-set-the-gradients-of-the-functions-to-be-multiples-of-each-other}{\ul{Quora - Intuition on Langrange Multipliers}}
-
-And a video showing exactly how it's done:
-
-\href{https://www.youtube.com/watch?v=yuqB-d5MjZA}{\ul{Khan Academy - Lagrange Multipliers Example}}
+When the required output is a discrete class. Instead of regressing something, the objective is to separate data into classes. Through the learning of what features each class has, be able to classify new data accordingly.
 
 
+A Bayes Estimator is a Maximum Likelihood estimator, a perfect estimator. However, it requires information that we usually don't have. Estimators like the Naive Bayes are useful because they enable simplifications if one is willing to accept the assumptions they entail.
+
+We'll start with the maximum likelihood estimator and then particularize to Naive Bayes. 
+
+Let's assume K classes and $y_k$ being each one. We want to choose $y_k$ such that $k = \underset{k}{\operatorname{argmax}} p(y_k|\mathbf{x})$.
+This is a maximum likelihood estimator because we want to choose the class that is more likely given the data we received.
+
+From the Bayes Theorem, one can rewrite that probability as $p(y_k|\mathbf{x}) = \frac{p(\mathbf{x}|y_k) p(y_k)}{p(\mathbf{x})}$. Given the denominator as a scaling factor and, normally, an equal probability of each class, one can rewrite the maximum likelihood estimator as:
+
+\begin{equation}
+    y_k : k = \underset{k}{\operatorname{argmax}} \ p(\mathbf{x}|y_k)
+\end{equation}
+
+Note that the rigorous shape of the above probability is $p(x_1, x_2, ..., x_n|y_k)$, where $n$ is the number of features in our feature vector $\mathbf{x}$.
+
+So far, some considerations have been made but no approximations. The Naive Bayes estimator simplifies the estimation at a cost: assuming the features are independent. If the features are independent of each other, the joint probability distribution degenerates in the multiplication of the marginal PDFs. Likewise, the joint conditional probability density function degenerates in the multiplication of the marginal probability density functions. Mathematically:
+
+
+\begin{equation}
+    p(x_1, x_2, ..., x_n|y_k) = \prod_{i=1}^{n} p(x_i|y_k)
+\end{equation}
+
+Further, one should note that due to the logarithmic function being monotone, maximizing a function or the its logarithmic has the same maximizing argument. This is a way of transforming the above multiplication into $\sum_{i=1}^{n}\log(p(x_i|y_k))$.
+
+One particular case where the Naive Bayes Estimator performs decently is language recognition. Not because the letters in the \ii{ngrams} considered are independent - that is certainly not the case, e.g `ã' is much more likely to be followed by a `o' in portuguese - but because the assumption of independence throughout the languages has somewhat of the same effect, not influencing the estimation too much. Therefore, assuming independence between characters in a case where there are so many characters and so many \ii{ngrams} combinations to derive our estimator from, doesn't return that bad results and is quite a good application of Naive Bayes, a very simple estimator.
+
+
+\subsection{Support Vector Machines}
+
+
+\subsubsection{Linear Classifiers}
+We call linear methods the classifiers whose decision boundaries are linear, hyperplanes.
+
+A way of classifying multiple classes is to assign to class i, a discriminant $f_i(x) = \left[1 x^\text{T}\right] \beta_i$.
+
+The purpose of this function is to be 1 when the class of the input is class i, and be 0 when the class of the input is not $y_i$.
+
+Therefore, decisions are made with $\hat{y}_i : i = \underset{i}{\operatorname{argmax}} f_i(x)$.
+
+Logistic Regression is a Generalized Linear Model (GLM) which can perform prediction and inference while linear Perceptrons can only achieve predictions, and in this case will perform similarly as to logistic regression. Statistical Modelling versus Machine Learning in practice.
+
+In logistic regression, since each output represents a probability, the maximisation of the correct probability is the aim. Therefore gradient ascent (the same apart from a signal) is used.
+
+
+\subsubsection{SVM's}
+
+This is a great tutorial on the vector math part of SVM.
+
+\href{https://www.svm-tutorial.com/2014/11/svm-understanding-math-part-2/}{\ul{Vectors of SVMs}}
+
+This is a very very good and complete tutorial about SVM:
+\href{https://cling.csd.uwo.ca/cs860/papers/SVM_Explained.pdf}{\ul{Fletcher: SVM explained}}
+
+
+
+SVMs can only separate between two classes, then is necessary to do strategies like 1 vs All to separate more classes. This is our $n$ sample dataset with $p$ features per sample.
+\quickimage{AIML/AA-cap8-001.png}{0.6}
+
+
+From Fletcher's:
+\quickimage{AIML/AA-cap8-002.png}{0.6}
+
+
+We'll now have a look to some of the whys. Note that this is for a Linearly Separable Binary Classification. 
+\begin{itemize}
+    \item How about non-Binary? One vs All.
+    \item What if it is not Linearly Separable? Kernels.
+    \item What else, Linear Regression? Yes.
+    \item But the SVM always separates with an hyperplane right, always linearly? Unless a Non-linear SVM is created.
+\end{itemize}
+
+
+\subsubsection{One vs All approach}
+
+Applies to SMVs and all classification problems that can only distinguish between 2 classes.
+
+It consists of training K classifiers that will make decisions between the K classes of option. Each classifier will consider the labels of that class against the ``other'' label that will be all the other samples. 
+
+The class with higher certainty is the correct one.
+
+\quickimagesidebyside{AIML/AA-002.png}{0.6}{AIML/AA-001.png}{0.6}
+\quickimagesidebyside{AIML/AA-003.png}{0.6}{AIML/AA-004.png}{0.6}
+
+
+
+\subsubsection{Formulation of SVMs}
+
+All the edge cases explained above will be constructed above this, usually being a simple modification.
+
+We want to define a plane in an n-dimension space that divides our data in its classes.
+
+Also, the best plane will be the one that has the highest margin of error, thus choosing correctly with higher probability.
+
+
+One can define a plane in $\mathds{R}^n$ like:
+
+\begin{equation}
+    \vec{n} \cdot (\vec{r} - \vec{r}_o) = 0
+\end{equation}
+
+$\vec{n}$ is the vector normal to the plane, $\vec{r}$ is a random point and $\vec{r}_o$ is the vector that has the point $x_o = (x_1, x_2, \dots, x_n)$.
+
+For instances, in 3D, calling now the normal to the plane $\vec{w} = (a,b,c)$ and $\vec{x} = (x,y,z)$ and representing vectors in bold:
+
+\begin{gather}
+    \vec{n} \cdot (\vec{r} - \vec{r}_o) = 0  \\
+    \Leftrightarrow  \ a (x-x_o) + b (y-y_o) + c (z-z_o) = 0 \\
+    \Leftrightarrow  \ a x + b y + c z + d = 0 \\
+    \Leftrightarrow  \ \mathbf{w} \cdot \mathbf{x} + b = 0
+\end{gather}
+
+
+To compute the distance of a point to the hyperplane, we simply have to calculate the norm of the projection to the unitary normal vector.
+
+\begin{equation}
+    dist = \mathbf{x} \cdot \frac{\mathbf{w}}{||\mathbf{w}||} 
+\end{equation}
+
+Note now that if we want the distance of the plane to the origin, calling $\mathbf{v}$ to our vector such that $\mathbf{v} = (x_1 - x_o, y_1 - y_o, z_1 - z_o)$, where $P_o$ belongs to the plane and $P_1$ is the point in question, and $\mathbf{n}$ to our unitary normal just so:
+
+\begin{align}
+    dist &= \left|v \cdot \frac{\mathbf{w}}{||\mathbf{w}||}\right| \\
+    dist &= \left|(x_1 - x_o, y_1 - y_o, z_1 - z_o) \cdot \frac{\mathbf{w}}{||\mathbf{w}||}\right| \\
+    dist &= \frac{\left|A(x_1 - x_o) + B(y_1 - y_o) + C(z_1 - z_o)\right|}{\sqrt{A^2 + B^2 + C^2}}
+\end{align}
+
+
+Note now that we need the point in the plane that is closer to the origin to calculate this distance. In fact is possible to find that point by intersecting with the plane a line directed with the normal to the place from the origin. This point however is not required for this analysis. 
+Also, note that if $P_1$ is the origin, and $P_o$ is the nearest point to the origin belonging to the plane, because it belongs to the plane $\mathbf{w} \cdot \mathbf{x_o} + b = 0$, so the expression degenerates in:
+
+\begin{equation}
+    dist = \frac{b}{||\mathbf{w}||}
+\end{equation}
+
+More generally:
+\begin{enumerate}
+    \item Is possible to calculate the distance of any point to the plane if we choose any point in the plane and get a vector from that point to the point the distance is required. This is because the plane is not defined uniquely by the orthogonal vector. 
+    \item A sign can be given to the distance $\frac{b}{||\mathbf{w}||}$. If it is below the plane, the distance is negative. If above it is positive. Before only the absolute value was considered, however if we consider w to always be the normal pointing up, we can choose this convention;
+\end{enumerate}
+
+This is where everything gets interesting: 
+
+\bb{This is called Support Vector Machines because they use Support vectors that are the points that are closer together.} The amount of support vectors required will depend on the dimensions, in 2 dimensions, 2 points are enough to define a plane of equal distance to both. In 3 dimensions 2 points are not enough because there's a line of points of equal distance and infinite planes can pass through that line. Therefore, 3 points are required. N dimensions, n points to define the problem. Actually, these points will be used to define $\mathbf{w}$. The value of $b$ will be set with the margin between the hyperplanes!
+
+
+Two hyperplanes can be defined as:
+
+\begin{equation}
+    \mathbf{w} \cdot \mathbf{x} + b = \pm \delta
+\end{equation}
+
+The actual value of $\delta$ won't matter because it won't be more than a factor of scale.
+
+The mid way between the two hyperplanes will be the boundary. And the decision will be based on what side of the boundary the point lies in.
+
+\quickimage{AIML/AA-005.png}{0.6}
+
+
+\bb{We want to maximise the distance between the two planes in order to have the boundary as far from the support vector as possible.}
+
+Also, may be it is a good idea to take more than the $n$ closest points because those might generate a plane that doesn't divide the data properly. But this can be taken into account later. First, what is the margin between the two described planes and how to maximise it?
+
+Note that since the hyperplanes are parallel, the constant will be the only thing moving them along the normal direction and the distance between them can certainly be deduced directly from that constant.
+
+The constants of both planes are $b \pm \delta$. To calculate the distance between them, is doing $\frac{\left| D_1 - D_2 \right|}{||w||}$. This formula can be explained by the calculation of the difference of both planes' distance to the origin. Note now that the $b$ will be $b-\delta$.
+
+Therefore, we get:
+
+\begin{equation}
+    d = \frac{2 \delta}{||w||}
+\end{equation}
+
+And to maximize this distance is necessary to minimize $||w||$, with the a constraint per training sample:
+\quickimage{AIML/AA-010.png}{0.6}
+
+
+Constraint optimization is a problem for the Lagrange multipliers. See Section \ref{sec:Lagrange} to see how to apply the method carefully.
+
+The first application gets us to the primary Lagrangean function:
+
+\quickimage{AIML/AA-011.png}{0.6}
+
+Then, by doing the gradient and replacing it in the above expression:
+\quickimage{AIML/AA-012.png}{0.6}
+
+Note that this is a problem dual from the first one. We are still solving the same optimization problem but with this substitution, the final expression to optimize depends only on the dot inner product of $x^{(i)}$ and $x^{(j)}$ which will be very important for the \bb{kernel trick}. Also, with the formulation below (after some simplifications) it's possible to use a \ul{Converx Quadratic Programming (QP) Solver}. See the end of Section \ref{sec:Lagrange} for more info on this Duality.
+
+\quickimage{AIML/AA-013.png}{0.6}
+
+In conclusion, with $f(x) = x cdot w + b$, the SVM provides more than a decision, a score, a certainty associated with that decision.
+
+\subsubsection{Soft Margin - Slack Variables}
+This was performed for an hard margin in linear separable data. If the data is not linear separable, either some \bb{Kernel Trick} is performed or some slack is added to account for variables in the other side of the boundary. Slack variables are the penalties that will be added to points in the wrong side of the boundary and thieir sum should be minimised, i.e $C \sum_{i=1}^n \epsilon_i$, where C is the scale of the penalty. 
+
+\quickimage{AIML/AA-014.png}{0.6}
+
+\subsubsection{Non-Linear SVM \& The Kernel Trick}
+
+In higher dimensions the data may be separable, but in the current one it may not be.
+
+There are mappings/transformations to increase the feature space dimensionality. With higher dimensions and more complex features that are the weird combinations of the current ones, is possible that there's a separation.
+
+\begin{equation}
+    \tilde{\mathbf{x}} = \phi(\mathbf{x}) = 
+    \begin{bmatrix}
+    \phi_1(\mathbf{x})\\
+    \phi_2(\mathbf{x})\\
+    \vdots\\
+    \phi_p(\mathbf{x})
+    \end{bmatrix}
+\end{equation}
+
+The kernel function $\phi(\mathbf{x})$ will map n features to p, where (usually at least) $p \geq n$.
+
+The biggest problem is that this high dimensionality may drive the problem unfeasible since that each sample will have much more information. And the process of mapping all samples, apply the SVM and them map the boundary back to the first feature space is quite time consuming.
+
+Instead of that, since the dual formulation just requires the inner product of features, is possible to define a kernel function that is the product of the two mappings and compute the inner products in the low dimension input space instead of really having to climb the dimensionality ladder.
+
+
+\quickimage{AIML/AA-015.png}{0.6}
+
+The typical kernels:
+\quickimage{AIML/AA-016.png}{0.6}
+
+
+
+
+\section{Machine Learning - Unsupervised Learning}
 
 \subsection{Reinforcement Learning and Decision Making}
 

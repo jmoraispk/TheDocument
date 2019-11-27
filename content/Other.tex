@@ -70,10 +70,14 @@ Consult their wiki on that, it can be found \href{https://github.com/sqlitebrows
     \item Ctrl + K + Ctrl + $\geq 0$ $->$ Fold all level $\geq 0$ depth sections. \textbackslash section is depth 0. \textbackslash  is depth 1, \textbackslash subsubsection is depth 2 and subsequent blocks inside that will be the next depths. Similarly, with code: no indentation is depth 0, 1 indentation is depth 1, etc\dots
     \item Ctrl + K + Ctrl + J $->$ unfold all sections.
     \item Ctrl + K + Ctrl + L $->$ toggle fold in current section.
+    \item Ctrl + , $->$ for settings
+    \item Ctrl + Backspace $->$ delete full word
 \end{itemize}
 
 \subsection{Using VS Code as an Environment for Debugging Python}
 Install the correct python package, the one from Microsoft and that should be enough
+
+Add a ruler for character limit: Ctrl + Shift + P, write ``setting json'', add to the final line \text{"editor.rulers": [ 80 ]}
 
 \begin{itemize}
     \item F5 $->$ debugs the file
@@ -85,6 +89,7 @@ Install the correct python package, the one from Microsoft and that should be en
     \item Ctrl + Shift + F9 $->$ Inline Breakpoint (only useful if it's a line with many commands)
     \item Ctrl + Alt + D $->$ Open Debug Mode (needs to be configure View: Show Debug)
     \item Ctrl + Shift + Y $->$ Debug Console
+    \item \quickimage{debugCommands.png}{.5}
 \end{itemize}
 
 
@@ -115,7 +120,7 @@ Install the correct python package, the one from Microsoft and that should be en
 
 \vspace{.5cm}
 
-{\large Crete or clone}
+{\large Create or clone}
 \vspace{.5cm}
 \par It depends who starts it. If you start it, you have to create it. If someone else already created it, then clone.
 
@@ -144,7 +149,7 @@ Install the correct python package, the one from Microsoft and that should be en
 \par Regarding the license, it should be included if the code is to be used by others. A good example of a classical license is the \href{https://choosealicense.com/licenses/mit/}{MIT License}. The website \href{https://choosealicense.com}{Choose a License} explains everything perfectly.
 
 
-\subsection{After Carolina's help}
+\subsection{Basics}
 merge this subsection with the above things.
 
 \subsubsection{Start a repository}

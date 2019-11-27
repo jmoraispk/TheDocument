@@ -21,9 +21,14 @@ grep -i filters without concerning about the case.
 \subsection{Redirect with >}
 One can redirect the stdout and the stderr to other files with that little ``bigger than '' sign.
 
-xdg-open ~/Pictures/1.png > /dev/null will redirect the stdout to null. 
-xdg-open ~/Pictures/1.png &> /dev/null will redirect everything to null.
-xdg-open ~/Pictures/1.png > /dev/null 2>&1 will perform the above and redirect stderr to stdout.
+\begin{lstlisting}[language=bash]
+    xdg-open ~/Pictures/1.png > /dev/null #will redirect the stdout to null. 
+    xdg-open ~/Pictures/1.png &> /dev/null #will redirect everything to null.
+    xdg-open ~/Pictures/1.png > /dev/null 2>&1 #will perform the above and redirect stderr to stdout.    
+\end{lstlisting}
+
+
+
 \quickimage{Other/BashRedirecting.png}{.5}
 
 
@@ -453,21 +458,20 @@ Additionally, the general \href{https://www.kapwing.com/workspace}{\ul{Kapwing T
 \begin{itemize}
     \item \href{ https://nl.mathworks.com/help/stats/continuous-distributions.htm}{Matlab Continuous Distributions}
     
-    
     \item \href{https://nl.mathworks.com/support/bugreports/1765886}{MATLAB Ubuntu fix}Necessary for help displaying and no errors on terminal
     
     \item To search stuff on the terminal by name: \\ 
     find directory -name "filename", e.g: find . -name "error.png"\\
     Or add the following for files: find directory -type d -name "foldername"
     
-    
     \item sudo rm /var/crash/* \hspace{1cm}   for removing error reports every time they appear, or else they will continue to appear every time the computer boots
-    
     
     \item xdg-open . \hspace{1cm} to open the file explorer in the terminal location. xdg-open helo.mp4  \hspace{.5cm} is will open with the default program the specified file.
     
-    
     \item To create a File shortcut for Thunar, the beautiful file manager that XUBUNTU uses, visit \href{https://forum.xfce.org/viewtopic.php?id=9711}{\uline{this}};
+    
+    \item \bb{sudo service network-manager restart} \hspace{1cm} To restart the network manager because it stops unexpectedly sometimes.
+    
 \end{itemize}
 
 

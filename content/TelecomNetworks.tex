@@ -209,7 +209,6 @@ OTN has become the new standard for a while now and has a few differences compar
 
 \bb{A very important distinction between the transport and the service layers} is that the representation in the service layer has nodes connected with \bb{logical topologies} while the transport layer has nodes connected with \bb{physical topologies}.
 
-
 \quickimage{RTel/Cap2-015.png}{.5}
 
 The network management systems sends configurations through the \bb{Data Communication Channel (DCC)}. Moreover, not all parts of the network are the same!
@@ -224,6 +223,8 @@ In a more abstracted way, one can identify three planes:
 \quickimage{RTel/Cap2-017.png}{.5}
 
 As you already know, there are circuit switched or packet switched networks.
+
+\bb{An important note:} Packet switching can be connection oriented (MPLS) or simply connectionless (pure IP packets, best effort)
 
 Circuit Switched require circuit establishment and tear-down at the beginning and at the end, respectively. However, a distinction is made between physically \ii{switchable} circuits and semi-permanent circuits. The first ones, a physical circuit is easily switched to connect one end to the other, while the second type regards circuits that are more static, that are much more difficult to switch. The semi-permanent must be switched by the administrators in order to attribute these circuits to a user for a somewhat long period of time (not just one transmission).
 \quickimage{RTel/Cap2-019.png}{.5}
@@ -296,7 +297,6 @@ Generalized MPLS (GMPLS) is the \ii{de facto} (practice that exists practically 
 Label Switching allows Traffic Engineering:
 
 \quickimage{RTel/Cap2-024.png}{.5}
-
 
 
 
@@ -419,7 +419,12 @@ That is also why CSMA/CD is not used when the rates get too high!
 Note that this is only necessary if a medium is shared! If it is dedicated, it is not necessary.
 
 
-A switch is a layer 2 - the Link Layer - equipment that commutes Ethernet frames,
+A switch is a layer 2 - the Link Layer - equipment that commutes Ethernet frames. 
+
+\quickimage{RTel/Cap3-013.png}{.5}
+
+\bb{A Hub only has physical layer, propagates to all interfaces everything. A Switch has layer 2 and Mac Address Tables. A Router has layer 3 capabilities and is able to route IP packets.}
+
 
 Switches with higher capacities are higher up in the grid, closer to the core, because they have to handle many more traffic flows.
 
@@ -498,6 +503,13 @@ The second sublayer is responsible for the parallel/series conversion.
 
 The last sublayer must generate the signal into the medium being optic fibre, twister pair, etc...
 
+In essence:
+
+\quickimage{RTel/Cap3-017.png}{.5}
+
+
+
+
 \subsubsection*{Code - mBnB}
 
 Firstly, the code. Required for robustness of transmission and to send symbols at lower frequencies than the actual bitrate.
@@ -528,9 +540,413 @@ To reduce these interferences, a metal sheet foil can be used. A more effective 
 Therefore, shielding is necessary for twisted pairs.
 
 
-The necessary bandwidth to transmit 10Gbaud/s, CHEEEEEEEEEEEEEEEECK HOOOOWWWWWWW
+The necessary bandwidth to transmit 10Gbaud/s.
+
+1 baud can have several bits of significance, therefore there is a strong leverage in the coding that is used.
+
+\bb{COMPLEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEETE THIIIIIIIIIIIIIIIIIIS}
 
 \quickimage{RTel/Cap3-011.png}{.5}
 
+
+In order to multiplex everything into the physical medium, there are two ways of doing it, normally the second one is used.
+\quickimage{RTel/Cap3-015.png}{.5}
+
+
+\quickimage{RTel/Cap3-014.png}{.5}
+
+
 \subsubsection*{Gigabit + Ethernet}
-When the speeds are too big, either the distances need to be smaller or fibres must be used. Single mode even...
+When the speeds are too big, either the distances need to be smaller or fibres must be used. Single mode avoids dispersion and the pulse is able to keep is form for longer.
+
+
+
+\subsubsection{Virtual LAN}
+The time it would take to implement the Spanning Tree Protocol in very big networks makes it infeasible. Therefore, the same physical grid should be separated in many logical grids and the spanning tree only covers one VLAN.
+
+
+VLANs also allows for traffic separation in triple play services, allow for cloud computing and storage separation. Is possible to separate departments, buildings, etc\dots
+
+
+
+Additionally, it improves the network security and privacy since the traffic inside a VLAN doesn't need to come outside. And facilitates network management since the administrator is able to organize user groups independently of the physical topology of the network. It is the network administrator that defines the limits/boundaries of the VLAN. 
+
+\bb{The communication between VLANs is done at Layer 3.}
+
+There is 3 types of VLANs implementations:
+\begin{itemize}
+    \item Layer 1 VLAN (port-based VLAN): the frames don't need to be tagged and the switch distinguish VLANs based on the ports it come from.
+    \item Layer 2 VLAN (MAC Address-based VLAN): the frames need to have VLAN specific tag.
+    \item Layer 3 VLAN (Network Address-based VLAN): The information of VLAN includes IP addresses, requires routers.
+\end{itemize}
+
+
+Here is the tag:
+\quickimage{RTel/Cap3-016.png}{.5}
+
+Note the first field of the tag is bigger than 1500. This happens because the switch is expecting to see a Length/Type field. This way, the switch reads it as a type that is a VLAN type and it knows how to treat the frame - that can be a BPDU or any other kind of frame - based on that identifier.
+
+There is 2 octects to identify the VLANs (4094 because 2 are reserved). At some point, it isn't enough. What is done is multiple tagging: \bb{simply by adding another tag, a  VLAN inside a VLAN is created}.
+However, VLAN IEEE802.1Q is not very clear on how to treat such encapsulations, thus IEEE802.1ad Provider Bridges is used. The tag is called a Service Provider Tag and requires a Provider Bridges aware switch.
+
+A switch can be aware to simple untagged frames, can be aware of VLANs and can be aware of Provider Bridges.
+
+However, with these 2 tags, tables with 16 Million entrances is already too big\dots \bb{There must be another way of scale the network properly and way of connecting PB switches at long distances.}
+
+\bb{Solution 1- }
+Ethernet doesn't have regenerators, therefore the ethernet frame can be place inside a transport network frame. Using SDH or OTN there's regeneration and there can be links with more than 40 km (the maximum length without regeneration).
+
+\quickimage{RTel/Cap3-018.png}{.5}
+
+
+Carrier Ethernet is the idea of using Ethernet in all of the network.
+
+PB switches are barely capable of handling Metro, can't be used in the core.
+PBB switches are the ones used in the core and they only process their own headers.
+
+\bb{However, this is quite far from Ethernet Networks and requires many more functions to compete with the transport network}
+
+The standard of the transport network is recovering links after a failure in less than 50 ms. OAM functions and much more is needed to be implemented in Ethernet protocols in order to provide reliable traffic.
+
+But, there's a huge Ethernet frame...
+
+\quickimage{RTel/Cap3-020.png}{.5}
+
+
+And they then it still uses spanning tree protocols? Non deterministic networks in the core? This would lead to big delays every time there's a change in a link 
+
+It is necessary to establish hard links through the management plane.
+
+PBB-TE is a variation of PBB that doesn't use the spanning tree protocol.
+
+\quickimage{RTel/Cap3-020.png}{.5}
+
+
+\quickimage{RTel/Cap3-019.png}{.5}
+
+
+\bb{PBB-TE is a technology that can be used in the transport network. It uses only Ethernet but has a lot of overhead to }
+
+
+
+\subsubsection{Data Centres}
+Big Ethernet Networks where an organization stores, manages and disseminates data. 10 and 100 GbE is used. VLAN aware, PB and PBB are possible to be found in Data Centres. Then there are Servers and Routers (IP and MPLS).
+
+The connection between datacentres is called inter-datacentre connection and sometimes the data-rate needs to be so big that 
+
+
+There a switch on top of each rack to connect all of the servers. 
+\quickimage{RTel/Cap3-022.png}{.5}
+
+
+Top of Rack (ToR) switch, are connected to aggregation switches connected to just a couple of central switches and these are connected to Edge IP/MPLS routers that connect the IP/MPLS network that is on top of the global transport network.
+
+\quickimage{RTel/Cap3-023.png}{.3}
+
+For instances, to use a cloud based service a virtual machine must be created in one of those servers.
+
+
+A tree physical topology despite being easy to implement provides no fault tolerance, leads to congestion (no load balancing) and doesn't scale properly since the maximum data rate the central node can handle will limit the size of the tree.
+
+\quickimage{RTel/Cap3-025.png}{.5}
+
+
+Instead, a Fat Tree is used.
+\quickimage{RTel/Cap3-024.png}{.5}
+
+Note that:
+\begin{itemize}
+    \item Each ToR switch is connected to 2 aggregation switches;
+    \item Each aggregation switch should be connected to more than one core/central switch to achieve redundancy and flexible load balancing;
+    \item It usually comes 40Gbps from the rack but the switch only outputs 20Gbps, this is quite normal since the traffic is bursty. Overprovisioning would be to have the same output as the input. 
+\end{itemize}
+
+
+
+
+A general overview of IPTV network:
+
+
+
+\quickimage{RTel/Cap3-027.png}{.3}
+
+
+
+DOCSIS Modem is used for HFC, there's FTTx (Fibre to the x, where x can Node, Curb, Building or Home, depending on how close the fibre is terminated) and xDSL (x Digital Subscriber Line).
+
+
+\quickimage{RTel/Cap3-026.png}{.5}
+
+
+The final is node in our homes in the set-top box (STB). Contains a TV-tuner input, display output for the television. Also contains, external source signal to receive the data from a cable, satellite or even other ways.
+
+
+
+
+\subsection{SDH - Synchronous Digital Hierarchy}
+
+
+SDH is not used very much, OTN is the current standard. MPLS-TP is yet another way of doing transport, using MPLS with Transport Profile.
+
+To have deterministic links, the Management plane has to establish them.
+
+There are multiple ways of doing multiplexing. In SDH (and in OTN), TDM is used.
+
+To transmit our signal in SDH using TDM, it will have a slight overhead with the Start Frame Delimiter (SDM). There are many flavours of TDM. However, in a deterministic network, the timeslots are assigned in a fixed way. Therefore, even if one of the input channels doesn't have information to transmit, there will be a slot assigned to it and will be empty.
+
+\quickimage{RTel/Cap4-003.png}{0.6}
+
+Two clocks are synchronous if they operate with the same frequency
+and a constant phase offset ($\bigtriangleup \phi(t) = const.$). Moreover, they can be classified with other words regarding the similarities between frequencies and phases.
+\quickimage{RTel/Cap4-004.png}{0.6}
+
+Regarding the accuracy of the frequency of the real clock ($f_r$), expressing in Parts Per Million (ppm):
+
+\quickimage{RTel/Cap4-002.png}{0.6}
+
+
+\bb{A curiosity:} nowadays is possible to find atomic clocks for less than 5k euros. Some as low as 1500 euros.
+
+
+Because the sampling rate should be at least twice the maximum frequency of the signal to sample it properly (according to the Nyquist Theorem). Therefore:
+\quickimage{RTel/Cap4-005.png}{0.6}
+
+\quickimage{RTel/Cap4-006.png}{0.6}
+
+
+
+
+
+Recalling the meaning of Synchronous and Plesiochronous, now is possible to understand
+what are the Digital Hierarchies based on these types of synchrony. In the first (SDH), both ends are synchronized with a central clock while the second (PDH) doesn't require this synchronization. 
+
+
+In the PDH network, the frequencies are similar and depending on the multiplexing factor, they can drift a certain amount. If the amount of signals being multiplexed grows considerably, 
+\quickimage{RTel/Cap4-007.png}{0.6}
+
+For some reasons, the American and the Japanese networks follow slightly different standards, having different amounts of multiplexed channels.
+
+\bb{Note} also
+
+
+
+But these PDH still use TDM? Maybe the drift in frequency is small enough to still allow it.
+
+
+
+
+
+In SDH, the network operator has to provide the synchronization clock, the \bb{PRC - Primary Reference Clock}.
+
+Note that a synchronization network is required to keep all elements with the same clock. Examples of synchronous  networks:
+\begin{itemize}
+    \item SDH
+    \item TDT - Terrestrial Digital Television
+    \item GPON - Gigabit Passive Optical Networks is Synchronous as well. (OTN is not)
+    \item Mobile Network
+    \item PSTN 
+\end{itemize}
+
+Regarding SDN then, one of the first proposals was called SONET (Synchronous Optical Network). SDN was later defined by ITU-T as an international standard compatible with SONET. TDM frames were used. Some more nomenclature:
+
+\quickimage{RTel/Cap4-008.png}{0.6}
+
+\quickimage{RTel/Cap4-009.png}{0.6}
+
+
+\bb{Note}: SDH is compatible with PDH E-n signals. Since SDH is able to carry more information in each TDM frame, it can carry PDH hierarchies in its frames.
+
+\vspace{.5cm}
+A SHD basic frame (STM-1) contains 3 blocks:
+\begin{itemize}
+    \item SOH - Section OverHead for regenerations and multiplexing
+    \item PT - Pointer to the Virtual Container start.
+    \item VC - Virtual Container with the payload and the 
+\end{itemize}
+
+
+Since this basic frame is sent every 125 micro seconds, 8000 frames per second is the frame rate. Note again that 155 MB/s is the bitrate. 
+
+
+\quickimage{RTel/Cap4-010.png}{0.6}
+
+
+
+
+Some equipment that is necessary in this kinds of networks:
+
+-An ADM (Add and Drop Multiplexer) selects one of the containers in the TDM frame to drop and one of its own to add, in case it is expecting containers or has containers to send, respectively;
+
+- A regenerator;
+
+- A Terminal Multiplexer (TM) that multiplexes any amount of signals at the entrance to one signal at the output.
+
+- A Digital Cross-Connect (DXC) is able to connect any input to any output, and is controlled by the management plane to establish the previously mentioned semi-permanent paths.
+
+\quickimage{RTel/Cap4-011.png}{0.6}
+
+\quickimage{RTel/Cap4-012.png}{0.6}
+
+
+These equipments are used in accordance to the densification we have in the network. Closer to the core there are more DXCs, closer to the access there's more ADMs.
+\quickimage{RTel/Cap4-013.png}{0.6}
+
+
+\bb{When we mention ``containers''} we are referring to Ethernet frames or other hierarchies of digital flows.
+
+%check 169 and the control vs management plane stuff...
+
+
+
+
+
+The transport Network SDH based can be divided in 2 parts, the Path and the Transmission.
+
+
+\quickimage{RTel/Cap4-014.png}{0.4}
+
+This layers have important functionalities. Path layer functionalities are related with the connections, the paths established. High and Low order ......\dots
+
+These functions are why it is worth it to have extra overhead in all layers:
+\quickimage{RTel/Cap4-015.png}{0.5}
+
+Note that these layers are similar to the OSI model layers, each of them has an overhead related to its \ii{modus operandi}, exactly like there are IP headers and MAC headers:
+\quickimage{RTel/Cap4-017.png}{0.6}
+\quickimage{RTel/Cap4-016.png}{0.6}
+
+
+Note the scopes in a digital transmission! All of them do regeneration, but not all of them multiplex. In the multiplexing layer its where the clock synchronization comes in, note that despite being able to carry Plesiochronous DH frames, it this is a synchronous hierarchy, so it needs a PRC (primary reference clock).
+
+
+To step back a bit:
+\begin{enumerate}
+    \item An SDH basic frame (STM-1) contains section overhead (SOH), PT (pointer) to the beginning of the virtual container with the payload data and then the VC. 
+    \item \bb{One STM-1 frame supports 63 E1 frames, 3 E3 or 1 E4}
+    \item SOH has a regeneration section and a multiplexing section overheads.
+    \item A VC is a container with a path overhead:
+    ``The STM-1 frame is 
+    represented as a matrix of
+    bytes, with 9 rows and 270
+    columns, which corresponds
+    to 2430 bytes.
+    The bytes of the matrix are
+    transmitted row by row, left to
+    the right.'' - That is why there's a 9 segment separation over the transmission interval, because the frame has 9 rows and each row is transmitted 
+    \quickimage{RTel/Cap4-018.png}{0.8}
+
+    \item In a VC there may be several containers + path-overhead
+    \item There it takes 125 microseconds to transmit a complete frame, therefore 8000 frames can be transmitted per second.
+    \item One payload byte corresponds to 64 kb/s because 8000 of those bytes will be 
+    sent per second. Therefore, to know the bitrate of a certain portion of the frame we just need to count the number of bytes and multiply it by 64kbps.
+    \item The pointer part of the section points to all container beginnings in the virtual container?
+    \item The Frame Alignment Signal sinalizes the beginning of the frame. Despite 
+    \item The SOH format is:
+    \quickimage{RTel/Cap4-019.png}{0.6}
+
+    Note that there are 3 bytes in a frame to transmit Management plane information regarding the Regeneration. D4-12 are the correspondent for Multiplexing.
+    B's are for error corrections for both those planes.
+    
+    \item There are multiple Virtual containers sizes, all 9 rows long:
+        \begin{itemize}
+            \item VC-4 - 261 columns long (1 path overhead, 260 C4 payload)
+            \item VC-3 - 86 columns long (1 path overhead, 85 C3 payload)
+        \end{itemize}
+    \bb{Note: In a Virtual Container is possible to carry 1 VC-4 or 3 VC-3s}
+
+    \item A VC-4 with a pointer is called an AU-4. A VC-3 with a pointer is called an AU-3. A frame may have 1 AU-4 or 3 AU-3.
+    \item The VC-4 can fluctuate inside the AU-4, it doesn't need to start in the beginning. The same of VC-3. If it doesn't start in the beginning, it can simply continue to other frames.
+    \item Overall:
+    \quickimage{RTel/Cap4-020.png}{0.7}
+\end{enumerate}
+
+
+AUG aggregates all AUs. If AU-4 is used, then AUG is AU-4, else, it includes more than one AU.
+
+
+Management plane uses a DCC (Data Communication Channel) which has bytes in the frame overhead, more specifically, D1 to D12 bytes.
+
+Control plane uses B types of bytes.
+
+However, S type of bytes are of the responsibility of the data plane since synchronism is nothing more than expecting bits at certain times.
+
+\subsubsection*{GFP }
+\bb{Generic Framic Procedure}(GFP) is an ITU-T standard on how to map packet traffic like Ethernet and SAN (see ahead), which is of bursty nature, \ul{into SDH and OTN with a constant bit rate}.
+
+
+GFP client frames:
+\quickimage{RTel/Cap4-023.png}{0.6}
+
+Other type of GFP frames are GFP control frames, where only the header is sent.
+
+
+
+
+\subsubsection*{Storage Area Networks}
+A very redundant server and disk access network, stores information for a big quantity of data. Each server is connected to more than one switch and each switch aggregates more than 2 disk/storage arrays.
+
+
+One of the most common SAN protocols are Fibre Channels that range from 1 to 128 Gbit per second.
+
+
+
+
+
+\subsubsection*{Virtual Concatenation}
+
+How is SDH able to cope with 1GbE?
+It uses virtual concatenation: creates \bb{X} output flows with STM-1 frames. 
+This is called inverse multiplexing.
+
+\quickimage{RTel/Cap4-021.png}{0.7}
+
+Therefore, with $X = 256$, is possible to achieve $256 x 150 Mbit/s = 38.4 Gbit/s$.
+
+
+This technique can also be used to do balancing in the network since it implements multipath routing on the physical level since the $X$ SDH flows may not do the same path.
+
+There's a field called H4 that has the sequence number of these containers.
+8 bits are able to index 256 containers, that is why $X$ is limiter to 256.
+
+\quickimage{RTel/Cap4-022.png}{0.7}
+
+
+\subsubsection*{IP over SDH / OTN / WDM}
+
+Note that in order to use SDH, a synchronous 
+MPLS is one of the important ones. But be aware that MPLS, SDH and OTN are in different planes!
+
+\quickimage{RTel/Cap4-024.png}{0.6}
+
+
+In summary:
+\begin{itemize}
+    \item MPLS,  VLANs and directly IP use Ethernet which needs GFP to convert this non constant bit rate traffic to the constant bit rate of SDH; 
+    \item SAN and DVB are also supported by GFP (GFP-F and GFP-T)
+    As a curiosity:
+    \quickimage{RTel/Cap4-025.png}{0.7}
+    \item DVB transmits without compression?
+    FHD = 1920 x 1080 = 2073600
+    QHD = 2560 x 1440 = 3686400
+    UHD = 3840 x 2160 = 8294400 (4 times as much as FHD)
+    If we have 24 bit color depth, 8 bits per color, we would uncompressed bit rates above 1Gbit/s for FHD at 30 fps. With compression we get around 10 Mbit/s.
+
+
+    DVB includes Satellite, Cable, Microwave Links portabilities.
+\end{itemize}
+
+
+
+
+
+\subsubsection*{Generalization of Network Element}
+
+MultiService Provisioning Platform
+
+\quickimage{RTel/Cap4-025.png}{0.6}
+
+%194 was the last slide we've seen...
+
+
+
+
+

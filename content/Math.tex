@@ -1,0 +1,155 @@
+
+
+\section{Math}
+
+\subsection{Taylor Series}
+Incredibly important for simplifications, approximations and to have a notion of the shape of the function.
+
+The definition is as follows:
+A real or complex-valued function $f(x)$ that is infinitely differentiable at a real or complex number $a$ can be written as a power series the following way
+
+\begin{align*}
+    f(x) &= \sum_{n = 0}^{\infty} \frac{f^{(n)}(a)}{n!} (x-a)^n = \\
+    &= f(a)+{\frac {f'(a)}{1!}}(x-a)+{\frac {f''(a)}{2!}}(x-a)^{2}+{\frac {f'''(a)}{3!}}(x-a)^{3}+\cdots
+\end{align*}
+
+Some utilities of this formula:
+\begin{itemize}
+    \item The approximation $(1+x)^n \approx 1-x^n$, when x is much smaller than 1. (Binomial Series)
+    \item When approximating $y(x) = cos(2x) + \epsilon$ with a polynomial using least squares, the coefficients fo that polynomial will tend for the coefficients of Taylor's polynomial. Many MacLaurin Series (Taylor Series at the origin) can be found \href{https://en.wikipedia.org/wiki/Taylor_series#List_of_Maclaurin_series_of_some_common_functions}{\ul{Here in the Wiki}}.
+\end{itemize}
+
+\subsection{Erlang Models B and C}
+\par These are statistical models to predict the necessary resources to satisfy a certain amount of traffic with the constraint of not serving at most a certain percentage of the incoming traffic at a given time. 
+\par Instead of thinking like:
+\begin{center}
+    ``''\textit{Hey, it's simple arithmetic! We get 3 200 calls a day. That's 400 calls an hour. Each call lasts three minutes, so each person can handle 20 calls and hour. So we'll need 20 incoming  lines and 20 people to answer the phones.}''
+\end{center}
+Good models were created because of this! This is completely wrong if the calls don't arrive evenly distributed across the day, which is very likely. There are busy hours where the traffic is much bigger than in any other time of the day. 
+\par A.K. Erlang derived nice formulas for us to use. Note that the terms "call" and "resource" will be used interchangeable because these models can be used for a immense variety of applications besides call-centres. For instance, to figure how many printers to buy so that people in the office can print decently.
+\par One last note: these formulas were derived for "infinite sources" of incoming traffic. However, they work very very well for cases when there are about 10x more sources than trunks. For real world applications that tends to be the case. 
+
+\par The concepts:
+\begin{itemize}
+    \item \bb{Erlang}: Dimensionless unit. Regards the continuous use of a resource. Normally is referred to hours, therefore 90 minutes of traffic are regarded as 1.5 erlangs.
+    \item \bb{Grade of Service}: Probability of all servers/trunks being busy when a resource is requested for a given amount of traffic and for a certain amount of trunks.
+\end{itemize}
+
+
+\subsubsection*{Erlang B}
+Use if a call is really blocked, i.e if the person trying to use the resource doesn't wait to use it when all the trunks are busy at that time. Given 2 from \ul{Traffic}, \ul{Grade of Service} or \ul{Number of Trunks} one may calculate the other.
+\par Tables can be found \href{https://onlinelibrary.wiley.com/doi/pdf/10.1002/0470862696.app5}{here}.
+
+\subsubsection*{Erlang C}
+Use if a blocked call is delayed instead of the "come back later" that happens in the previous model. This one needs as well the \ul{average duration of each call}.
+
+
+
+
+\subsection{Probabilities}
+
+
+\subsubsection{Conditional Probability}
+
+Probability of A happening given that B happened before. 
+The formula:
+\quickimage{Other/math5.png}{.5}
+
+Some intuitive images:
+\quickimage{Other/math3.png}{.3}
+
+\quickimage{Other/math4.png}{.5}
+
+
+
+
+\subsubsection{Bayes Theorem}
+
+This an important topic. Is appears just about everywhere!
+
+What is the probability of something, given that something happened.
+
+What we'll see very very often is that this is associated with decision 
+boundaries and thresholds. Depending on what we saw, the likeliness of what we 
+thing was transmitted or the class we thing our data may belong, may change.
+
+This is Bayes' Theorem in its discrete form:
+
+\quickimage{Other/math2.png}{.5}
+
+\quickimage{Other/math1.png}{.5}
+
+
+In just about every case, we want to choose:
+\begin{itemize}
+    \item the symbol that was most likely transmitted given that we received a certain signal (the maximum likelihood criteria, which Bayes Theorem definitely is, may degenerate in a shortest distance criteria in phase and quadrature plots - remember QAM and PSK)
+    \item the class that a certain sample most likely fits into is the class that most likely would generate that kind of sample. 
+\end{itemize} 
+
+Therefore
+
+
+\subsection{Optimization}
+
+\subsubsection{Unconstraint Optimization}
+
+\quickimage{AIML/AA-009.png}{.6}
+Refer to Section \ref{sec:Hessian} for details of the Hessian Matrix.
+
+
+\subsubsection{Constraint Optimization - Lagrange Multipliers} \label{sec:Lagrange}
+
+The Lagrange Multipliers is a mathematical optimization method, allows the finding of local maxima or minima of a function, subject to constraints.
+
+Perfect Explanation why it works:
+
+\href{https://www.quora.com/Why-does-the-method-of-Lagrange-multipliers-work-for-optimization-in-multivariable-calculus-Why-exactly-given-a-function-f-x-y-and-a-constraint-g-x-y-c-can-we-set-the-gradients-of-the-functions-to-be-multiples-of-each-other}{\ul{Quora - Intuition on Langrange Multipliers}}
+
+And a video showing exactly how it's done:
+
+\href{https://www.youtube.com/watch?v=yuqB-d5MjZA}{\ul{Khan Academy - Lagrange Multipliers Example}}
+
+\vspace{.5cm}
+
+\bb{How to use:}
+
+Let $f$ be the optimizing function and $g$ the constraint function. They are both scalar functions, i.e $\mathds{R}^n \rightarrow \mathds{R}$. For example purpose, let is consider $n = 2$.
+
+\begin{gather}
+    f(x,y) = x^2 y \\
+    g(x,y) = x^2+y^2 = c
+\end{gather}
+
+The Lagrange Multipliers Method for Constraint Optimization tells us that:
+
+\begin{equation} \label{eq:lagMult}
+    \bigtriangleup f = \lambda \bigtriangleup g
+\end{equation}
+
+Thus, is common to formalize the Lagrangean function:
+
+\begin{equation}
+    L(x,y,\lambda) = f(x,y) - \lambda g(x,y)
+\end{equation}
+
+To get the optimized point, we just have to solve the following system of $n+1$ equations for the $n$ dimensions and the lagrange multiplier:
+
+\begin{gather}
+    \begin{cases}
+        \bigtriangleup L(x,y,\lambda) = 0 \\
+        g(x,y) = c
+    \end{cases}
+\end{gather}
+
+
+Curiosity notes:
+\begin{itemize}
+    \item it doesn't matter if $g(x,y) = c$ is the constraint of if $g(x,y) = x^2 + y^2 - c = 0$ is the constraint. The constraint should be the last equation and the Lagrangean doesn't need that constant in there as it will disappear for our purposes
+    \item The core of this methods is equation \eqref{eq:lagMult}. This is true because in the point we want to obtain, there's tangency between the constraint and the optimizing function's contour lines
+    \quickimagesidebyside{AIML/AA-007.png}{0.9}{AIML/AA-008.png}{0.7}
+    \quickimage{AIML/AA-006.png}{0.4}
+    \item If there are many constraints, they are summed in the Lagrangean, there will be an extra multiplier for each one and each one will appear in the final system of equations. Note that for each Lagrange Multiplier there should be one constraint equation to get that multiplier value.
+    \item Yet another generalization can be made when there are constraints that are not $= c$ but are $\geq c$. Refer to page 7 on Langrage Duality of \href{http://cs229.stanford.edu/notes/cs229-notes3.pdf}{\ul{Andrew Ng stanford Lectures notes on SVMs}}.
+    \item Still regarding Lagrange Duality, consists of transformating the general Lagrangean into something else. In particular, Quadratic Programming is done is the SVM chapter.
+\end{itemize}
+\subsubsection{Constraint Optimization - Quadratic Programming}
