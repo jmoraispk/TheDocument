@@ -422,7 +422,7 @@ One means scale-independent pixels and the other density-independent pixels. The
     
     
 \vspace{.5cm}
-\par For the keyboard, the answer is using xmodmap if what you really need it is chaning functionalities instead of adding them. If you need to add them, xbindkeys is the way to go. 
+\par For the keyboard, the answer is using xmodmap if what you really need it's changing functionalities instead of adding them. If you need to add them, xbindkeys is the way to go. 
 But I urge you, read \ref{sec:linux_life_lessons_keybindings} before doing anything, I've invested quite a bit of my life, speacially while I was the most busy, exploring no way out and very unefficient paths.
 
 
@@ -443,6 +443,23 @@ To resize photographs or videos, something that is needed in case one needs to u
 Additionally, the general \href{https://www.kapwing.com/workspace}{\ul{Kapwing Tool}} is very usefull for video and image editing. Quick and easy really.
 
 
+
+
+\subsection{FFMPEG - Record, Convert and Compress Video}
+This tool is pure magic.
+One command to record the screen:
+\begin{lstlisting}[language=bash]
+    ffmpeg -f x11grab -y -r 30 -s 1366x768 -i :0.0 -vcodec huffyuv out.avi
+\end{lstlisting}
+
+For me, a video of 1366x768 bits recorded at 30 frames per second got a size of 2.4 GB.
+
+Then it was compresses to 16 MB with quite enough resolution still.
+
+One command to compress the quality afterwards :
+\begin{lstlisting}[language=bash]
+    ffmpeg -i out.avi -vcodec libx265 -crf 20 output.mp4
+\end{lstlisting}
 
 
 \subsection{Other Linux related stuff}
@@ -472,6 +489,8 @@ Additionally, the general \href{https://www.kapwing.com/workspace}{\ul{Kapwing T
     
     \item \bb{sudo service network-manager restart} \hspace{1cm} To restart the network manager because it stops unexpectedly sometimes.
     
+    \item Rotate Screen: xrandr -o left, xrandr -o original
+
 \end{itemize}
 
 

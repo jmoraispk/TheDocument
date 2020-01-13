@@ -656,7 +656,7 @@ Instead, a Fat Tree is used.
 
 Note that:
 \begin{itemize}
-    \item Each ToR switch is connected to 2 aggregation switches;
+    \item Each ToR switch is connected to all aggregation switches for redundancy;
     \item Each aggregation switch should be connected to more than one core/central switch to achieve redundancy and flexible load balancing;
     \item It usually comes 40Gbps from the rack but the switch only outputs 20Gbps, this is quite normal since the traffic is bursty. Overprovisioning would be to have the same output as the input. 
 \end{itemize}
@@ -950,3 +950,388 @@ MultiService Provisioning Platform
 
 
 
+\subsection{OTN - Optical Transport Network}
+
+These can be of 3 types: opaque, transparent or translucent.
+
+Opaque: Electrical nodes, optical links.
+Transparent: Optical nodes, optical links.
+Translucent: Some nodes are optical, some are electric, optical links.
+Nodes are ODU switches. Depending on the type of network (opaque, transparent or translucent), these switches can have line cards at the entrance (equipments that transform the optical signal to the electrical domain) or work fully in the optical domain.
+
+
+\quickimage{RTel/Cap5-006.png}{0.6}
+
+Note the distinction between optical repeater (represented slightly below) and a regenerator. Regenerator receives the signal and sends it again, i.e the signal passes through the electrical domain. Such thing doesn't happen in transparent networks where everything is optical.
+
+
+Every 80-120 kilometers an optical amplifier is needed. It belongs to the link.
+
+
+An optical Line Amplifier has to compensate dispersion and amplify the signal.
+EDFA: Erbium-Doped Fiber Amplifier have an automatic gain control to keep power constant at their outputs.
+
+\quickimage{RTel/Cap5-007.png}{0.6}
+
+There's a signal sent in a different wavelength that has the infomation about the amplification. This signal is called Opctical Supervisory Channel and is terminated and at the input side of the amplifier and added at the output. It carries software updates and management information. One way of compensating dispersion it to use dispersion compensating fibres and make the signal propagate there. Fibres that may have higher attenuation but that make the pulses closer together.
+
+\bb{There are 3 main network components:}
+\begin{itemize}
+    \item Optical Amplifier;
+    \item Optical Terminal Multiplexer
+    \quickimage{RTel/Cap5-008.png}{0.6}
+    \item ROADM (Reconfigurable Optical Add \& Drop Multiplexer) - can have degree 2 or more (up to 8 or 9 nowadays) and must always have a conection to the client, normally connected to IP/MPLS routers, SAN switches, SDH networks, or overall GFM data;
+    \item Optical Cross-Connect (OXC) - not very used since multidegree ROADMs are a thing.
+\end{itemize}
+
+The same way SDH networks have Regenerators, Terminal multiplexers, ADMs and DXCs, OTN has Optical Amplifiers, Optical Terminal Multiplexers, ROADMs and OXCs
+
+
+Optical networks operate between 800 and 1600 nm wavelengths, which are in the infrared region of the spectrum.
+
+1310 to 1550 are particularly used in communications due to low attenuations. 
+
+
+\subsubsection{OTN as the transport Base - Electical Layer}
+
+MPLS is connected to the optical equipment with Ethernet, 10 or 100GbE.
+SDH is connected to OTN with SMT-16, STM-64 or STM-256 frames.
+SAN is connected with optical channels.
+
+\quickimage{RTel/Cap5-001.png}{0.6}
+
+More generally, OTN can have all clients, it is just a compatibility matter and the standards have that considered.
+
+\quickimage{RTel/Cap5-002.png}{0.6}
+
+\quickimage{RTel/Cap5-003.png}{0.6}
+
+Keep in mind:
+\begin{itemize}
+    \item 1000Base-SX is 1 Gbps short ranges, 8B/10B code;
+    \item CBR means constant bit rate, expected for SDH networks;
+    \item The same way SDH is an hierarchy, OTH is also an hierarchy;
+    \item In OTH, the first step is in the electrical domain, the second is in the optical domain;
+    \item The same way SDH had STM's (STM-4, STM-16, ect\dots), OTH has OTU (Optical Transport Unit, OTU-1, OTU-2, etc\dots);
+    \item Client data + OPU header = OPUk - Stuffing, client data type, etc\dots
+    OPUK + ODU overhead = ODUK. ODUK + OTU overhead = OTUK:\\
+    Optical Payload Unit (equivalent to C-4)  + ODU overhed (equivalent to Path header) - ODUk. The purpose of ODU is to monitor end-to-end performance and do protection switching\\
+    Optical Data Unit k + OTU overhead + FEC =  OTUk - Added at the end of the OTUk is added a Forward Error Correction (FEC) field, computed over the ODUk. The OTU overhead has a Frame Alignment Signal (FAS).
+    \item All the above mentioned operations take place in the electrical domain. Now is possible to go to the optical domain!
+    \quickimage{RTel/Cap5-004.png}{0.6}
+    \item Note that ODU2/OTU2 has 4 times the bitrate of ODU1/OTU1. ODU3/OTU3 has 4 times the bitrate of ODU2/OTU2 and 16 times the bitrate of ODU1/OTU1. There also is ODU0 which has half the bitrate of ODU1. Because there isn't any OTU0, 2 ODU0 must be places in ODU1 which is then place in a OTU1. For ODU3 or ODU4, the ration isn't the same and we should check the image. 
+    \item Having an ODU-k, the direct solution is to use OTU-k. But there are higher order solutions as well: to aggregate several ODU-k into OTU-k+1 or OTU-k+2, etc\dots We do this aggregation.
+    \item The structure of the frame is always the same, what changes is the frame duration. For an higher k, the frames are sent faster.
+    \quickimage{RTel/Cap5-005.png}{0.6}
+    OTUk bitrates can be calculated in the same way as in SDH: number of bit/bytes in a frame divided by the frame duration.
+    \item Note that OTN is a plesiochronous network, because frame durations are not constant. 
+    \item The Error correcting code is able to correct at most 16 wrong bytes in a row. 255-238 ....???
+\end{itemize}
+
+
+
+
+
+
+
+Overall, the OTN has an hierarchy called OTH. This OTH has two layers, electrical and optical. The electrical layer has 3 layers, OPU, ODU and OTU. Each subsequent layer adds headers to the previous ones. OPU is OPU-header + client payload. ODU is ODU-header + OPU. OTU = OTU-header + ODU + FEC, where FEC is calculated over the ODU to check for errors.
+
+OTU-k, for k from 1 to 5, has the following bitrates: OTU-1 supports 2.5 Gbit/s, OTU-2 supports 10Gb/s, OTU-3 supports 40Gb/s, OTU-4 supports 100 Gb/s and OTU-5 supports 400Gb/s.
+
+The OTU frame is a TDM frame. OTN is a non-synchronous network, called a plesiochronous network. In a synchronous network, the clock information is propagated from a master. In plesiochronous network there's no clock information, only tools for synchronization. In optical networks is very difficult to have the complete synchrony. In the electrical part is possible and they function in an autonomous. 
+
+Another very good way of knowing if a network is synchronous or plesiochronous, is by the frame duration. In SDH every frame lasts 125 microseconds while in OTN, different frames types (k order) have different durations.
+
+
+
+\subsubsection{Optical layer}
+
+In an Ethernet network is possible to use optical fibres, however in OTN the fibres are used with much higher data rates, therefore there are different wavelengths:
+1310nm and 1550nm are the most common. With these wavelengths, single mode fibres are possible.
+
+1310 nm (0-band with 100nm of length, correspondent to 17.48 THz of bandwidth) are more used in datacentres, because the distances are not that high and 1550 nm is used in OTN. 1550 nm has 0.18 dB/km, the physical limit is 0.16 dB/km.
+
+
+With the OTK-k frame, that bitrate is passed through a laser-diode that emits radiation in the visible spectrum, in a given wavelength. This signal is converter to an optical channel.
+
+A \bb{Transponder} will take the client data, create OPU, ODU, OTU and generate an Optical Channel.
+
+A quick example: what would be the block diagram for sending 10 GBASE-R signals? These signals can only use ODU2e ODUs, and 10 of them only fit in one ODU4. In theory, it would also be possible to place them in 4 ODU3.  Therefore, there would have to be a parallelisation until the OTU4 multiplexing and only one ODU4 would be converted to an optical channel.
+
+Muxponder is a transponder that also multiplexes. A muxponder has several clients when a transponder has only one. 
+
+Since outputting light is the expensive part (note that a process in the electrical domain as already used in Ethernet), the price per client is smaller if they share a muxponder.
+
+
+DWDM means Dense WDM, which is when many wavelengths are used. WDM term is used when the amount of wavelengths is around or smaller than 16.
+
+To the people that have fibre to the home (FTTH), each home will have a multimode (cheap) fibre that takes the traffic to a multiplexer at the building, and another at a street level. After these, DWDM is done. Also, remember that the terminal multiplexer is always degree 1. It only matter how many of the actual connections to the network it has.
+
+
+In SDH, degree 2 equipments were called ADM (Add \& Drop Multiplexers). In OTN it's OADM to allow frames to be droped and added (on the side that is connected to the clients). Because it is connected to the transport fibre on 2 sides (in \& out), it has degree 2.
+
+ROADM is used, the R is for Reconfigurable and the reconfigurable part is the possible wavelength of use.
+
+
+There are 3 optic layers:
+\quickimage{RTel/Cap5-009.png}{0.6}
+
+\quickimage{RTel/Cap5-010.png}{0.6}
+
+At the end, an Optical Transport Module n.m is generated. n = number of optical channels m = k, for the OTU-k. If m = 0 is because there's a mix of bit rates.
+
+
+
+
+
+
+\subsubsection{Routing and Wavelength Assignment}
+Route according to the traffic demands, obtain the lightpahts and then choose the wavelengths to be used in each lightpath.
+
+
+The routing problem is known from other networks. The Wavelength assignment has some rules:
+\begin{itemize}
+    \item Wavelength Continuity - All the links of a lightpath must be the same wavelength;
+    \item Distinct Wavelengths - All the lightpaths that traverse the same link must have different wavelengths.
+\end{itemize}
+
+This is common sense, but in a pool of wavelengths, how to choose?
+
+Dynamic Wavelength assignment strategies:
+\begin{itemize}
+    \item First Fit - Choose the first that fits. There are a couple of paths, check which is the lowest wavelength available (not necessarily the shortest wavelength, the wavelength with the lowest index, there's an abstraction) and assign that one.
+    \item Most used - 
+    \item Longest First - 
+\end{itemize}
+
+In Dynamic wavelength assignment, the wavelength is assigned as the demands come. 
+In Static WA, we can simple order the demands according to shortest first, longest first, largest first or random and do the same thing as in Dynamic but considering that the new order is the order of arrival.
+
+
+
+
+\subsection{Access Network}
+\subsubsection{Intro}
+The networks that allow the connection of the client with the operator.
+
+This is the simplest yet the most expensive part of the network.
+
+Regarding the Public Switched Telephone Network.
+
+\quickimage{RTel/Cap6-001.png}{0.6}
+
+
+The Main distribution frame will connect the different pairs of Simetric twisted copper cables (200 or more cables), reaching the SDC it will be divided in groups of 30-50. And reaching the Drop Point it gets divided to unity, one for each client.
+
+If we want to replace the feeder cable that has hunders of twister pairs by a fibre one has two options:
+\begin{itemize}
+    \item since the fibre as much wider band that the twisted pair, one option would be to put the signal of each pair in a wavelengt. However, WDM is very expensive and one wavelength would still be too much for a copper cable. 
+    \item In order to avoid WDM, one can simply use one wavelength as multiplex in the time domain, TDM with 200 slots. Here we can't use statistical multiplexing because here is done circuit switch and the flow is given by the timeslot where it arrives. However, if we 
+\end{itemize}
+
+Replacing the feeder cable by an optic fibre, is necessary to multiplex / demultiplex and convert to/from the optic domain. Note that we need one optic fibre per direction. Here the SDC are called Remote Units.
+
+Because all the channels are not used at the same time, exceptionnaly in the new year's eve, less channels (K of them) can be used without a problem. $\frac{N}{K}$ is the concentration factor. In an image:
+
+\quickimage{RTel/Cap6-002.png}{0.6}
+
+
+A redundant way of connecting Central Offices and RU's can be a mesh or rings.
+
+\quickimage{RTel/Cap6-003.png}{0.6}
+
+
+A few years ago, in order to use these copper cables to access the internet, one could modulate an internet signal in the copper cable. By using a Digital Subscribel Line (DSL) Modem (Modulator Demodulator), taking advantage of 4 kHz band, used for voice, one can get 56 kbit/s. Internet access and voice go in the same cable in different frequencies.
+
+In the Central Office, the DSL Access Multiplexer (DSLAM) is connected to internet, at the time using Ethernet.
+
+\quickimage{RTel/Cap6-004.png}{0.6}
+
+
+
+The DSLAM connects to an aggregation network, more specifically, to a PB switch.
+Also, VLANs are used to identify different services.
+
+\quickimage{RTel/Cap6-006.png}{0.6}
+
+
+
+
+Different types of duplexing are done in the copper cable.
+Echo Cancelation Duplexing is based on the cancelation of echos through the generation of similar signals and doing their difference. Echos happen due to impedances mismatches. $\hat{r}(t)$ is created and will try to nullify the echo of $y(t)$.
+
+\quickimage{RTel/Cap6-005.png}{0.6}
+
+
+
+\subsubsection{Copper vs Fibre}
+The conventional access network is the network described so far, the one used in the PSTN. However, copper twisted pairs can still be used for internet access. When this is the case, technologies that use twisted pair for internet access use the DSL (Digital Subscriber Line). DSL is the name technologies that use the telephone line have. Obviously, nowadays it is used much more than just for telephone and it that cable dangling of 2 posts. Because it uses copper pairs, it is very cheap.
+
+Nowadays, VDSL, ADSL2+ and ASDL are the main technologies over the DSL.
+\quickimage{RTel/Cap6-009.png}{0.6}
+
+
+The main problem with copper cables is the range. In copper there are severe problems with attenuation therefore the code is very limited. The bitrate is a direct function of the distance.
+
+In fibres the problem has more to do with dispersion and are capable of getting much further. That and the huge bandwidth is why they are replacing copper almost everywhere.
+
+
+In ADSL and posterior copper technologies, the DSL Access Multiplexer (DSLAM) is responsible for the aggregation along with PB Switches. Between the access and the metro networks there is always an aggreagtion layer.
+
+The image below is quite important. It shows how a triple play network is completely connected. In essence, the television is connected to a set-top box, which is used to retrive the tv signal from the modulation. Sometimes from the cable, sometimes from the over-the-air sometimes even from a satellite. Nowadays it only decodes IPTV video stream. All the remaining client devices, phones, laptops (\dots) are connected to an Home Gateway which is also a router and an wi-fi access point. The HG is connected to a Modem (in case of ADSL) that will perform the modulation and demodulation. 
+
+\quickimage{RTel/Cap6-011.png}{0.6}
+
+Clearly, from the picture as well, there must be a Network Access Provider that guarantees the connection between the Service Suppliers (IPTV platform, VOIP platform and Internet given by an ISP).
+
+Something important is to know how the flows are separated at a client level, at a service level and at a DSLAM level, because the ethernet frames must reach the correct DSLAMs. For this, VLANs are used with 2 distinct tags, C-tag and S-tag. The C-tag (client) has information about the client and the type of flow/service the client is requiring. The S-tag (Service), despite the name, refers to the DSLAM where that client is connected. These tags will be read by the PB Ethernet Switch.
+
+
+
+\subsubsection*{The change to fibre}
+We've said before that it can be done at a feeder level. But it can and is being done at distribution network! It has to use a P2MP (Point to Multipoint) connection in order to save costs in fibre. 
+
+The equipment that performs the aggregation of many fibres and that is equivalent to a DSLAM in functionality is the Optical Line Terminal (OLT).
+
+\quickimage{RTel/Cap6-012.png}{0.6}
+
+It is connected to a ONU or a ONT, depending on how far the fibre reaches into the home of the client.
+
+\quickimage{RTel/Cap6-013.png}{0.6}
+
+If the fibre reaches the building or even the Home, it is called an ONT. Else, if it reaches only the concentrator, cabinet or curb, the node that transforms it to the electrical domain is the ONU.
+
+
+
+\subsubsection{Fibre: Active vs Passive}
+
+\quickimage{RTel/Cap6-010.png}{0.6}
+
+We work with the passive. Active would be something like normal ethernet switches. However, those are hard to power.
+
+Therefore, Passive Optical Networks (PON) are whats most widely used.
+
+A key element in a PON is the splitter. With directional couplers it reproduces in every exit the same as the entrance but with a fraction of the power.
+
+
+\quickimage{RTel/Cap6-014.png}{0.6}
+
+Additionally, there are different multiple access PONs. In the OLT stuff needs to join to get into the same feeder. 
+
+\quickimage{RTel/Cap6-015.png}{0.6}
+
+
+Of these 2 types, TDM-PON is the most used. WDM-PON is probably just used in Korea..
+
+\quickimage{RTel/Cap6-016.png}{0.6}
+
+
+
+
+\subsubsection{Passive: EPON vs GPON}
+A summary right at the beginning:
+\quickimage{RTel/Cap6-017.png}{0.6}
+
+\subsubsection*{EPON}
+Ethernet over PON, basically.
+
+EPON frames are like:
+\quickimage{RTel/Cap6-007.png}{0.6}
+
+This way, is possible to identify to whom the frame is for. These frames are sent from the OLT to the spliter and only at the ONU the frames are filtered for the correct user.
+
+The LLID is the field responsible for this, is used for the extraction.
+
+\bb{Downstream:}
+\quickimage{RTel/Cap6-008.png}{0.6}
+
+\bb{Upstream:}
+\quickimage{RTel/Cap6-021.png}{0.6}
+
+
+EPON has a symmetric rate (down/upstream) of 1.25 Gbaud which results in a 1Gib/s bit rate when using the 8B10B coding scheme.
+
+To upstream, each ONU is allocated a time-slot and several ethernet frames fit in that timeslot. A complete time-slot cycle over all ONUs has 1 ms. And the guard interval has 1.5 microseconds. Therefore, it depends on how many ONUs are sharing an OLT. Tipically, 16 users share a OLT. $1ms = 16 \times$(ethernet-frame + guard-interval). Thus, one gets 61 microseconds of ethernet frame duration, which, at 1Gbit/s are 61 000 ethernet frames. Of course, the efficiency is not 100\% due to error correction codes mainly.
+
+
+
+A few final notes about EPON frame format:
+\begin{itemize}
+    \item There are LLIDs which stand for Logical Link Identifiers. From the name is possible to understand that the links are logical. They not only identify each client but also each service. Therefore, over the same physical link going from an OLT to a certain client's ONU there can be 3 logical links connecting the service in the client's home to the service provider (tv, voice or data).
+    \item The ONU knows what LLID's came from him and rejects all others; But, how about the VLANs? Does the ONU map between VLANs and LLIDs? \bb{YES}. 
+    If there are no Ethernet frames, the ONU transmits only 10 meaningless bytes?
+    \bb{OLT Functions in EPON}
+    \quickimage{RTel/Cap6-018.png}{0.6}
+
+    Depending on the buffer occupancy, the frames can be longer or shorter. The ONU reports this occupancy with... (guess what) a \bb{report}. The OLT sends a \bb{gate} to each ONU and this is the \ul{bandwidth assignment process}.
+    
+    \bb{The control plane is the responsible for this and all other OLT functions described above.} Tip: to have a complete answer regarding the control plane, 
+    \item The duration of each time slot is called the transmission window and this window size is what will be attributed to an ONU. The windows size is the number of bytes that can be transmitted. Therefore, to get the slot duration, one simply does $\frac{8 \times \text{Windown}}{\text{Datarate}}$. Additionally, there's a guard interval.
+    \item It is called a cycle time for the set of N time-slots. N corresponds to the number of ONUs. For EPON, this value is typically 16. \bb{The number of time slots is equal to the number of ONUs connected to the OLT because in a cycle everyone needs the oportunity to transmit}. A cycle time is nothing more than the sum of each time slot duration + guard time:
+    \quickimage{RTel/Cap6-019.png}{0.6}
+\end{itemize}
+
+\subsubsection*{GPON}
+
+GPON has around 2.5 downstream and 1.25 upstream.
+
+
+
+slides 297 and 298 mainly. 
+
+
+
+Frame summary: slide 300
+
+XGPON through faster electronic is able to increase the bitrates per wavelength to 10 Gbit/s.
+TWDM-PON does $4 \times 10$ downstream and $4 \times 2.5$ upstream.
+\quickimage{RTel/Cap6-020.png}{0.5}
+
+There are two main limitations with increasing the bit rate in optical fibre. Problems with fast electronics and dispersion. The narrower the pulse, the more bandwidth it takes and thus the higher the dispersion. Then it starts to get really expensive and this is only access..
+
+Network operators assume only about 40 \% of the users use the resources at the same time.
+
+
+In GPON, the bottom two layers are GTC and PHY while in the EPON was MAC and PHY.
+\quickimage{RTel/Cap6-023.png}{0.6}
+
+
+GPON Encapsulation Methods is one of the functionalities of GPON Transmission Convergence Layer in the GPON network.
+
+GEM header has several functionalities like having the FAS (Frame Alignment Sequence)
+
+
+P-ID in the GEM header, payload is an ethernet frame
+
+While in EPON the downstream ethernet frames are transmitted \ii{raw}, in GPON networks the P-ID is 
+
+\quickimage{RTel/Cap6-022.png}{0.65}
+
+Upstream, the ethernet frames are placed inside GEM frames and those go into a T-container (transmission container). 
+Inside the GEM frames is possible to transport different types of frames : Ethernet, ATM, etc..
+Depending on the required Qos of the traffic, different T-containers can be used: Different T-containers are meat to separate traffic types by the QoS (VoIP is different than IPTV).
+Each T-container has a \bb{alloc-ID}. The alloc-ID tells the OLT from where the T-container came from. There can be multiple frames of that traffic in each T-container.
+
+Only in the upstream, T-containers are used. Both is upstream and downstream, GTC frames are used. however in upstream they have many headers + t containers + guardband while in the downstream they simple are a bunch of GEMs together that each ONU will remove the one that has it's P-ID.
+
+
+In the EPON, the dynamic bandwidth allocation Gate and Report messages are used and this reduces the efficiency of the network. In GPON these messages are included in the header GTC, there aren't specific separated messages simply for these reports.
+
+
+Splitting ratio in the number of ONUs connected to a OLT.
+
+
+\subsubsection{XGPON, TWDM-PON and WDM-PON}
+
+TWDM-PON is able to serve much higher bitrates but to far fewer users since they need $2N$ wavelengths to serve up and downstream N users.
+
+
+WDM-PONs are GOOD because are very future proof. If each user has it's wavelength (and each wavelength has a bandwidth of 50 GHz) it is possible to increase the bitrates until something like 40Gbit per user, which is still slightly out of range of today's technology. With this network structure is possible to increase everyone's bitrates by simply changing the OLT.
+
+\quickimage{RTel/Cap6-024.png}{0.6}
+
+
+\subsubsection{todo}
+\begin{comment}
+    do the maths for the bitrate in a fibre - ethernet
+\end{comment}

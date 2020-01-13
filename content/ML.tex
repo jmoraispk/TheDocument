@@ -723,7 +723,7 @@ There are mappings/transformations to increase the feature space dimensionality.
 
 The kernel function $\phi(\mathbf{x})$ will map n features to p, where (usually at least) $p \geq n$.
 
-The biggest problem is that this high dimensionality may drive the problem unfeasible since that each sample will have much more information. And the process of mapping all samples, apply the SVM and them map the boundary back to the first feature space is quite time consuming.
+The biggest problem is that this high dimensionality may drive the problem infeasible since that each sample will have much more information. And the process of mapping all samples, apply the SVM and them map the boundary back to the first feature space is quite time consuming.
 
 Instead of that, since the dual formulation just requires the inner product of features, is possible to define a kernel function that is the product of the two mappings and compute the inner products in the low dimension input space instead of really having to climb the dimensionality ladder.
 
@@ -734,13 +734,179 @@ The typical kernels:
 \quickimage{AIML/AA-016.png}{0.6}
 
 
+\subsection{Decision Trees \& Random Forests}
+
+Only used for classification problems.
+It's a technique used with discrete features - this does not limit it's usage because continuous features can be discretized in a finite number of intervals.
+
+It works by figuring out what is the best question to ask in each node (the question that separates better que labels) and when the sample reaches que bottom of the tree
+
+A measure that is used to know which variable to ask about is the impurity. There are multiple impurity functions.
+
+
+\quickimage{AIML/AA-017.png}{0.6}
+
+The impurity drop is what is used to choose which feature to use at a certain node.
+
+
+\subsubsection{ID3 algorithm}
+
+Impurity criterion is entropy. And stops either when every leaf is pure or if all attributes (features) have been tested along the path to the root.
+
+If the data or attributes are noisy (there are multiple instants with different results for supposedly the same label or attributes), then ID3 may overfit because it will ask enough questions to properly and thoroughly separate the data. One way of avoiding this is to \bb{stop early} (when the impurity drop gets below a threshold) or do \bb{post-processing pruning}.
+
+Note that the first method may provide problematic solutions because the impurity droop in a certain iteration may be smaller than it will be in the next one, therefore the algorithm would stop before checking the tree properly.
+
+\subsubsection{Pruning}
+
+Simplifying the tree improves it's performance since ``less questions'' need to be asked on each sample evaluation. Additionally, pruning can lead to the exact same classification errors, therefore is very worth to do.
+
+The actual way of implementing pruning is by testing splitting notes - not worth to check the leafs - in a bottom-up way. For each tested node, replace it by a leaf with the most likely result of the subtree. Then check if the number of classification errors improved. If it improved or stayed the same, then that simplification is viable.
+
+\subsubsection{Boostrapping with aggregation (Bagging)} 
+To understand how random forests work, one needs to look at \bb{Bootstrapping aggregation} first, also called \bb{bagging}. 
+Given an $m$ sample training set, one samples it $m$ times with replacement, and repeats the process B times. This way, B training sets can be created from the original one. 
+
+\quickimage{AIML/AA-018.png}{0.6}
+
+\bb{Bootstrapping is sampling with replacement}.
+
+The ``with aggregation'' parts refers to final part of taking the average, i.e aggregating the results into one.
+
+This allows us to reduce the uncertainty of $f(x)$.
+
+\subsubsection{Random Forest}
+
+A random forest is using multiple random trees, each with a subset of features, in order to have approaches as distinct as possible in order to avoid errors of noisy labels. Each tree is trained with one of B sets of training data achieved by Bootstrapping. Then each tree is used for the estimation, and the most popular final result is considered the correct one.
+
+The random selection of features is called \bb{Random Subspace} and the actual percentage of features that will be used in each tree/each splitting node is a algorithm parameter. 
+
+\subsection{Leading with data anomalies - Data imbalances}
+
+\href{https://towardsdatascience.com/handling-imbalanced-datasets-in-machine-learning-7a0e84220f28}{\ul{Good link}}
+
+If the data is imbalanced, for instances: 99\% of data is class A and only one percent is class B, it is possible to find a trivial classifier that has 99\% accuracy in this dataset by only guessing A. This is very bad as the outliers will never be found. 
+
+There are two ways of proceeding:
+\begin{itemize}
+    \item Reworking the dataset;
+    \item Reworking the problem - (spoiler: this is the solution)
+\end{itemize}
+
+First of all, one has to identify a naive behaviour. This can be done with a confusion matrix, computing precision, recall and F1 measure.
+
+\bb{``}The precision of a class define how trustable is the result when the model answer that a point belongs to that class. The recall of a class expresses how well the model is able to detect that class. The F1 score of a class is given by the harmonic mean of precision and recall ($\frac{2\times precision \times recall}{precision + recall})$, it combines precision and recall of a class in one metric. For a given class, the different combinations of recall and precision have the following meanings :
+
+\begin{itemize}
+    \item high recall + high precision : the class is perfectly handled by the model
+    \item low recall + high precision : the model can’t detect the class well but is highly trustable when it does
+    \item high recall + low precision : the class is well detected but the model also include points of other classes in it
+    \item low recall + low precision : the class is poorly handled by the model
+\end{itemize}\bb{''}
+
+Note: recall is also called True Positive Rate (TP or TPR). Precision can be obtained from TP and False Positive Rate. Mathematically:
+\begin{itemize}
+    \item Recall = True positive rate = $P(\hat{y} = T | y = T)$
+    \item False positive rate = $P(\hat{y} = T | y = F)$
+    \item Precision = $\frac{\text{TP}}{\text{TP}+\text{FP}}$
+\end{itemize}
+
+Additionally Received Operating Characteristic (ROC) is something common to compute for each class. The Area Under ROC is an objective measure how good the performance is - the closer to 1 the better, the closer to 0.5 the worst (a cube with side 1 has area 1 and the random guess is a diagonal, thus area 0.5).
+
+
+
+\quickimage{AIML/roc.jpeg}{0.12}
+
+
+\subsubsection{Working the problem}
+
+The alternative to this would be to work the dataset. To undersample the most common (throw away some samples), oversample the least common one (replicate samples) or some more fancy stuff like SMOTe (search...). All of these try to rebalance the dataset which will show the wrong proportions of data to the classifier. Therefore it will be more likely to guess the least likely class but at a considerable cost of guessing correctly the common one, specially if the data is not separable.
+
+A better way is enriching the dataset with additional features. If we find a new feature that helps distinguish the classes, the classifier can be more accurate.
+
+
+
+
 
 
 \section{Machine Learning - Unsupervised Learning}
 
-\subsection{Reinforcement Learning and Decision Making}
 
+\section{Reinforcement Learning}
+
+\subsection{Introduction}
 
 An agent to make the wisest decision in its situation has to have knowledge on what state he is in, how the environment will evolve, how it will be like if he performs a certain action (taking into account stochastic environments) and a utility function to  know how much that state contributes to its happiness.
 
+\quickimage{AIML/RL-001.png}{0.6}
+
+\quickimage{AIML/RL-002.png}{0.6}
+
+The state is the information used to determine what to do next. 
+The environment state $S_t^e$ is how the environment uses the history to choose the reward and the observation based on the action chosen by the agent.
+The agent state $S_t^a$ is how the agent takes the history and chooses what action to do next.
+
+\subsubsection{Markov Property}
+
+When a state is a sufficient statistic for the future, i.e the next state only depends on the previous state and not on the complete history, then it's said to be a \bb{Markov State}. In other words, a Markov State is a State that has all useful information about the past.
+
+\quickimage{AIML/RL-003.png}{0.6}
+
+Therefore, we can thrown away all the previous states because the current state has all the information I need to know the probability of the state of the future.
+
+Also, what our representation of state is will influence what the agent will think about the outcome. If the state is the last 3 items, then shock, if it's the count, then cheese. Or it may even be impossible to tell from our state what will happen next.
+\quickimage{AIML/RL-004.png}{0.6}
+
+\subsubsection{Observability}
+When the agent fully observes the environment, then $O_t = S_t^e = S_t^a$, this is known as a \bb{Markov Decision Process}.
+
+Partial observability is when the environment is more than what the agent can see. This is very often the case in the real world since it's hard to get the complete information about the environment. In this case, the agent must construct it's own representation of the state. That construct may be estimated with a \ul{Recurrent Neural Network}.
+
+\subsubsection{Agent Components}
+
+\quickimage{AIML/RL-005.png}{0.6}
+
+The less obvious is the value function. It's a prediction of the future rewards, not necessary only in the next state but long term future can be included as well. It's used to evaluate how good a state is.
+
+From the policy, it should choose an action $a = \pi(s)$: 
+
+\quickimage{AIML/RL-007.png}{0.6}
+
+
+The value function will put a value in the state that each action will lead to:
+
+\quickimage{AIML/RL-006.png}{0.6}
+
+\quickimage{AIML/RL-008.png}{0.6}
+
+
+The model is something that predicts the next state or the next immediate reward given a certain action.
+
+\quickimage{AIML/RL-009.png}{0.6}
+
+\subsubsection{Agent Categories}
+\begin{itemize}
+    \item Value Based - only has value function (the policy is implicit)
+    \item Policy Based - only has policy
+    \item Actor Critic - has both policy and value function
+    \item Model Free -  Policy and/or Value function, no model
+    \item Model Based - Policy and/or Value function, with model
+\end{itemize}
+
+In one image:
+\quickimage{AIML/RL-010.png}{0.6}
+
+
+\subsubsection{Exploration vs Exploitation}
+One may set some rules to make the choice much more straightforward for the machine, but also letting it learn by itself can be interesting. This is the difference between Planning and Learning. One exploits useful information to maximise the reward when the other find more information about the environment.
+
+\bb{Something important in RL is how to balance Exploration and Exploitation. If we know some rules, we can simply program something that heuristicly would give a good result. However, exploring unknown strategies and simply let the machine learn by itself can also provide a very good insight on the game and even return higher rewards.}
+
+Therefore, this balance is key.
+
+Is it worth to give up some reward only to know more about the environment? This tradeoff is unique to RL.
+
+
+
+\subsection{Markov Decision Processes}
 

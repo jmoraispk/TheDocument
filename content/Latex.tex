@@ -599,7 +599,6 @@ I used, respectively these two pieces of code:
 
 \end{lstlisting}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{Others}
@@ -608,8 +607,34 @@ I used, respectively these two pieces of code:
     \item This is a HUGE one for the use of \LaTeX and VS code. You can type ``\textbackslash be equa'' letting the autocomplete do the work and then TAB your way into the scope! It doesn't get faster than that.
 \end{itemize}
 
+\subsubsection{Acronyms}
+\href{http://mirrors.up.pt/pub/CTAN/macros/latex/contrib/acro/acro_en.pdf}{\ul{full Documentation}}
+
+\subsubsection{Symbol List}
+\href{https://personal.utdallas.edu/~hamlen/symlist.pdf}{\ul{CTAN Documentation}}
+
+\subsubsection{Bibliography}
+2 options, both listed \href{https://www.overleaf.com/learn/latex/Bibliography_management_with_bibtex}{\ul{here}}.
+A .bib is probably a best idea for a thesis.
+
+These are the fields one may have below each item in the bibliography:
+\href{https://verbosus.com/bibtex-style-examples.html}{\ul{verbosus.com/bibtex-examples}}
+\href{https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management#Authors}{\ul{This one is more complete}}
+For IEEETransaction style bibliography without dashing out name of authors, do:
+\href{https://engineering.purdue.edu/~mark/puthesis/faq/replace-dashes-with-authors-names/i.pdf}{\ul{this}}
+
+\bb{Notes about bibliography:}
+\begin{itemize}
+    \item everything gets better formatted if everything is books;
+    \item Names separated with `and'
+    \item For characters with tildes, or other kind of accentuation, use \{\\'e\} resulting in: {\'e}
+\end{itemize}
+
+\subsubsection{Acronyms}
+\href{https://tex.stackexchange.com/questions/306918/how-to-add-acronym-list}{\ul{SO ans}}
 \subsection{How to Debug LaTeX}
 \begin{enumerate}
     \item Isolate the Error. If you can comment all the code where you are sure the error is not it, do so. If you have many included parts, including only the one with the error is quite a good measure as well.
     \item Open the Log. ``.tex:'' and line number will tell you the error EXACTLY. What usually happens is that the error you see is the lack of references or something because as a consequence to the problem, the .aux files generated a problem as well. \bb{The actual error description and the precise place where to find it is above! You might as well start in the beginning of the log.} There also is a log file where you can Ctrl + F.
 \end{enumerate}
+
