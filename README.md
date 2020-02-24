@@ -1,2 +1,2 @@
 # TheDocument
-A backup of something I've been writing for a while. What I hope to be the go to place when I forget stuff.
+A backup of something I've been writing for a while. What I hope to be the go-to place when I need to remember something.
